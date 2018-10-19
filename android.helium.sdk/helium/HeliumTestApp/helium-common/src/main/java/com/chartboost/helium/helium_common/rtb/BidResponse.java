@@ -1,5 +1,7 @@
 package com.chartboost.helium.helium_common.rtb;
 
+import com.chartboost.helium.helium_common.common.SimpleBuffer;
+
 public class BidResponse {
     private RtbResponse rtbResponse_;
     private SimpleBuffer adContents_;
