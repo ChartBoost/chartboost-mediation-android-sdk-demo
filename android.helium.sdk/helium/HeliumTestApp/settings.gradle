@@ -1,1 +1,1 @@
-include ':app', ':helium-domain', ':helium-interactors', ':helium-infrastructure'
+include ':app', ':helium-domain', ':helium-interactors', ':helium-infrastructure', ':helium-common'
