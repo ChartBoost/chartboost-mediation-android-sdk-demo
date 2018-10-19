@@ -1,0 +1,77 @@
+language: android
+filter_secrets: false
+
+# JDK 1.8 is required for the build tools version 24+
+jdk: oraclejdk8
+
+# Only build pushes to master, release, and hotfix branches.
+# All PRs will still be built.
+branches:
+  only:
+  - master
+  - /^release/.*$/
+  - /^hotfix/.*$/
+  - /^\d+\.\d+\.\d+(\.?[A-Za-z0-9]+)*$/
+  - /^\d+\.\d+\.\d+(\.?[A-Za-z0-9]+)*_rc\d+$/
+
+env:
+  global:
+    - ANDROID_API_LEVEL=27
+    - ANDROID_BUILD_TOOLS_VERSION=27.0.3
+    - ANDROID_ABI=armeabi-v7a
+    - ANDROID_TAG=google_apis
+    - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
+    - IS_PUBLIC_RELEASE=$(echo $TRAVIS_TAG | grep -v -q -e '^[0-9]\+\.[0-9]\+\.[0-9]\+$' ; echo $?)
+    - GRADLE_OPTS="-Xmx4608M"
+
+android:
+  components:
+  - tools # to get the new `repository-11.xml`
+  - platform-tools
+  - tools # to install Android SDK tools 
+  - build-tools-$ANDROID_BUILD_TOOLS_VERSION
+  - android-$ANDROID_API_LEVEL
+  # For Google APIs
+  - addon-google_apis-google-$ANDROID_API_LEVEL
+  # Google Play Services
+  - extra-google-google_play_services
+  # Support library
+  - extra-android-support
+  # Latest artifacts in local repository
+  - extra-google-m2repository
+  - extra-android-m2repository
+  # Specify at least one system image
+  # This is disabled until we run emulator tests
+  #- sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
+
+# accept SDK license
+before_install:
+  - yes | sdkmanager "platforms;android-27" 
+
+# The emulator takes about 7 minutes to start up, and another 8
+# minutes to start the test.  There are only 3 instrumented tests now,
+# and adding 17 minutes for 3 tests seems excessive.
+# before_script: ./scripts/start_emulator_if_not_release_build.sh
+before_script:
+  # Build crashes if a local.properties file isn't present; this file is not kept
+  # under version control. Create an empty local.properties for testing.
+  - touch local.properties
+
+# See https://docs.travis-ci.com/user/languages/android/#Caching
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+
+script: ./gradlew --stacktrace --daemon travisScript
+
+before_deploy: ./gradlew travisBeforeDeploy
+
+notifications:
+  slack: chartboost:17m6k265ttZKXxztAahohnoT

@@ -3,9 +3,11 @@ package com.chartboost.helium.helium_interactors.store.cloud;
 import android.content.Context;
 
 
+import com.chartboost.helium.helium_common.common.Precondition;
+
 import java.io.InvalidObjectException;
 
-public class ApiClient implements IApiClient<Ad> {
+public class ApiClient implements IApiClient<AdAggregate> {
     private PrebidHttpConnection prebidConnection_;
     private AdResponseTransformer transformer_;
     private Context context_;
