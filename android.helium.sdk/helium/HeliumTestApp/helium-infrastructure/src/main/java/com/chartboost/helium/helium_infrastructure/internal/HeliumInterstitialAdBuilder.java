@@ -1,6 +1,6 @@
 package com.chartboost.helium.helium_infrastructure.internal;
 
-import com.chartboost.helium.helium_common.EventBus;
+import com.chartboost.helium.helium_common.event.EventBus;
 import com.chartboost.helium.helium_domain.PlacementId;
 import com.chartboost.helium.helium_infrastructure.HeliumInterstitialAd;
 import com.chartboost.helium.helium_interactors.RepoFactory;
