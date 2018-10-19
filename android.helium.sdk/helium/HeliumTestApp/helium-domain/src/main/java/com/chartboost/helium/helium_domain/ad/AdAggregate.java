@@ -14,6 +14,11 @@ public class AdAggregate extends BasicAggregate {
     private AdExpiryTimer adExpiryTimer_;
     private AdState state_;
 
+    public AdAggregate() {
+        state_ = AdState.AdState_New;
+        startAdExpiryTimer();
+    }
+
 
     @Override
     public Idenitifer identifier() {
@@ -31,6 +36,7 @@ public class AdAggregate extends BasicAggregate {
 
     public void setIdentifier(Idenitifer identifier) {
         adId_ = identifier;
+        state_ = AdState.AdState_Creating;
     }
 
     public void setPlacementId(PlacementId placementId) {
