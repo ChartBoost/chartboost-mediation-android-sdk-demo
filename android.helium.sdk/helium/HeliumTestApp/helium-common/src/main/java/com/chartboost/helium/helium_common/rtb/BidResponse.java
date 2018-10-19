@@ -1,6 +1,8 @@
 package com.chartboost.helium.helium_common.rtb;
 
 import com.chartboost.helium.helium_common.common.SimpleBuffer;
+import com.chartboost.helium.helium_domain.bid.BidAggregate;
+import com.google.gson.Gson;
 
 public class BidResponse {
     private RtbResponse rtbResponse_;
@@ -20,22 +22,22 @@ public class BidResponse {
         return rtbResponse;
     }
 
-    public Bid extractBid(SimpleBuffer adContents) {
-        Bid bid = Bid.with(adContents_);
-        return bid;
+    public BidAggregate extractBid(SimpleBuffer adContents) {
+        BidAggregate bidAggregate = null; // = BidAggregate.with(adContents_);
+        return bidAggregate;
     }
 
-    public Sdk extractSdk() {
-        String partnerSdkName = new String("chartboost");
-        String partnerSdkVersion = new String("7.2.1");
-        Sdk sdk = Sdk.from(partnerSdkName, partnerSdkVersion);
-        return sdk;
-    }
-
-    public Route extractRoute(Sdk sdk) {
-        Route route = Route.from(sdk);
-        return route;
-    }
+//    public Sdk extractSdk() {
+//        String partnerSdkName = new String("chartboost");
+//        String partnerSdkVersion = new String("7.2.1");
+//        Sdk sdk = Sdk.from(partnerSdkName, partnerSdkVersion);
+//        return sdk;
+//    }
+//
+//    public Route extractRoute(Sdk sdk) {
+//        Route route = Route.from(sdk);
+//        return route;
+//    }
 
     public static BidResponse from(SimpleBuffer adContents) {
         return new BidResponse(adContents);

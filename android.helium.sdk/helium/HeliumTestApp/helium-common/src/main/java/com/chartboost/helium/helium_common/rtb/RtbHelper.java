@@ -1,4 +1,6 @@
-package com.chartboost.helium.helium_interactors.store.cloud;
+package com.chartboost.helium.helium_common.rtb;
+
+import com.google.gson.Gson;
 
 import java.util.HashSet;
 import java.util.Set;
