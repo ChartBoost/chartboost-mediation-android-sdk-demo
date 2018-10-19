@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.chartboost.helium.helium_infrastructure.HeliumInterstitialAd;
 import com.chartboost.helium.helium_infrastructure.HeliumSdk;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +18,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void testHeliumSdk() {
         heliumSdk_ = new HeliumSdk();
+
+        heliumSdk_.start(null, null);
+
+        String placementId = "tjPlacementDirectlyUntilPrebidWrapperIsReady";
+        HeliumInterstitialAd interstitialAd = heliumSdk_.interstitialAdProviderForPlacementId(placementId);
+
 
     }
 
