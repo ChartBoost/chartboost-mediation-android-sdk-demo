@@ -3,6 +3,9 @@ package com.chartboost.helium.helium_common.value.string;
 public class StringValue implements IStringValue<StringValue> {
     private String pointer_;
     private StringValue(String pointer) {
+        if (pointer == null) {
+            pointer = "";
+        }
         pointer_ = new String(pointer);
     }
     public static StringValue valueOf(String str) {
