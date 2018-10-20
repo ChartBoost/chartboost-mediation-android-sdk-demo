@@ -32,4 +32,19 @@ public class HeliumInterstitialAd_UnitTest {
             .build();
         assertTrue(interstitialAd != null);
     }
+
+    @Test
+    public void interstitialAd_GetPlacementId() {
+        EventBus eventBus = Mockito.mock(EventBus.class);
+        String p = "placementid";
+        RepoFactory repoFactory = Mockito.mock(RepoFactory.class);
+        HeliumInterstitialAd interstitialAd = new HeliumInterstitialAdImpl.Builder()
+            .setEventBus(eventBus)
+            .setPlacementId(p)
+            .setRepoFactory(repoFactory)
+            .build();
+        assertTrue(interstitialAd != null);
+        String actualPlacement = interstitialAd.placementId();
+        assertTrue(actualPlacement.equalsIgnoreCase(p));
+    }
 }
