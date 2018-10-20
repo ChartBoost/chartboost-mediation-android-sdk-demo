@@ -50,7 +50,7 @@ public class HeliumInterstitialAdImpl implements HeliumInterstitialAd {
         loadAd();
 
 
-delegate.interstitialAdDidLoad(null, null);//todo
+//delegate.interstitialAdDidLoad(null, null);//todo
     }
 
     @Override

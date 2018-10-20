@@ -22,7 +22,7 @@ public class InterstitialShowRequested implements Event {
 
     @Override
     public EventType eventType() {
-        return null;
+        return EventType.App;
     }
 
     @Override

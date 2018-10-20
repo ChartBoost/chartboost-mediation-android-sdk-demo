@@ -23,7 +23,7 @@ public final class InterstitialLoadRequested implements Event {
 
     @Override
     public EventType eventType() {
-        return null;
+        return EventType.App;
     }
 
     @Override
