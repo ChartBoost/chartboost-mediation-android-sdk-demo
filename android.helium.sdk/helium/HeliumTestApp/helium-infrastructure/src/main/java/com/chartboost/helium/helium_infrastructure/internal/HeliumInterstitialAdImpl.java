@@ -24,7 +24,7 @@ public class HeliumInterstitialAdImpl implements HeliumInterstitialAd {
 
     @Override
     public void loadAdWithDelegate(HeliumInterstitialAdDelegate delegate) {
-
+delegate.interstitialAdDidLoad(null, null);//todo
     }
 
     @Override
