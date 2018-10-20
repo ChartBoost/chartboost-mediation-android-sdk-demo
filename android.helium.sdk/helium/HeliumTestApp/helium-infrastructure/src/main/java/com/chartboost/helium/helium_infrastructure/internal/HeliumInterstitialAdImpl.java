@@ -67,9 +67,8 @@ public class HeliumInterstitialAdImpl implements HeliumInterstitialAd {
         public HeliumInterstitialAd build() {
             HeliumInterstitialAdImpl interstitialAd = new HeliumInterstitialAdImpl();
             interstitialAd.setEventBus(eventBus_);
-            PlacementId placementId = PlacementId.of(placementId_);
-//            interstitialAd.setPlacementId(placementId);
-//            interstitialAd.setRepoFactory(repoFactory_);
+            interstitialAd.setPlacementId(placementId_);
+            interstitialAd.setRepoFactory(repoFactory_);
             return interstitialAd;
         }
 
