@@ -12,6 +12,9 @@ public class HeliumAdContext {
         delegate_ = delegate;
         callee_ = callee;
     }
+    public static HeliumAdContext of(final HeliumInterstitialAdDelegate delegate, final Object callee) {
+        return new HeliumAdContext(delegate, callee);
+    }
     public void yourAreLoading() {
         state_ = HeliumAdContextState.HeliumAdContextState_Loading;
     }
