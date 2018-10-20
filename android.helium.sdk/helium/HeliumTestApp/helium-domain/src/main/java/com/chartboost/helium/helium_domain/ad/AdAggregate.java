@@ -1,13 +1,13 @@
 package com.chartboost.helium.helium_domain.ad;
 
 import com.chartboost.helium.helium_domain.BasicAggregate;
-import com.chartboost.helium.helium_domain.Idenitifer;
+import com.chartboost.helium.helium_domain.BasicIdentifier;
 import com.chartboost.helium.helium_domain.PlacementId;
 
 public class AdAggregate extends BasicAggregate {
-    private Idenitifer adId_;
-    private Idenitifer bidId_;
-    private Idenitifer partnerId_;
+    private BasicIdentifier adId_;
+    private BasicIdentifier bidId_;
+    private BasicIdentifier partnerId_;
     private PlacementId placementId_;
 
     private TimeUnit expireTime_;
@@ -21,7 +21,7 @@ public class AdAggregate extends BasicAggregate {
 
 
     @Override
-    public Idenitifer identifier() {
+    public BasicIdentifier identifier() {
         return adId_;
     }
 
@@ -34,7 +34,7 @@ public class AdAggregate extends BasicAggregate {
         adExpiryTimer_.start();
     }
 
-    public void setIdentifier(Idenitifer identifier) {
+    public void setIdentifier(BasicIdentifier identifier) {
         adId_ = identifier;
         state_ = AdState.AdState_Creating;
     }

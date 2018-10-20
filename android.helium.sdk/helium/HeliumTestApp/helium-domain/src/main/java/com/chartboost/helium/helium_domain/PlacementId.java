@@ -1,10 +1,12 @@
 package com.chartboost.helium.helium_domain;
 
+import com.chartboost.helium.helium_common.value.string.StringValue;
+
 public final class PlacementId {
-    private final IStringValue placementId_;
+    private final StringValue placementId_;
 
     private PlacementId(String placementId) {
-        //placementId_ = new String(placementId);
+        placementId_ = StringValue.valueOf(placementId);
     }
 
     public static PlacementId of(String placementId) {
@@ -12,7 +14,6 @@ public final class PlacementId {
     }
 
     public String placementId() {
-        //return placementId_;
-        return null;
+        return placementId_ == null ? null : placementId_.asString();
     }
 }
