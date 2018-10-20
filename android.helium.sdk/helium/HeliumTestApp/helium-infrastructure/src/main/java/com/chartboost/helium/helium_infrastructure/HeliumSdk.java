@@ -3,30 +3,36 @@ package com.chartboost.helium.helium_infrastructure;
 import com.chartboost.helium.helium_common.event.EventBus;
 import com.chartboost.helium.helium_infrastructure.internal.HeliumInterstitialAdImpl;
 import com.chartboost.helium.helium_interactors.RepoFactory;
+import com.chartboost.helium.helium_interactors.controllers.AdController;
+import com.chartboost.helium.helium_interactors.controllers.BidController;
+import com.chartboost.helium.helium_interactors.controllers.ConfigController;
+import com.chartboost.helium.helium_interactors.controllers.PartnerController;
+import com.chartboost.helium.helium_interactors.repos.HeliumRepo;
 
 import java.util.logging.Logger;
 
 public class HeliumSdk {
-    EventBus eventBus;
-    HeliumSdkInitializeListener delegate;
-    Logger defaultHeliumLogger;
-    HeliumConfig config;
-    AdController adController;
-    BidController bidController;
-    PartnerController partnerController;
-    ConfigController configController;
-    RepoFactory repoFactory;
-    HeliumRepo heliumRepo;
+    private EventBus eventBus_;
+    private HeliumSdkInitializeListener delegate_;
+    private Logger defaultHeliumLogger_;
+    private HeliumConfig config_;
+    private AdController adController_;
+    private BidController bidController_;
+    private PartnerController partnerController_;
+    private ConfigController configController_;
+    private RepoFactory repoFactory_;
+    private HeliumRepo heliumRepo_;
     
     public void start(HeliumConfig config, HeliumSdkInitializeListener listener) {
 
     }
 
     public HeliumInterstitialAd interstitialAdProviderForPlacementId(String placemendId) {
-        
-        HeliumInterstitialAdImpl.Builder builder = new HeliumInterstitialAdImpl.Builder();
-        builder.setEventBus()
-        HeliumInterstitialAd interstitialAd = builder.build();
+        HeliumInterstitialAd interstitialAd = new HeliumInterstitialAdImpl.Builder()
+                    .setEventBus(eventBus_)
+                    .setPlacementId(placemendId)
+                    .setRepoFactory(repoFactory_)
+                    .build();
         return interstitialAd;
     }
 
