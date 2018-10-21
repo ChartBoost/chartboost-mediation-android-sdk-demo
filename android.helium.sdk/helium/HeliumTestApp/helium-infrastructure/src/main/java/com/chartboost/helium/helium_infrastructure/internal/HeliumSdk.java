@@ -120,7 +120,7 @@ public class HeliumSdk implements Helium {
         private RepoFactory repoFactory_;
         private HeliumRepo heliumRepo_;
         
-        public Builder setEventBus(EventBus eventBus) {
+        public Builder withEventBus(EventBus eventBus) {
             this.eventBus_ = eventBus;
             return this;
         }
@@ -136,7 +136,7 @@ public class HeliumSdk implements Helium {
             return this;
         }
 
-        public Builder setAdController(AdController adController) {
+        public Builder withAdController(AdController adController) {
             this.adController_ = adController;
             return this;
         }
@@ -156,7 +156,7 @@ public class HeliumSdk implements Helium {
             return this;
         }
 
-        public Builder setRepoFactory(RepoFactory repoFactory) {
+        public Builder withRepoFactory(RepoFactory repoFactory) {
             this.repoFactory_ = repoFactory;
             return this;
         }
