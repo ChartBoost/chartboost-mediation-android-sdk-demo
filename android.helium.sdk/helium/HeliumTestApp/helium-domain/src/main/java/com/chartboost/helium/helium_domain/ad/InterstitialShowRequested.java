@@ -7,12 +7,12 @@ import com.chartboost.helium.helium_common.version.QVersion;
 import com.chartboost.helium.helium_domain.PlacementId;
 
 public class InterstitialShowRequested implements Event {
-
-    private InterstitialShowRequested() {
-
+    private PlacementId placementIdentifier_;
+    private InterstitialShowRequested(PlacementId placementIdentifier) {
+        placementIdentifier_ = placementIdentifier;
     }
-    public static Event of(PlacementId placementIdentifier_) {
-        return new InterstitialShowRequested();
+    public static Event of(PlacementId placementIdentifier) {
+        return new InterstitialShowRequested(placementIdentifier);
     }
 
     @Override
