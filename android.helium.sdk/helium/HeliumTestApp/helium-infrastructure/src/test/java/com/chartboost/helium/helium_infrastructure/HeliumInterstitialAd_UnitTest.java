@@ -62,7 +62,7 @@ public class HeliumInterstitialAd_UnitTest {
         assertTrue(interstitialAd != null);
         String actualPlacement = interstitialAd.placementId();
         assertTrue(actualPlacement.equalsIgnoreCase(p));
-        interstitialAd.loadAdWithDelegate(adDelegate);
+        interstitialAd.loadAd();
 
         verify(adDelegate).interstitialAdDidLoad(any(), any());
     }

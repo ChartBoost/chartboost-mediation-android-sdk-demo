@@ -19,8 +19,19 @@ public class HeliumInterstitialAdImpl implements HeliumInterstitialAd {
     private HeliumAdContext context_;
     private RepoFactory repoFactory_;
     private PlacementId placementIdentifier_;
+    private HeliumInterstitialAdDelegate interstitialAdDelegate_;
 
-    private void loadAd() {
+    private void doLoadAd() {
+        if (context_ != null) {
+            Log.d(TAG, "load operation already in progress");
+            //todo - call the callback?
+            return;;
+        }
+
+        if (eventBus_ == null) {
+            Log.e(TAG, "eventBus_ was null");
+            return;
+        }
         context_.yourAreLoading();
         Event appEvent = InterstitialLoadRequested.of(placementIdentifier_);
         eventBus_.publish(appEvent);
@@ -40,24 +51,23 @@ public class HeliumInterstitialAdImpl implements HeliumInterstitialAd {
     }
 
     @Override
-    public void loadAdWithDelegate(HeliumInterstitialAdDelegate delegate) {
+    public void showAdWithViewController(UIViewController vc) throws NoAdFoundxception {
+
+    }
+
+    @Override
+    public void loadAd() {
         if (context_ != null) {
             Log.d(TAG, "previous load ad request is still pending???");
         }
         HeliumInterstitialAdDelegate adDelegate = null;
         Object callee = this;
         context_ = HeliumAdContext.of(adDelegate, callee);
-        loadAd();
+        doLoadAd();
 
 
 //delegate.interstitialAdDidLoad(null, null);//todo
     }
-
-    @Override
-    public void showAdWithViewController(UIViewController vc, HeliumInterstitialAdDelegate delegate) throws NoAdFoundxception {
-
-    }
-
 
 
     public void setPlacementId(String placementId) {
@@ -72,10 +82,15 @@ public class HeliumInterstitialAdImpl implements HeliumInterstitialAd {
         repoFactory_ = repoFactory;
     }
 
+    public void setInterstitialAdDelegate(HeliumInterstitialAdDelegate delegate) {
+        interstitialAdDelegate_ = delegate;
+    }
+
     public static class Builder {
         private String placementId_;
         private EventBus eventBus_;
         private RepoFactory repoFactory_;
+        private HeliumInterstitialAdDelegate interstitialAdDelegate_;
 
         public Builder setPlacementId(String placementId) {
             placementId_ = placementId;
@@ -92,13 +107,20 @@ public class HeliumInterstitialAdImpl implements HeliumInterstitialAd {
             return this;
         }
 
+        public Builder setInterstitialAdDelegate(HeliumInterstitialAdDelegate delegate) {
+            interstitialAdDelegate_ = delegate;
+            return this;
+        }
+
         public HeliumInterstitialAd build() {
             HeliumInterstitialAdImpl interstitialAd = new HeliumInterstitialAdImpl();
             interstitialAd.setEventBus(eventBus_);
             interstitialAd.setPlacementId(placementId_);
             interstitialAd.setRepoFactory(repoFactory_);
+            interstitialAd.setInterstitialAdDelegate(interstitialAdDelegate_);
             return interstitialAd;
         }
+
 
     }
 }

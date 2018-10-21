@@ -2,6 +2,6 @@ package com.chartboost.helium.helium_infrastructure;
 
 public interface HeliumInterstitialAd {
     String placementId();
-    void loadAdWithDelegate(HeliumInterstitialAdDelegate delegate);
-    void showAdWithViewController(UIViewController vc, HeliumInterstitialAdDelegate delegate) throws NoAdFoundxception;
+    void loadAd();
+    void showAdWithViewController(UIViewController vc) throws NoAdFoundxception;
 }

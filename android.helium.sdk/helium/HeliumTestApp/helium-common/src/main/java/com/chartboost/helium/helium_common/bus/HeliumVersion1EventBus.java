@@ -20,7 +20,7 @@ public class HeliumVersion1EventBus implements EventBus {
         alreadyExistsSubscribers_ = new CopyOnWriteArraySet<>();
     }
 
-    public static EventBus empty() {
+    public static EventBus of() {
         return new HeliumVersion1EventBus();
     }
 

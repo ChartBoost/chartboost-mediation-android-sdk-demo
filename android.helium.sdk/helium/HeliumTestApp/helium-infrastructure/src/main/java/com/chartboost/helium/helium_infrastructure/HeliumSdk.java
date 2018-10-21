@@ -11,7 +11,7 @@ import com.chartboost.helium.helium_interactors.repos.HeliumRepo;
 
 import java.util.logging.Logger;
 
-public class HeliumSdk {
+public class HeliumSdk implements Helium {
     private EventBus eventBus_;
     private HeliumSdkInitializeListener delegate_;
     private Logger defaultHeliumLogger_;
@@ -73,22 +73,33 @@ public class HeliumSdk {
         return this;
     }
 
-    public void start(HeliumConfig config, HeliumSdkInitializeListener listener) {
-
-    }
-//
-//    public HeliumInterstitialAd interstitialAdProviderForPlacementId(String placemendId) {
-//        HeliumInterstitialAd interstitialAd = new HeliumInterstitialAdImpl.Builder()
-//                    .setEventBus(eventBus)
-//                    .setPlacementId(placemendId)
-//                    .setRepoFactory(repoFactory)
-//                    .build();
-//        return interstitialAd;
-//    }
 
     public HeliumRewardedVideoAd rewardedVideoAdProviderForPlacementId(String placemendId) {
         HeliumRewardedVideoAd rewardedVideoAd = null;
         return rewardedVideoAd;
+    }
+
+    @Override
+    public void initialize(HeliumSdkInitializeListener listener) {
+        if (listener != null) {
+            listener.didInitializeHelium(null);
+        }
+    }
+
+    @Override
+    public HeliumInterstitialAd interstitalAd(String placementId, HeliumInterstitialAdDelegate delegate) {
+        HeliumInterstitialAd interstitialAd = new HeliumInterstitialAdImpl.Builder()
+            .setEventBus(eventBus_)
+            .setPlacementId(placementId)
+            .setRepoFactory(repoFactory_)
+            .setInterstitialAdDelegate(delegate)
+            .build();
+        return interstitialAd;
+    }
+
+    @Override
+    public HeliumRewardedVideoAd rewardedVideoAd(String placementId, HeliumRewardedVideoAdDelegate delegate) {
+        return null;
     }
 
     public static class Builder {
@@ -156,7 +167,16 @@ public class HeliumSdk {
 
         public HeliumSdk build() {
             HeliumSdk sdk = new HeliumSdk();
+            sdk.setEventBus(eventBus_);
+            sdk.setDelegate(delegate_);
+            sdk.setDefaultHeliumLogger(defaultHeliumLogger_);
+            sdk.setConfig(config_);
             sdk.setAdController(adController_);
+            sdk.setBidController(bidController_);
+            sdk.setPartnerController(partnerController_);
+            sdk.setConfigController(configController_);
+            sdk.setRepoFactory(repoFactory_);
+            sdk.setHeliumRepo(heliumRepo_);
             return sdk;
         }
 
