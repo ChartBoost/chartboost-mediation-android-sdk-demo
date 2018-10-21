@@ -22,12 +22,6 @@ public class HeliumInterstitialAdImpl implements HeliumInterstitialAd {
     private HeliumInterstitialAdDelegate interstitialAdDelegate_;
 
     private void doLoadAd() {
-        if (context_ != null) {
-            Log.d(TAG, "load operation already in progress");
-            //todo - call the callback?
-            return;;
-        }
-
         if (eventBus_ == null) {
             Log.e(TAG, "eventBus_ was null");
             return;
@@ -63,6 +57,12 @@ public class HeliumInterstitialAdImpl implements HeliumInterstitialAd {
         HeliumInterstitialAdDelegate adDelegate = null;
         Object callee = this;
         context_ = HeliumAdContext.of(adDelegate, callee);
+        if (context_ == null) {
+            Log.d(TAG, "load operation already in progress");
+            //todo - call the callback?
+            return;
+        }
+
         doLoadAd();
 
 

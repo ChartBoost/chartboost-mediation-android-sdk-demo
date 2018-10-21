@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity implements HeliumSdkInitiali
 
         helium_ = new HeliumSdk.Builder()
             .setAdController(adController)
-            //todo
+            .setEventBus(eventBus)
+            .setRepoFactory(repoFactory)
             .build();
 
         HeliumSdkInitializeListener initializeListener = this;

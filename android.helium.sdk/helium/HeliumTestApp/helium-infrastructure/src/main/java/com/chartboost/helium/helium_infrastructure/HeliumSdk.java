@@ -105,7 +105,6 @@ public class HeliumSdk implements Helium {
     public static class Builder {
 
         private EventBus eventBus_;
-        private HeliumSdkInitializeListener delegate_;
         private Logger defaultHeliumLogger_;
         private HeliumConfig config_;
         private AdController adController_;
@@ -120,10 +119,6 @@ public class HeliumSdk implements Helium {
             return this;
         }
 
-        public Builder setDelegate(HeliumSdkInitializeListener delegate) {
-            this.delegate_ = delegate;
-            return this;
-        }
 
         public Builder setDefaultHeliumLogger(Logger defaultHeliumLogger) {
             this.defaultHeliumLogger_ = defaultHeliumLogger;
@@ -168,7 +163,6 @@ public class HeliumSdk implements Helium {
         public HeliumSdk build() {
             HeliumSdk sdk = new HeliumSdk();
             sdk.setEventBus(eventBus_);
-            sdk.setDelegate(delegate_);
             sdk.setDefaultHeliumLogger(defaultHeliumLogger_);
             sdk.setConfig(config_);
             sdk.setAdController(adController_);
