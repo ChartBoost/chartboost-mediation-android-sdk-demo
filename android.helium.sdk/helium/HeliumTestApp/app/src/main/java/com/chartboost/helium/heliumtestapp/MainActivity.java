@@ -20,6 +20,7 @@ import com.chartboost.helium.helium_infrastructure.HeliumSdkInitializeListener;
 import com.chartboost.helium.helium_infrastructure.NoAdFoundxception;
 import com.chartboost.helium.helium_interactors.RepoFactory;
 import com.chartboost.helium.helium_interactors.controllers.AdController;
+import com.chartboost.helium.helium_interactors.repos.HeliumRepo;
 
 public class MainActivity extends AppCompatActivity implements HeliumSdkInitializeListener, HeliumInterstitialAdDelegate {
 
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity implements HeliumSdkInitiali
 
     private void createHeliumSdk() {
         EventBus eventBus = HeliumVersion1EventBus.of();
-        RepoFactory repoFactory = RepoFactory.of();
+        HeliumRepo heliumRepo = new HeliumRepo();
+        RepoFactory repoFactory = RepoFactory.of(heliumRepo);
         SdkRoutingDomainService routingDomainService = SdkRoutingDomainService.of();
 
         AdController adController = AdController.Builder.of()
