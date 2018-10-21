@@ -5,7 +5,7 @@ public class HeliumRepo {
 
     }
     public AdRepo adRepo() {
-        return null;
+        return new AdRepo();
     }
     public BidRepo bidRepo() {
         return null;
