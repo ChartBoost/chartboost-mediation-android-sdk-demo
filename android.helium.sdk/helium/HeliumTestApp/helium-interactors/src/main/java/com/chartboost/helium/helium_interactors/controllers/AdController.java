@@ -42,6 +42,12 @@ public class AdController {
         private InterstitialShowRequested_EventHandler interstitialShowAdRequested_EventHandler_;
         private AdFound_EventHandler adFound_EventHandler_;
 
+        private Builder() {}
+
+        public static Builder of() {
+            return new Builder();
+        }
+
         public Builder setRepoFactory(RepoFactory repoFactory) {
             repoFactory_ = repoFactory;
             return this;
