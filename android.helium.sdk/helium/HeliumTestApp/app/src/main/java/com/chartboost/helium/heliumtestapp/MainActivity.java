@@ -9,21 +9,68 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.chartboost.helium.helium_common.bus.HeliumVersion1EventBus;
+import com.chartboost.helium.helium_common.event.EventBus;
+import com.chartboost.helium.helium_domain.service.SdkRoutingDomainService;
+import com.chartboost.helium.helium_infrastructure.Helium;
 import com.chartboost.helium.helium_infrastructure.HeliumInterstitialAd;
-import com.chartboost.helium.helium_infrastructure.HeliumSdk;
+import com.chartboost.helium.helium_infrastructure.HeliumInterstitialAdDelegate;
+import com.chartboost.helium.helium_infrastructure.internal.HeliumSdk;
+import com.chartboost.helium.helium_infrastructure.HeliumSdkInitializeListener;
+import com.chartboost.helium.helium_infrastructure.NoAdFoundxception;
+import com.chartboost.helium.helium_interactors.RepoFactory;
+import com.chartboost.helium.helium_interactors.controllers.AdController;
+import com.chartboost.helium.helium_interactors.repos.HeliumRepo;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HeliumSdkInitializeListener, HeliumInterstitialAdDelegate {
 
-    private HeliumSdk heliumSdk_;
+    private Helium helium_;
 
-    private void testHeliumSdk() {
-        heliumSdk_ = new HeliumSdk();
+    private void createHeliumSdk() {
+        EventBus eventBus = HeliumVersion1EventBus.of();
+        HeliumRepo heliumRepo = new HeliumRepo();
+        RepoFactory repoFactory = RepoFactory.of(heliumRepo);
+        SdkRoutingDomainService routingDomainService = SdkRoutingDomainService.of();
 
-        heliumSdk_.start(null, null);
+        AdController adController = AdController.Builder.of()
+            .setEventBus(eventBus)
+            .setRepoFactory(repoFactory)
+            .setSdkRoutingDomainService(routingDomainService)
+            .build();
 
+        helium_ = new HeliumSdk.Builder()
+            .withAdController(adController)
+            .withEventBus(eventBus)
+            .withRepoFactory(repoFactory)
+            .build();
+
+        HeliumSdkInitializeListener initializeListener = this;
+        helium_.initialize(initializeListener);
+
+    }
+
+
+    //HeliumSdkInitializeListener
+    @Override
+    public void didInitializeHelium(Throwable error) {
+
+        HeliumInterstitialAdDelegate interstitialAdDelegate = this;
         String placementId = "tjPlacementDirectlyUntilPrebidWrapperIsReady";
-        HeliumInterstitialAd interstitialAd = heliumSdk_.interstitialAdProviderForPlacementId(placementId);
+        HeliumInterstitialAd interstitialAd = helium_.interstitalAd(placementId, interstitialAdDelegate);
 
+        interstitialAd.loadAd();
+
+    }
+
+
+    //HeliumInterstitialAdDelegate
+    @Override
+    public void interstitialAdDidLoad(HeliumInterstitialAd heliumInterstitialAd, NoAdFoundxception error) {
+
+    }
+
+    @Override
+    public void interstitialAdDidShow(HeliumInterstitialAd heliumInterstitialAd, NoAdFoundxception error) {
 
     }
 
@@ -44,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        testHeliumSdk();
+        createHeliumSdk();
     }
 
     @Override
@@ -68,4 +115,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

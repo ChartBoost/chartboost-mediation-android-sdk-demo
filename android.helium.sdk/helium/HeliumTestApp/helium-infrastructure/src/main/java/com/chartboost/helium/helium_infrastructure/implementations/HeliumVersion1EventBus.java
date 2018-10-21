@@ -1,6 +1,5 @@
 package com.chartboost.helium.helium_infrastructure.implementations;
 
-
 import com.chartboost.helium.helium_common.event.Event;
 import com.chartboost.helium.helium_common.event.EventBus;
 import com.chartboost.helium.helium_common.event.EventHandler;
@@ -10,8 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-//dont panic. this is just an implementation x and can easily be replaced by implementation y
-//quick and dirty helium eventbus. replace it later with appropriate one
 public class HeliumVersion1EventBus implements EventBus {
 
     private CopyOnWriteArraySet<EventHandler<Event>> alreadyExistsSubscribers_;
@@ -40,7 +37,7 @@ public class HeliumVersion1EventBus implements EventBus {
     }
 
     @Override
-    public void subscribe(EventType eventType, EventHandler<Event> handler) {
+    public void subscribe(EventType eventType, EventHandler handler) {
          Integer subscriptionKey = Integer.valueOf(eventType.ordinal());
 
         //dont add duplicate handlers
@@ -61,7 +58,7 @@ public class HeliumVersion1EventBus implements EventBus {
     }
 
     @Override
-    public void unSubscribe(EventType eventType, EventHandler<Event> handler) {
+    public void unSubscribe(EventType eventType, EventHandler handler) {
         Integer subscriptionKey = Integer.valueOf(eventType.ordinal());
         if (alreadyExistsSubscribers_.contains(handler)) {
             if (subscribers_.get(subscriptionKey) != null) { //exists
