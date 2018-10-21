@@ -37,8 +37,12 @@ public class HeliumVersion1EventBus implements EventBus {
         }
     }
 
+
+
+
     @Override
-    public void subscribe(EventType eventType, EventHandler<Event> handler) {
+    public void subscribe(EventType eventType, EventHandler handler) {
+
         Integer subscriptionKey = Integer.valueOf(eventType.ordinal());
 
         //dont add duplicate handlers
@@ -59,7 +63,9 @@ public class HeliumVersion1EventBus implements EventBus {
     }
 
     @Override
-    public void unSubscribe(EventType eventType, EventHandler<Event> handler) {
+    public void unSubscribe(EventType eventType, EventHandler handler) {
+
+
         Integer subscriptionKey = Integer.valueOf(eventType.ordinal());
         if (alreadyExistsSubscribers_.contains(handler)) {
             if (subscribers_.get(subscriptionKey) != null) { //exists

@@ -1,7 +1,13 @@
-package com.chartboost.helium.helium_infrastructure;
+package com.chartboost.helium.helium_infrastructure.internal;
 
 import com.chartboost.helium.helium_common.event.EventBus;
-import com.chartboost.helium.helium_infrastructure.internal.HeliumInterstitialAdImpl;
+import com.chartboost.helium.helium_infrastructure.Helium;
+import com.chartboost.helium.helium_infrastructure.HeliumConfig;
+import com.chartboost.helium.helium_infrastructure.HeliumInterstitialAd;
+import com.chartboost.helium.helium_infrastructure.HeliumInterstitialAdDelegate;
+import com.chartboost.helium.helium_infrastructure.HeliumRewardedVideoAd;
+import com.chartboost.helium.helium_infrastructure.HeliumRewardedVideoAdDelegate;
+import com.chartboost.helium.helium_infrastructure.HeliumSdkInitializeListener;
 import com.chartboost.helium.helium_interactors.RepoFactory;
 import com.chartboost.helium.helium_interactors.controllers.AdController;
 import com.chartboost.helium.helium_interactors.controllers.BidController;

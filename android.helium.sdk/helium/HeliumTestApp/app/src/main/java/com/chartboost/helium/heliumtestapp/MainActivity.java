@@ -15,7 +15,7 @@ import com.chartboost.helium.helium_domain.service.SdkRoutingDomainService;
 import com.chartboost.helium.helium_infrastructure.Helium;
 import com.chartboost.helium.helium_infrastructure.HeliumInterstitialAd;
 import com.chartboost.helium.helium_infrastructure.HeliumInterstitialAdDelegate;
-import com.chartboost.helium.helium_infrastructure.HeliumSdk;
+import com.chartboost.helium.helium_infrastructure.internal.HeliumSdk;
 import com.chartboost.helium.helium_infrastructure.HeliumSdkInitializeListener;
 import com.chartboost.helium.helium_infrastructure.NoAdFoundxception;
 import com.chartboost.helium.helium_interactors.RepoFactory;
