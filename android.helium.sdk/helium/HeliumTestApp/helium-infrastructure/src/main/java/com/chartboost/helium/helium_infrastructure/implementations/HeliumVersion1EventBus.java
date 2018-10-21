@@ -1,6 +1,5 @@
 package com.chartboost.helium.helium_infrastructure.implementations;
 
-
 import com.chartboost.helium.helium_common.event.Event;
 import com.chartboost.helium.helium_common.event.EventBus;
 import com.chartboost.helium.helium_common.event.EventHandler;
@@ -10,8 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-//dont panic. this is just an implementation x and can easily be replaced by implementation y
-//quick and dirty helium eventbus. replace it later with appropriate one
 public class HeliumVersion1EventBus implements EventBus {
 
     private CopyOnWriteArraySet<EventHandler<Event>> alreadyExistsSubscribers_;

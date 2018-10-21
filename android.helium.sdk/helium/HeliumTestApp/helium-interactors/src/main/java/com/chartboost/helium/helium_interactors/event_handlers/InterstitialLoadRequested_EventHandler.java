@@ -37,7 +37,7 @@ public class InterstitialLoadRequested_EventHandler implements EventHandler<Inte
 
     private void doHandle(InterstitialLoadRequested event) {
         BasicIdentifier adid = new BasicIdentifier();
-        repoFactory_.getAd(adid, (AdAggregate adAggregate) -> {
+        repoFactory_.getAd(adid, (adAggregate) -> {
             Log.d(TAG, "got ad");
         });
     }
