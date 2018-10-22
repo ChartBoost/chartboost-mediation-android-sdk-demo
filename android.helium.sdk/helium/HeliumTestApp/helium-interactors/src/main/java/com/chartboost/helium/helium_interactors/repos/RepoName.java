@@ -9,7 +9,6 @@ public final class RepoName {
         } else {
             repoName_ = reponame;
         }
-
     }
     public static RepoName of(final String reponame) {
         return new RepoName(reponame);

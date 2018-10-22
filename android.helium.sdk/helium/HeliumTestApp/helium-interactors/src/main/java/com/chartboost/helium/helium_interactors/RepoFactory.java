@@ -31,6 +31,8 @@ public final class RepoFactory {
 
         adAggregate = new AdAggregate();
 
-        completion.didGet(adAggregate);
+        if (completion != null) {
+            completion.didGet(adAggregate);
+        }
     }
 }
