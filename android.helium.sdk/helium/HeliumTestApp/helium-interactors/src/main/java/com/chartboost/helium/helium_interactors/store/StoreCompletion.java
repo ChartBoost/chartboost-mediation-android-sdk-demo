@@ -3,7 +3,7 @@ package com.chartboost.helium.helium_interactors.store;
 import com.chartboost.helium.helium_common.OnError;
 import com.chartboost.helium.helium_common.OnSuccess;
 
-public final class StoreCompletion<AggregateT> implements RunStoreCompletion {
+public final class StoreCompletion<AggregateT> {
     private final OnSuccess<AggregateT> successCallback_;
     private final OnError errorCallback_;
     private final AggregateT aggregateT_;
@@ -25,8 +25,7 @@ public final class StoreCompletion<AggregateT> implements RunStoreCompletion {
                                      final OnError errorCallback) {
         return new StoreCompletion(aggregateT, error, successCallback, errorCallback);
     }
-
-    @Override
+    
     public void runCompletion() {
         if (successCallback_ != null && aggregateT_ != null) {
             successCallback_.handle(aggregateT_);
