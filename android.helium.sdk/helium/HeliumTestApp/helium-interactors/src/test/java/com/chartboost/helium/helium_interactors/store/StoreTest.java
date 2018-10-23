@@ -10,44 +10,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 
-class StoreResult<AggregateT> {
-    private AggregateT aggregate_;
-    private Throwable error_;
-
-    public StoreResult() {
-        aggregate_ = null;
-        error_ = null;
-    }
-
-    public void setAggregate(AggregateT aggregate) {
-        aggregate_ = aggregate;
-    }
-
-    public void setError(Throwable error) {
-        error_ = error;
-    }
-
-    public AggregateT getAggregate() {
-        return aggregate_;
-    }
-
-    public Throwable getError() {
-        return error_;
-    }
-}
-
-interface IStoreStatus<AggregateT>  {
-    void handle(StoreResult<AggregateT> result);
-}
-
-interface IStore<AggregateT> {
-    void read(BasicIdentifier identifier, IStoreStatus<AggregateT> completion);
-    void write(AggregateT domainObject, IStoreStatus<AggregateT> completion);
-    void delete(BasicIdentifier identifier, IStoreStatus<AggregateT> completion);
-}
-
-
-
 
 class DummyAggregate {
     public int dummyVal;
@@ -83,6 +45,11 @@ class DummyStore implements IStore<DummyAggregate> {
             storeResult.setAggregate(dummyAggregate);
             completion.handle(storeResult);
         }
+    }
+
+    @Override
+    public String name() {
+        return "Dummy";
     }
 }
 
