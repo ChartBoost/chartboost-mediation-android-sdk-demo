@@ -77,7 +77,12 @@ class DummyStore implements IStore<DummyAggregate> {
 
     @Override
     public void delete(BasicIdentifier identifier, IStoreStatus<DummyAggregate> completion) {
-
+        if (completion != null) {
+            StoreResult<DummyAggregate> storeResult = new StoreResult();
+            DummyAggregate dummyAggregate = new DummyAggregate();
+            storeResult.setAggregate(dummyAggregate);
+            completion.handle(storeResult);
+        }
     }
 }
 
@@ -120,7 +125,15 @@ public class StoreTest {
     }
 
     @Test
-    public void deleteit() {
+    public void delete() {
+        IStore<DummyAggregate> dummyAggregateStore = new DummyStore();
+        Assert.assertTrue(dummyAggregateStore != null);
+        BasicIdentifier identifier = new BasicIdentifier();
+        dummyAggregateStore.delete(identifier, (StoreResult<DummyAggregate> result) -> {
+            if (result != null) {
+
+            }
+        });
     }
 
     @Test
