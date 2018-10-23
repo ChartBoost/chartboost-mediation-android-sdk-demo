@@ -109,6 +109,14 @@ public class StoreTest {
 
     @Test
     public void write() {
+        IStore<DummyAggregate> dummyAggregateStore = new DummyStore();
+        Assert.assertTrue(dummyAggregateStore != null);
+        DummyAggregate da = new DummyAggregate();
+        dummyAggregateStore.write(da, (StoreResult<DummyAggregate> result) -> {
+            if (result != null) {
+
+            }
+        });
     }
 
     @Test
