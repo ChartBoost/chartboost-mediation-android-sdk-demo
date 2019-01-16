@@ -1,5 +1,6 @@
 package com.chartboost.helium.helium_domain;
 
+
 public abstract class BasicAggregate implements Aggregate {
     @Override
     public String version() {

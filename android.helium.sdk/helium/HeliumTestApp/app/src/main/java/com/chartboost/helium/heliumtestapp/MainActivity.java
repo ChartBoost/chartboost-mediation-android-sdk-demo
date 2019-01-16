@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements HeliumSdkInitiali
 
     private void createHeliumSdk() {
         EventBus eventBus = HeliumVersion1EventBus.of();
-        HeliumRepo heliumRepo = new HeliumRepo();
+        HeliumRepo heliumRepo = HeliumRepo.of();
         RepoFactory repoFactory = RepoFactory.of(heliumRepo);
         SdkRoutingDomainService routingDomainService = SdkRoutingDomainService.of();
 

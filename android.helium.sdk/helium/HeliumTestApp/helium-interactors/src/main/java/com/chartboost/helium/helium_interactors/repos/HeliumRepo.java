@@ -1,6 +1,19 @@
 package com.chartboost.helium.helium_interactors.repos;
 
-public class HeliumRepo {
+import com.chartboost.helium.helium_interactors.store.factory.HeliumStore;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+public final class HeliumRepo {
+    private ConcurrentHashMap<RepoName, Object> loadedRepos_;
+    private HeliumStore heliumStore_;
+    private HeliumRepo() {
+        loadedRepos_ = new ConcurrentHashMap<>();
+    }
+    public static HeliumRepo of() {
+        return new HeliumRepo();
+    }
+
     public void autoloadAllRepos() {
 
     }
