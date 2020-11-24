@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/android-helium-sdk-example.iml" filepath="$PROJECT_DIR$/.idea/android-helium-sdk-example.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/HeliumExample/android-helium-sdk-example.HeliumExample.iml" filepath="$PROJECT_DIR$/.idea/modules/HeliumExample/android-helium-sdk-example.HeliumExample.iml" />
-    </modules>
-  </component>
-</project>
