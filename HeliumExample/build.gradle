@@ -35,7 +35,7 @@ android {
     defaultConfig {
         multiDexEnabled true
         applicationId "com.chartboost.heliumexample"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -73,7 +73,6 @@ dependencies {
     implementation 'com.chartboost:helium-tapjoy:2.2.0'
     implementation 'com.chartboost:helium-facebook:2.2.0'
     implementation 'com.chartboost:helium-adcolony:2.2.0'
-    implementation 'com.chartboost:helium-admob:2.2.0'
 	implementation 'com.chartboost:helium-vungle:2.2.0'
     implementation 'com.chartboost:helium-applovin:2.2.0'
     implementation 'com.chartboost:helium-unityads:2.2.0'
