@@ -35,6 +35,7 @@ proguard/
 captures/
 
 # IntelliJ
+.idea/
 *.iml
 .idea/CodeStyles
 .idea/codeStyles
