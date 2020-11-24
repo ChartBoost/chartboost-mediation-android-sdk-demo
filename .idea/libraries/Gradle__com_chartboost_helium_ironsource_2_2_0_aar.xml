@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.chartboost:helium-ironsource:2.2.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f04b0deb6bdfd585d3af18632e6e46f/helium-ironsource-2.2.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/689554423db6b58c2dd874bea83f8a95/jetified-helium-ironsource-2.2.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c36b1e1989036337ae4f847d4ea04aa5/jetified-helium-ironsource-2.2.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c36b1e1989036337ae4f847d4ea04aa5/jetified-helium-ironsource-2.2.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c36b1e1989036337ae4f847d4ea04aa5/jetified-helium-ironsource-2.2.0/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

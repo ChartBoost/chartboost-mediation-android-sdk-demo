@@ -1,1 +1,0 @@
-include ':app', ':helium-domain', ':helium-interactors', ':helium-infrastructure', ':helium-common'

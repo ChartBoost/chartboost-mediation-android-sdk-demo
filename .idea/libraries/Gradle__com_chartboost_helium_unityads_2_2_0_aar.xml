@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.chartboost:helium-unityads:2.2.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9beea080668a5c9d43668afbbf6bbc88/helium-unityads-2.2.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d014ebce8f4b85c4883e213436eda3b4/jetified-helium-unityads-2.2.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/528437666376baf1375edfad1402fcfa/jetified-helium-unityads-2.2.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/528437666376baf1375edfad1402fcfa/jetified-helium-unityads-2.2.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/528437666376baf1375edfad1402fcfa/jetified-helium-unityads-2.2.0/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

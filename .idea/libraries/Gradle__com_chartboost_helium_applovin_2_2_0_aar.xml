@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.chartboost:helium-applovin:2.2.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/cfd392629635380a5cd54dc1a73731c7/helium-applovin-2.2.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/56641b4596f96e9ed490066cd7721694/jetified-helium-applovin-2.2.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e1a17cc09788d1458c8e3ff4154bf52d/jetified-helium-applovin-2.2.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e1a17cc09788d1458c8e3ff4154bf52d/jetified-helium-applovin-2.2.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e1a17cc09788d1458c8e3ff4154bf52d/jetified-helium-applovin-2.2.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
