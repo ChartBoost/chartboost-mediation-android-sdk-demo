@@ -25,7 +25,7 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:2.3.0'
+    implementation 'com.chartboost:helium:2.2.1'
     implementation 'org.greenrobot:eventbus:3.2.0'
 
     ...
@@ -67,7 +67,7 @@ If using mediation (i.e. Admob), you also need to include the 'classic' chartboo
 ### Google Play Services
 
 ```Gradle
-implementation "com.google.android.gms:play-services-base:17.6.0"
+implementation "com.google.android.gms:play-services-base:17.1.0"
 implementation "com.google.android.gms:play-services-ads-identifier:17.0.0"
 ```
 
@@ -219,7 +219,7 @@ Note: Not all partner SDKs have full support for GDPR. Please refer to its offic
 
 ## 3rd-Party Supported Partner SDKs & Adapters
 ---
-The Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
+As of 2.0.0, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
 
 * Tapjoy
 * Facebook
@@ -234,21 +234,21 @@ To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
 //TapJoy
-implementation 'com.chartboost:helium-tapjoy:2.3.0'
+implementation 'com.chartboost:helium-tapjoy:2.2.1'
 //Facebook
-implementation 'com.chartboost:helium-facebook:2.3.0'
+implementation 'com.chartboost:helium-facebook:2.2.1'
 //AdColony
-implementation 'com.chartboost:helium-adcolony:2.3.0'
+implementation 'com.chartboost:helium-adcolony:2.2.1'
 //AdMob
-implementation 'com.chartboost:helium-admob:2.3.0'
+implementation 'com.chartboost:helium-admob:2.2.1'
 //Vungle
-implementation 'com.chartboost:helium-vungle:2.3.0'
+implementation 'com.chartboost:helium-vungle:2.2.1'
 //Applovin
-implementation 'com.chartboost:helium-applovin:2.3.0'
+implementation 'com.chartboost:helium-applovin:2.2.1'
 //UnityAds
-implementation 'com.chartboost:helium-unityads:2.3.0'
+implementation 'com.chartboost:helium-unityads:2.2.1'
 //ironSource
-implementation 'com.chartboost:helium-ironsource:2.3.0'
+implementation 'com.chartboost:helium-ironsource:2.2.1'
 
 //Make sure to also include the 3rd-party sdks & their dependencies
 ...
