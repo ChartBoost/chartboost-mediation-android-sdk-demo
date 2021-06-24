@@ -69,14 +69,14 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
 
     // Helium Adapters
-    implementation 'com.chartboost:helium-tapjoy:2.3.1'
-    implementation 'com.chartboost:helium-facebook:2.3.1'
-    implementation 'com.chartboost:helium-adcolony:2.3.1'
-    implementation 'com.chartboost:helium-admob:2.3.1'
-	implementation 'com.chartboost:helium-vungle:2.3.1'
-    implementation 'com.chartboost:helium-applovin:2.3.1'
-    implementation 'com.chartboost:helium-unityads:2.3.1'
-    implementation 'com.chartboost:helium-ironsource:2.3.1'
+    implementation 'com.chartboost:helium-tapjoy:2.3.1.0'
+    implementation 'com.chartboost:helium-facebook:2.3.1.0'
+    implementation 'com.chartboost:helium-adcolony:2.3.1.0'
+    implementation 'com.chartboost:helium-admob:2.3.1.0'
+	implementation 'com.chartboost:helium-vungle:2.3.1.0'
+    implementation 'com.chartboost:helium-applovin:2.3.1.0'
+    implementation 'com.chartboost:helium-unityads:2.3.1.0'
+    implementation 'com.chartboost:helium-ironsource:2.3.1.0'
 
     //Tapjoy
     implementation 'com.tapjoy:tapjoy-android-sdk:12.8.1'
