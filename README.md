@@ -19,13 +19,13 @@ To quickly get started, simply add the following dependencies inside your app's 
 
 ```gradle
 repositories {
-  jcenter()
+  mavenCentral()
 }
 
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:2.2.1'
+    implementation 'com.chartboost:helium:2.3.1'
     implementation 'org.greenrobot:eventbus:3.2.0'
 
     ...
@@ -67,8 +67,8 @@ If using mediation (i.e. Admob), you also need to include the 'classic' chartboo
 ### Google Play Services
 
 ```Gradle
-implementation "com.google.android.gms:play-services-base:17.1.0"
-implementation "com.google.android.gms:play-services-ads-identifier:17.0.0"
+implementation "com.google.android.gms:play-services-base:17.6.0"
+implementation "com.google.android.gms:play-services-ads-identifier:17.0.1"
 ```
 
 ### Proguard
@@ -234,21 +234,21 @@ To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
 //TapJoy
-implementation 'com.chartboost:helium-tapjoy:2.2.1'
+implementation 'com.chartboost:helium-tapjoy:2.3.1.0'
 //Facebook
-implementation 'com.chartboost:helium-facebook:2.2.1'
+implementation 'com.chartboost:helium-facebook:2.3.1.0'
 //AdColony
-implementation 'com.chartboost:helium-adcolony:2.2.1'
+implementation 'com.chartboost:helium-adcolony:2.3.1.0'
 //AdMob
-implementation 'com.chartboost:helium-admob:2.2.1'
+implementation 'com.chartboost:helium-admob:2.3.1.0'
 //Vungle
-implementation 'com.chartboost:helium-vungle:2.2.1'
+implementation 'com.chartboost:helium-vungle:2.3.1.0'
 //Applovin
-implementation 'com.chartboost:helium-applovin:2.2.1'
+implementation 'com.chartboost:helium-applovin:2.3.1.0'
 //UnityAds
-implementation 'com.chartboost:helium-unityads:2.2.1'
+implementation 'com.chartboost:helium-unityads:2.3.1.0'
 //ironSource
-implementation 'com.chartboost:helium-ironsource:2.2.1'
+implementation 'com.chartboost:helium-ironsource:2.3.1.0'
 
 //Make sure to also include the 3rd-party sdks & their dependencies
 ...
