@@ -240,7 +240,7 @@ implementation 'com.chartboost:helium-facebook:2.3.1.0'
 //AdColony
 implementation 'com.chartboost:helium-adcolony:2.3.1.0'
 //AdMob
-implementation 'com.chartboost:helium-admob:2.3.1.0'
+implementation 'com.chartboost:helium-admob:2.3.1.1'
 //Vungle
 implementation 'com.chartboost:helium-vungle:2.3.1.0'
 //Applovin
