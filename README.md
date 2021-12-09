@@ -25,7 +25,7 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:2.3.1'
+    implementation 'com.chartboost:helium:2.3.2'
     implementation 'org.greenrobot:eventbus:3.2.0'
 
     ...
@@ -234,21 +234,21 @@ To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
 //TapJoy
-implementation 'com.chartboost:helium-tapjoy:2.3.1.0'
+implementation 'com.chartboost:helium-tapjoy:2.3.2.0'
 //Facebook
-implementation 'com.chartboost:helium-facebook:2.3.1.0'
+implementation 'com.chartboost:helium-facebook:2.3.2.0'
 //AdColony
-implementation 'com.chartboost:helium-adcolony:2.3.1.0'
+implementation 'com.chartboost:helium-adcolony:2.3.2.0'
 //AdMob
-implementation 'com.chartboost:helium-admob:2.3.1.1'
+implementation 'com.chartboost:helium-admob:2.3.2.0'
 //Vungle
-implementation 'com.chartboost:helium-vungle:2.3.1.0'
+implementation 'com.chartboost:helium-vungle:2.3.2.0'
 //Applovin
-implementation 'com.chartboost:helium-applovin:2.3.1.0'
+implementation 'com.chartboost:helium-applovin:2.3.2.0'
 //UnityAds
-implementation 'com.chartboost:helium-unityads:2.3.1.0'
+implementation 'com.chartboost:helium-unityads:2.3.2.0'
 //ironSource
-implementation 'com.chartboost:helium-ironsource:2.3.1.0'
+implementation 'com.chartboost:helium-ironsource:2.3.2.0'
 
 //Make sure to also include the 3rd-party sdks & their dependencies
 ...
