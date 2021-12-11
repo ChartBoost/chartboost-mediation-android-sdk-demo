@@ -242,7 +242,7 @@ implementation 'com.chartboost:helium-adcolony:2.3.2.0'
 //AdMob
 implementation 'com.chartboost:helium-admob:2.3.2.0'
 //Vungle
-implementation 'com.chartboost:helium-vungle:2.3.2.0'
+implementation 'com.chartboost:helium-vungle:2.3.2.1'
 //Applovin
 implementation 'com.chartboost:helium-applovin:2.3.2.0'
 //UnityAds
