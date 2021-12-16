@@ -64,7 +64,7 @@ dependencies {
     implementation 'com.adcolony:sdk:4.6.5'
 
     //AdMob
-    implementation 'com.google.android.gms:play-services-ads:20.4.0'
+    implementation 'com.google.android.gms:play-services-ads:20.5.0'
 
     //Vungle
     implementation 'com.vungle:publisher-sdk-android:6.10.2'
