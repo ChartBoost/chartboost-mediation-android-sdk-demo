@@ -17,7 +17,7 @@
         android:theme="@style/MainTheme">
         <activity
             android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:theme="@style/MainTheme" />
         <activity
             android:name="com.chartboost_helium.sdk.CBImpressionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -27,7 +27,8 @@
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@style/FullScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
