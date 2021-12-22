@@ -1,15 +1,12 @@
 package com.chartboost.heliumsdk.sampleapp
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.chartboost.heliumsdk.HeliumSdk
-import com.chartboost.heliumsdk.HeliumSdk.HeliumSdkListener
 import android.widget.Toast
-import com.chartboost.heliumsdk.sampleapp.MainActivity
-import java.lang.Error
+import androidx.appcompat.app.AppCompatActivity
+import com.chartboost.heliumsdk.HeliumSdk
 
-class SplashActivity : Activity() {
+class SplashActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)

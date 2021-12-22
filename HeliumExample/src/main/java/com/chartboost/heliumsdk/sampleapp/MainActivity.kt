@@ -1,46 +1,49 @@
 package com.chartboost.heliumsdk.sampleapp
 
-import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.method.ScrollingMovementMethod
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.chartboost.heliumsdk.HeliumSdk
 import com.chartboost.heliumsdk.ad.*
 import com.chartboost.heliumsdk.sampleapp.databinding.ActivityMainBinding
 import java.util.*
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
+    private var _bannerAd: HeliumBannerAd? = null
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
         setupLogView()
         setupScreen()
         setupInterstitial()
         setupRewarded()
         setupListeners()
+        setupBanner()
         setupSdk()
+    }
 
-        //val bannerAd=createBannerAd()
+    override fun onDestroy() {
+        super.onDestroy()
+        _bannerAd?.destroy()
     }
 
     private fun setupRewarded() {
         val rewardedAd = createRewardedAd()
-        binding.btnLoadRewarded.setOnClickListener(View.OnClickListener { rewardedAd.load() })
+        binding.btnLoadRewarded.setOnClickListener { rewardedAd.load() }
 
-        binding.btnShowRewarded.setOnClickListener(View.OnClickListener {
+        binding.btnShowRewarded.setOnClickListener {
             if (rewardedAd.readyToShow()) {
                 binding.btnLoadRewarded.isEnabled = false
                 rewardedAd.show()
             } else {
                 addToLogView("Rewarded ad not ready to show")
             }
-        })
+        }
     }
 
     private fun setupInterstitial() {
@@ -56,12 +59,62 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun createBannerAd() {
-        TODO("Not yet implemented")
+    private fun setupBanner() {
+        binding.bannerAd.let { bannerAd ->
+            bannerAd.setAdListener(createBannerAdListener {
+                if (bannerAd.readyToShow()) {
+                    bannerAd.show()
+                }
+            })
+            bannerAd.load()
+            _bannerAd = bannerAd
+        }
+    }
+
+    private fun createBannerAdListener(
+        onLoaded: () -> Unit
+    ): HeliumBannerAdListener {
+        val bannerListener = object : HeliumBannerAdListener {
+            override fun didReceiveWinningBid(
+                placementName: String?,
+                bidInfo: HashMap<String?, String?>?
+            ) {
+                addToLogView("$placementName (HeliumBannerAd) didReceiveWinningBid")
+                addToLogView(bidInfo.toString())
+            }
+
+            override fun didCache(placementName: String?, error: HeliumAdError?) {
+                if (error != null) {
+                    addToLogView(placementName + " (HeliumBannerAd) didCache failed with heliumError: " + error.message)
+                } else {
+                    onLoaded()
+                    addToLogView("$placementName (HeliumBannerAd) didCache")
+                }
+            }
+
+            override fun didShow(placementName: String?, error: HeliumAdError?) {
+                if (error != null) {
+                    addToLogView(placementName + " (HeliumBannerAd) didShow failed with heliumError: " + error.message)
+                } else {
+                    addToLogView("$placementName (HeliumBannerAd) didShow")
+                }
+            }
+
+            override fun didClose(placementName: String?, error: HeliumAdError?) {
+                if (error != null) {
+                    addToLogView(placementName + " (HeliumBannerAd) didClose failed with heliumError: " + error.message)
+                } else {
+                    addToLogView("$placementName (HeliumBannerAd) didClose")
+                }
+            }
+        }
+        return bannerListener
     }
 
     private fun createInterstitialAd(): HeliumInterstitialAd {
-        val interstitialPlacement = getString(R.string.heliumInterstitial)
+        val interstitialPlacement =
+            binding.interstitialPlacementName.text?.toString()
+                ?: getString(R.string.heliumInterstitial)
         val interstitialAd =
             HeliumInterstitialAd(interstitialPlacement, object : HeliumInterstitialAdListener {
                 override fun didReceiveWinningBid(
@@ -101,7 +154,8 @@ class MainActivity : Activity() {
     }
 
     private fun createRewardedAd(): HeliumRewardedAd {
-        val rewardedPlacement = getString(R.string.heliumRewarded)
+        val rewardedPlacement =
+            binding.rewardedPlacementName.text?.toString() ?: getString(R.string.heliumRewarded)
         val rewardedAd = HeliumRewardedAd(rewardedPlacement, object : HeliumRewardedAdListener {
             override fun didReceiveWinningBid(
                 placementName: String,
@@ -148,6 +202,8 @@ class MainActivity : Activity() {
     private fun setupScreen() {
         binding.btnShow.isEnabled = false
         binding.btnShowRewarded.isEnabled = false
+        binding.interstitialPlacementName.text = getString(R.string.heliumInterstitial)
+        binding.rewardedPlacementName.text = getString(R.string.heliumRewarded)
     }
 
     private fun setupLogView() {
@@ -158,11 +214,9 @@ class MainActivity : Activity() {
 
     private fun addToLogView(s: String) {
         Handler(Looper.getMainLooper()).post {
-            if (binding.logView != null) {
-                binding.logView.append(
-                    """$s""".trimIndent()
-                )
-            }
+            binding.logView.append(
+                """$s""".trimIndent()
+            )
         }
     }
 
