@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/interstitialPlacementLabel"
         app:layout_constraintTop_toTopOf="@id/interstitialPlacementLabel"
-        tools:text="FBInterstitial"/>
+        tools:text="Interstitial"/>
 
     <Button
         android:id="@+id/btn_load"
@@ -99,7 +99,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/rewardedPlacementLabel"
         app:layout_constraintTop_toTopOf="@id/rewardedPlacementLabel"
-        tools:text="FBRewarded" />
+        tools:text="Rewarded" />
 
     <Button
         android:id="@+id/btn_load_rewarded"
