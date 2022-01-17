@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginEnd="5dp"
-        android:text="Placement"
+        tools:text="Placement"
         app:layout_constraintBottom_toBottomOf="@+id/textView"
         app:layout_constraintEnd_toStartOf="@id/interstitialPlacementName"
         app:layout_constraintStart_toEndOf="@id/textView"
@@ -40,7 +40,8 @@
         app:layout_constraintBottom_toBottomOf="@id/interstitialPlacementLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/interstitialPlacementLabel"
-        app:layout_constraintTop_toTopOf="@id/interstitialPlacementLabel" />
+        app:layout_constraintTop_toTopOf="@id/interstitialPlacementLabel"
+        tools:text="FBInterstitial"/>
 
     <Button
         android:id="@+id/btn_load"
@@ -84,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginEnd="5dp"
-        android:text="Placement"
+        tools:text="Placement"
         app:layout_constraintBottom_toBottomOf="@id/rewardedTextView"
         app:layout_constraintEnd_toStartOf="@id/rewardedPlacementName"
         app:layout_constraintStart_toEndOf="@id/rewardedTextView"
@@ -98,7 +99,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/rewardedPlacementLabel"
         app:layout_constraintTop_toTopOf="@id/rewardedPlacementLabel"
-        tools:text="FBInterstitial" />
+        tools:text="FBRewarded" />
 
     <Button
         android:id="@+id/btn_load_rewarded"
@@ -170,8 +171,8 @@
             android:id="@+id/bannerAd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:layout_height="50dp"
             app:heliumBannerSize="STANDARD"
-            app:heliumPlacementName="CBBanner2" />
+            app:heliumPlacementName="CBBanner2"
+            tools:layout_height="50dp" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
