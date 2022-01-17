@@ -87,7 +87,6 @@ dependencies {
 
     //InMobi
     implementation 'com.inmobi.monetization:inmobi-ads:10.0.1'
-    //implementation 'com.google.android.gms:play-services-ads-identifier:17.1.0'
 
     //Mintegral
     implementation "com.mbridge.msdk.oversea:videojs:15.7.21"
