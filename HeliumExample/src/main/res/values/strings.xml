@@ -6,6 +6,7 @@
     <!-- Helium App Placement -->
     <string name="heliumInterstitial">CBInterstitial</string>
     <string name="heliumRewarded">CBRewarded</string>
+    <string name="heliumBanner">CBBanner2</string>
 
     <!-- SampleApp Values -->
     <string name="app_name">Helium Example</string>

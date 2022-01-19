@@ -1,10 +1,12 @@
 package com.chartboost.heliumsdk.sampleapp
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.method.ScrollingMovementMethod
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chartboost.heliumsdk.HeliumSdk
 import com.chartboost.heliumsdk.ad.*
@@ -16,21 +18,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
+
         setContentView(view)
         setupLogView()
         setupScreen()
         setupInterstitial()
         setupRewarded()
         setupListeners()
-        setupBanner()
         setupSdk()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _bannerAd?.destroy()
+        _bannerAd = null
     }
 
     private fun setupRewarded() {
@@ -226,11 +230,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSdk() {
+        HeliumSdk.start(
+            this,
+            getString(R.string.appID),
+            getString(R.string.appSignature)
+        ) { error: Error? ->
+            if (error != null) {
+                runOnUiThread {
+                    val errorMessage = "Helium SDK failed to initialize. Reason: " + error.message
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+                }
+                addToLogView("Helium SDK Started unsuccessfully")
+            }else {
+                addToLogView("Helium SDK Started successfully")
+                configSdk()
+                setupBanner()
+            }
+        }
+    }
+
+    private fun configSdk() {
+        HeliumSdk.setDebugMode(false) // Only for debug builds!
         HeliumSdk.setSubjectToCoppa(false)
         HeliumSdk.setSubjectToGDPR(false)
         HeliumSdk.setUserHasGivenConsent(false)
         HeliumSdk.setCCPAConsent(true)
-        addToLogView("Helium SDK Started successfully")
     }
 
     override fun onBackPressed() {
