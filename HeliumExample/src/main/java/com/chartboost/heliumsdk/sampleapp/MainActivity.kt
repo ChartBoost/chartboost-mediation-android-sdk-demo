@@ -1,5 +1,6 @@
 package com.chartboost.heliumsdk.sampleapp
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -234,6 +235,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         // If an interstitial is on screen, close it.
-        if (HeliumSdk.onBackPressed()) return else super.onBackPressed()
+        if (HeliumSdk.onBackPressed()) {
+            return
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q && isTaskRoot) {
+            finishAfterTransition()
+        } else {
+            super.onBackPressed()
+        }
     }
 }
