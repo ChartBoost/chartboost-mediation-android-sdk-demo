@@ -1,6 +1,5 @@
 package com.chartboost.heliumsdk.sampleapp
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -16,6 +15,8 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private var _bannerAd: HeliumBannerAd? = null
     private lateinit var binding: ActivityMainBinding
+    private var _rewardedAd: HeliumRewardedAd? = null
+    private var _interstitialAd: HeliumInterstitialAd? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,33 +36,41 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         _bannerAd?.destroy()
         _bannerAd = null
+        _interstitialAd?.destroy()
+        _interstitialAd = null
+        _rewardedAd?.destroy()
+        _rewardedAd = null
     }
 
     private fun setupRewarded() {
-        val rewardedAd = createRewardedAd()
-        binding.btnLoadRewarded.setOnClickListener { rewardedAd.load() }
+        _rewardedAd = createRewardedAd()
+            .also { newRewardedAd ->
+                binding.btnLoadRewarded.setOnClickListener { newRewardedAd.load() }
 
-        binding.btnShowRewarded.setOnClickListener {
-            if (rewardedAd.readyToShow()) {
-                binding.btnLoadRewarded.isEnabled = false
-                rewardedAd.show()
-            } else {
-                addToLogView("Rewarded ad not ready to show")
+                binding.btnShowRewarded.setOnClickListener {
+                    if (newRewardedAd.readyToShow()) {
+                        binding.btnLoadRewarded.isEnabled = false
+                        newRewardedAd.show()
+                    } else {
+                        addToLogView("Rewarded ad not ready to show")
+                    }
+                }
             }
-        }
     }
 
     private fun setupInterstitial() {
-        val interstitialAd = createInterstitialAd()
-        binding.btnLoad.setOnClickListener { interstitialAd.load() }
-        binding.btnShow.setOnClickListener {
-            if (interstitialAd.readyToShow()) {
-                binding.btnShow.isEnabled = false
-                interstitialAd.show()
-            } else {
-                addToLogView("Interstitial ad not ready to show")
+        _interstitialAd = createInterstitialAd()
+            .also { newInterstitialAd ->
+                binding.btnLoad.setOnClickListener { newInterstitialAd.load() }
+                binding.btnShow.setOnClickListener {
+                    if (newInterstitialAd.readyToShow()) {
+                        binding.btnShow.isEnabled = false
+                        newInterstitialAd.show()
+                    } else {
+                        addToLogView("Interstitial ad not ready to show")
+                    }
+                }
             }
-        }
     }
 
     private fun setupBanner() {
@@ -107,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun didClose(placementName: String?, error: HeliumAdError?) {
                 if (error != null) {
-                    addToLogView(placementName + " (HeliumBannerAd) didClose failed with heliumError: " + error.message)
+                    addToLogView("$placementName (HeliumBannerAd) didClose failed with heliumError: " + error.message)
                 } else {
                     addToLogView("$placementName (HeliumBannerAd) didClose")
                 }
@@ -231,8 +240,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupSdk() {
         HeliumSdk.start(
-            this,
-            getString(R.string.appID),
+            this, getString(R.string.appID),
             getString(R.string.appSignature)
         ) { error: Error? ->
             if (error != null) {
@@ -241,7 +249,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
                 }
                 addToLogView("Helium SDK Started unsuccessfully")
-            }else {
+            } else {
                 addToLogView("Helium SDK Started successfully")
                 configSdk()
                 setupBanner()
