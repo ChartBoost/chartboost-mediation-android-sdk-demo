@@ -2,13 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
+    buildToolsVersion '32.0.0'
 
     defaultConfig {
         multiDexEnabled true
         applicationId "com.chartboost.heliumexample"
         minSdkVersion 19
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -22,15 +23,13 @@ android {
         }
     }
 
+    viewBinding {
+        enabled = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
-    }
-    buildFeatures {
-        viewBinding = true
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
 }
 
@@ -39,25 +38,26 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
 
     // Helium
-    implementation 'com.chartboost:helium:2.5.0'
+    implementation 'com.chartboost:helium:2.7.1'
 
     // Helium requirement
-    implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation 'org.greenrobot:eventbus:3.3.1'
 
     // Helium Adapters
-    implementation 'com.chartboost:helium-tapjoy:2.5.0.0'
-    implementation 'com.chartboost:helium-facebook:2.5.0.0'
-    implementation 'com.chartboost:helium-adcolony:2.5.0.0'
-    implementation 'com.chartboost:helium-admob:2.5.0.0'
-    implementation 'com.chartboost:helium-vungle:2.5.0.0'
-    implementation 'com.chartboost:helium-applovin:2.5.0.0'
-    implementation 'com.chartboost:helium-unityads:2.5.0.0'
-    implementation 'com.chartboost:helium-ironsource:2.5.0.0'
-    implementation 'com.chartboost:helium-fyber:2.5.0.0'
-    implementation 'com.chartboost:helium-inmobi:2.5.0.0'
-    implementation 'com.chartboost:helium-mintegral:2.5.0.0'
+    implementation 'com.chartboost:helium-tapjoy:2.7.1.0'
+    implementation 'com.chartboost:helium-facebook:2.7.1.0'
+    implementation 'com.chartboost:helium-adcolony:2.7.1.0'
+    implementation 'com.chartboost:helium-admob:2.7.1.0'
+    implementation 'com.chartboost:helium-vungle:2.7.1.0'
+    implementation 'com.chartboost:helium-applovin:2.7.1.0'
+    implementation 'com.chartboost:helium-unityads:2.7.1.0'
+    implementation 'com.chartboost:helium-ironsource:2.7.1.0'
+    implementation 'com.chartboost:helium-fyber:2.7.1.0'
+    implementation 'com.chartboost:helium-inmobi:2.7.1.0'
+    implementation 'com.chartboost:helium-mintegral:2.7.1.0'
+
     //Tapjoy
-    implementation 'com.tapjoy:tapjoy-android-sdk:12.8.1'
+    implementation 'com.tapjoy:tapjoy-android-sdk:12.9.0'
 
     //Facebook
     implementation 'com.facebook.android:audience-network-sdk:6.8.0'
@@ -70,36 +70,36 @@ dependencies {
 
     //Vungle
     implementation 'com.vungle:publisher-sdk-android:6.10.3'
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0"
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.1.0"
 
     //AppLovin
-    implementation 'com.applovin:applovin-sdk:10.3.5'
+    implementation 'com.applovin:applovin-sdk:11.2.2'
 
     //Unity Ads
     implementation 'com.unity3d.ads:unity-ads:3.7.5'
 
     //ironSource
-    implementation 'com.ironsource.sdk:mediationsdk:7.1.12.2'
+    implementation 'com.ironsource.sdk:mediationsdk:7.2.0'
 
     //Fyber
-    implementation 'com.fyber:marketplace-sdk:8.1.0'
+    implementation 'com.fyber:marketplace-sdk:8.1.2'
 
     //InMobi
-    implementation 'com.inmobi.monetization:inmobi-ads:10.0.1'
+    implementation 'com.inmobi.monetization:inmobi-ads:10.0.3'
 
     //Mintegral
-    implementation "com.mbridge.msdk.oversea:videojs:15.7.21"
-    implementation "com.mbridge.msdk.oversea:mbjscommon:15.7.21"
-    implementation "com.mbridge.msdk.oversea:playercommon:15.7.21"
-    implementation "com.mbridge.msdk.oversea:reward:15.7.21"
-    implementation "com.mbridge.msdk.oversea:videocommon:15.7.21"
-    implementation "com.mbridge.msdk.oversea:same:15.7.21"
-    implementation "com.mbridge.msdk.oversea:interstitialvideo:15.7.21"
-    implementation "com.mbridge.msdk.oversea:mbnative:15.7.21"
-    implementation "com.mbridge.msdk.oversea:nativeex:15.7.21"
-    implementation "com.mbridge.msdk.oversea:mbbanner:15.7.21"
-    implementation "com.mbridge.msdk.oversea:mbbid:15.7.21"
+    implementation "com.mbridge.msdk.oversea:videojs:16.0.11"
+    implementation "com.mbridge.msdk.oversea:mbjscommon:16.0.11"
+    implementation "com.mbridge.msdk.oversea:playercommon:16.0.11"
+    implementation "com.mbridge.msdk.oversea:reward:16.0.11"
+    implementation "com.mbridge.msdk.oversea:videocommon:16.0.11"
+    implementation "com.mbridge.msdk.oversea:same:16.0.11"
+    implementation "com.mbridge.msdk.oversea:interstitialvideo:16.0.11"
+    implementation "com.mbridge.msdk.oversea:mbnative:16.0.11"
+    implementation "com.mbridge.msdk.oversea:nativeex:16.0.11"
+    implementation "com.mbridge.msdk.oversea:mbbanner:16.0.11"
+    implementation "com.mbridge.msdk.oversea:mbbid:16.0.11"
 
 
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
