@@ -263,7 +263,7 @@ Note: Not all partner SDKs have full support for GDPR. Please refer to its offic
 
 ## 3rd-Party Supported Partner SDKs & Adapters
 ---
-As of 2.7.0, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
+As of 2.7.1, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
 
 * Tapjoy
 * Facebook

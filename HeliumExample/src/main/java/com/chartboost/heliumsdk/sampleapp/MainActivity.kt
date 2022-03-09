@@ -153,9 +153,6 @@ class MainActivity : AppCompatActivity() {
                     if (error != null) {
                         addToLogView(placementName + "(HeliumInterstitialAd) didShow failed with error: " + error.getMessage())
                     } else {
-                        Handler(Looper.getMainLooper()).post {
-                            binding.btnLoad.isEnabled = true
-                        }
                         addToLogView("$placementName(HeliumInterstitialAd) didShow")
                     }
                 }
@@ -198,9 +195,6 @@ class MainActivity : AppCompatActivity() {
                 if (error != null) {
                     addToLogView(placementName + "(HeliumRewardedAd) didShow failed with error: " + error.getMessage())
                 } else {
-                    Handler(Looper.getMainLooper()).post {
-                        binding.btnLoadRewarded.isEnabled = true
-                    }
                     addToLogView("$placementName(HeliumRewardedAd) didShow")
                 }
             }
@@ -236,7 +230,7 @@ class MainActivity : AppCompatActivity() {
     private fun addToLogView(s: String) {
         Handler(Looper.getMainLooper()).post {
             binding.logView.append(
-                """$s""".trimIndent()
+                "\n$s\n"
             )
         }
     }
