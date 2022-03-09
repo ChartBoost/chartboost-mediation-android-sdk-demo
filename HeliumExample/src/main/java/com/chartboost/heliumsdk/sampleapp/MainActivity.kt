@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
                 binding.btnShowRewarded.setOnClickListener {
                     if (newRewardedAd.readyToShow()) {
-                        binding.btnLoadRewarded.isEnabled = false
+                        binding.btnShowRewarded.isEnabled = false
                         newRewardedAd.show()
                     } else {
                         addToLogView("Rewarded ad not ready to show")
@@ -75,29 +75,30 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBanner() {
         binding.bannerAd.let { bannerAd ->
-            bannerAd.setAdListener(createBannerAdListener {
+            binding.bannerAd.heliumBannerAdListener = createBannerAd {
                 if (bannerAd.readyToShow()) {
                     bannerAd.show()
                 }
-            })
+            }
+
             bannerAd.load()
             _bannerAd = bannerAd
         }
     }
 
-    private fun createBannerAdListener(
+    private fun createBannerAd(
         onLoaded: () -> Unit
     ): HeliumBannerAdListener {
         val bannerListener = object : HeliumBannerAdListener {
             override fun didReceiveWinningBid(
-                placementName: String?,
-                bidInfo: HashMap<String?, String?>?
+                placementName: String,
+                bidInfo: HashMap<String, String>
             ) {
                 addToLogView("$placementName (HeliumBannerAd) didReceiveWinningBid")
                 addToLogView(bidInfo.toString())
             }
 
-            override fun didCache(placementName: String?, error: HeliumAdError?) {
+            override fun didCache(placementName: String, error: HeliumAdError?) {
                 if (error != null) {
                     addToLogView(placementName + " (HeliumBannerAd) didCache failed with heliumError: " + error.message)
                 } else {
@@ -106,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun didShow(placementName: String?, error: HeliumAdError?) {
+            override fun didShow(placementName: String, error: HeliumAdError?) {
                 if (error != null) {
                     addToLogView(placementName + " (HeliumBannerAd) didShow failed with heliumError: " + error.message)
                 } else {
@@ -114,7 +115,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun didClose(placementName: String?, error: HeliumAdError?) {
+            override fun didClose(placementName: String, error: HeliumAdError?) {
                 if (error != null) {
                     addToLogView("$placementName (HeliumBannerAd) didClose failed with heliumError: " + error.message)
                 } else {
@@ -229,7 +230,7 @@ class MainActivity : AppCompatActivity() {
     private fun addToLogView(s: String) {
         Handler(Looper.getMainLooper()).post {
             binding.logView.append(
-                """$s""".trimIndent()
+                "\n$s\n"
             )
         }
     }

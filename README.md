@@ -25,8 +25,8 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:2.3.2'
-    implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation 'com.chartboost:helium:2.7.1'
+    implementation 'org.greenrobot:eventbus:3.3.1'
 
     ...
 }
@@ -67,8 +67,8 @@ If using mediation (i.e. Admob), you also need to include the 'classic' chartboo
 ### Google Play Services
 
 ```Gradle
-implementation "com.google.android.gms:play-services-base:17.6.0"
-implementation "com.google.android.gms:play-services-ads-identifier:17.0.1"
+implementation "com.google.android.gms:play-services-base:18.0.1"
+implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
 ```
 
 ### Proguard
@@ -111,13 +111,13 @@ HeliumInterstitialAd interstitialAd = new HeliumInterstitialAd(interstitialPlace
         public void didReceiveWinningBid(String placementName, HashMap<String, String> bidInfo) {}
 
         @Override
-        public void didCache(String placementName, Error error) {}
+        public void didCache(String placementName, HeliumAdError error) {}
 
         @Override
-        public void didShow(String placementName, Error error) {}
+        public void didShow(String placementName, HeliumAdError error) {}
 
         @Override
-        public void didClose(String placementName, Error error) {}
+        public void didClose(String placementName, HeliumAdError error) {}
     }
 );
 ```
@@ -149,13 +149,13 @@ HeliumRewardedAd rewardedAd = new HeliumRewardedAd(rewardedPlacementName,
         public void didReceiveWinningBid(String placementName, HashMap<String, String> bidInfo) {}
 
         @Override
-        public void didCache(String placementName, Error error) {}
+        public void didCache(String placementName, HeliumAdError error) {}
 
         @Override
-        public void didShow(String placementName, Error error) {}
+        public void didShow(String placementName, HeliumAdError error) {}
 
         @Override
-        public void didClose(String placementName, Error error) {}
+        public void didClose(String placementName, HeliumAdError error) {}
 
         @Override
         public void didReceiveReward(String placementName, String reward) {}
@@ -175,6 +175,50 @@ To show the ad, make sure the ad is `readyToShow`, then show the ad.
 ```Java
 if (rewardedAd.readyToShow()) {
     rewardedAd.show();
+}
+```
+
+## Creating Banner Placements
+---
+If you want banner ads, this is how to create a banner ad object.
+```Java
+/*
+      The following Banner enum Sizes can be passed down:
+      HeliumBannerAd.Size.STANDARD
+      HeliumBannerAd.Size.MEDIUM
+      HeliumBannerAd.Size.LEADERBOARD
+    */
+    HeliumBannerAd.Size bannerSize = HeliumBannerAd.Size.STANDARD;
+    String bannerPlacementName = "CBBanner";
+    HeliumBannerAd heliumBannerAd = new HeliumBannerAd(context, bannerPlacementName, bannerSize,
+            new HeliumRewardedAdListener() {
+                @Override
+                public void didReceiveWinningBid(String placementName, HashMap<String, String> bidInfo) {}
+
+                @Override
+                public void didCache(String placementName, HeliumAdError error) {}
+
+                @Override
+                public void didShow(String placementName, HeliumAdError error) {}
+
+                @Override
+                public void didClose(String placementName, HeliumAdError error) {}
+        }
+    );
+
+```
+
+## Loading & Showing Banner Ads
+---
+To load a rewarded ad, simply call the `HeliumBannerAd` you created
+```Java
+bannerAd.load();
+```
+
+To show the ad, make sure the ad is `readyToShow`, then show the ad.
+```Java
+if (bannerAd.readyToShow()) {
+    bannerAd.show();
 }
 ```
 
@@ -219,7 +263,7 @@ Note: Not all partner SDKs have full support for GDPR. Please refer to its offic
 
 ## 3rd-Party Supported Partner SDKs & Adapters
 ---
-As of 2.0.0, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
+As of 2.7.1, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
 
 * Tapjoy
 * Facebook
@@ -229,26 +273,35 @@ As of 2.0.0, the Helium SDK currently supports the following 3rd-party programma
 * Applovin
 * UnityAds
 * ironSource
+* Fyber
+* inMobi
+* Mintegral
 
 To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
 //TapJoy
-implementation 'com.chartboost:helium-tapjoy:2.3.2.0'
+implementation 'com.chartboost:helium-tapjoy:2.7.1.0'
 //Facebook
-implementation 'com.chartboost:helium-facebook:2.3.2.0'
+implementation 'com.chartboost:helium-facebook:2.7.1.0'
 //AdColony
-implementation 'com.chartboost:helium-adcolony:2.3.2.0'
+implementation 'com.chartboost:helium-adcolony:2.7.1.0'
 //AdMob
-implementation 'com.chartboost:helium-admob:2.3.2.0'
+implementation 'com.chartboost:helium-admob:2.7.1.0'
 //Vungle
-implementation 'com.chartboost:helium-vungle:2.3.2.1'
+implementation 'com.chartboost:helium-vungle:2.7.1.0'
 //Applovin
-implementation 'com.chartboost:helium-applovin:2.3.2.0'
+implementation 'com.chartboost:helium-applovin:2.7.1.0'
 //UnityAds
-implementation 'com.chartboost:helium-unityads:2.3.2.0'
+implementation 'com.chartboost:helium-unityads:2.7.1.0'
 //ironSource
-implementation 'com.chartboost:helium-ironsource:2.3.2.0'
+implementation 'com.chartboost:helium-ironsource:2.7.1.0'
+//Fyber
+implementation 'com.chartboost:helium-fyber:2.7.1.0'
+//inMobi
+implementation 'com.chartboost:helium-inmobi:2.7.1.0'
+//Mintegral
+implementation 'com.chartboost:helium-mintegral:2.7.1.0'
 
 //Make sure to also include the 3rd-party sdks & their dependencies
 ...
