@@ -19,13 +19,14 @@ To quickly get started, simply add the following dependencies inside your app's 
 
 ```gradle
 repositories {
-  mavenCentral()
+  name "Helium's maven repo"
+  url 'https://cboost.jfrog.io/artifactory/helium'
 }
 
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:2.7.1'
+    implementation 'com.chartboost:helium:2.9.0'
     implementation 'org.greenrobot:eventbus:3.3.1'
 
     ...
@@ -117,6 +118,9 @@ HeliumInterstitialAd interstitialAd = new HeliumInterstitialAd(interstitialPlace
         public void didShow(String placementName, HeliumAdError error) {}
 
         @Override
+        public void didClick(String placementName, HeliumAdError error) {}
+
+        @Override
         public void didClose(String placementName, HeliumAdError error) {}
     }
 );
@@ -153,6 +157,9 @@ HeliumRewardedAd rewardedAd = new HeliumRewardedAd(rewardedPlacementName,
 
         @Override
         public void didShow(String placementName, HeliumAdError error) {}
+
+        @Override
+        public void didClick(String placementName, HeliumAdError error) {}
 
         @Override
         public void didClose(String placementName, HeliumAdError error) {}
@@ -200,6 +207,9 @@ If you want banner ads, this is how to create a banner ad object.
 
                 @Override
                 public void didShow(String placementName, HeliumAdError error) {}
+
+                @Override
+                public void didClick(String placementName, HeliumAdError error) {}
 
                 @Override
                 public void didClose(String placementName, HeliumAdError error) {}
@@ -263,7 +273,7 @@ Note: Not all partner SDKs have full support for GDPR. Please refer to its offic
 
 ## 3rd-Party Supported Partner SDKs & Adapters
 ---
-As of 2.7.1, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
+As of 2.9.0, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
 
 * Tapjoy
 * Facebook
@@ -276,32 +286,35 @@ As of 2.7.1, the Helium SDK currently supports the following 3rd-party programma
 * Fyber
 * inMobi
 * Mintegral
+* Yahoo
 
 To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
 //TapJoy
-implementation 'com.chartboost:helium-tapjoy:2.7.1.0'
+implementation 'com.chartboost:helium-tapjoy:2.9.0.0'
 //Facebook
-implementation 'com.chartboost:helium-facebook:2.7.1.0'
+implementation 'com.chartboost:helium-facebook:2.9.0.0'
 //AdColony
-implementation 'com.chartboost:helium-adcolony:2.7.1.0'
+implementation 'com.chartboost:helium-adcolony:2.9.0.0'
 //AdMob
-implementation 'com.chartboost:helium-admob:2.7.1.0'
+implementation 'com.chartboost:helium-admob:2.9.0.0'
 //Vungle
-implementation 'com.chartboost:helium-vungle:2.7.1.0'
+implementation 'com.chartboost:helium-vungle:2.9.0.0'
 //Applovin
-implementation 'com.chartboost:helium-applovin:2.7.1.0'
+implementation 'com.chartboost:helium-applovin:2.9.0.0'
 //UnityAds
-implementation 'com.chartboost:helium-unityads:2.7.1.0'
+implementation 'com.chartboost:helium-unityads:2.9.0.0'
 //ironSource
-implementation 'com.chartboost:helium-ironsource:2.7.1.0'
+implementation 'com.chartboost:helium-ironsource:2.9.0.0'
 //Fyber
-implementation 'com.chartboost:helium-fyber:2.7.1.0'
+implementation 'com.chartboost:helium-fyber:2.9.0.0'
 //inMobi
-implementation 'com.chartboost:helium-inmobi:2.7.1.0'
+implementation 'com.chartboost:helium-inmobi:2.9.0.0'
 //Mintegral
-implementation 'com.chartboost:helium-mintegral:2.7.1.0'
+implementation 'com.chartboost:helium-mintegral:2.9.0.0'
+//Yahoo
+implementation 'com.chartboost:helium-yahoo:2.9.0.0'
 
 //Make sure to also include the 3rd-party sdks & their dependencies
 ...
