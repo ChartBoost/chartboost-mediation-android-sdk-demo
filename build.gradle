@@ -13,6 +13,10 @@ allprojects {
         google()
         mavenCentral()
         maven {
+            name "Helium's maven repo"
+            url 'https://cboost.jfrog.io/artifactory/helium'
+        }
+        maven {
             name "ironSource's maven repo"
             url 'https://android-sdk.is.com/'
         }
@@ -20,7 +24,14 @@ allprojects {
             name "Tapjoy's maven repo"
             url "https://sdk.tapjoy.com/"
         }
-        maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
+        maven {
+            name "Mintegral's maven repo"
+            url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea"
+        }
+        maven {
+            name "Yahoo's maven repo"
+            url 'https://artifactory.verizonmedia.com/artifactory/maven/'
+        }
     }
 }
 task clean(type: Delete) {
