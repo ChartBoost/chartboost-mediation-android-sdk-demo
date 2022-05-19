@@ -2,6 +2,27 @@ Android Change Log
 ==================
 Check for the latest Helium SDK at the Helium website.
 
+### Version 2.10.0 *(2022-05-19)*
+Improvements:
+- Added `setGameEngine(String name, String version)` to HeliumSdk to facilitate sending game engine information for Reserved Keywords Targeting.
+- All ad listeners now provide their callbacks on the main thread. It is now possible to directly call methods on Views in ad callbacks.
+
+This version of the Helium SDK includes support for the following Ad Providers:
+
+>- *AdColony: 4.7.0*
+>- *AdMob: 20.6.0*
+>- *AppLovin: 11.3.1*
+>- *Chartboost: 8.3.1*
+>- *Facebook Audience Network: 6.8.0*
+>- *Fyber Marketplace: 8.1.3*
+>- *InMobi: 10.0.5*
+>- *ironSource: 7.2.1*
+>- *Mintegral: 16.0.31*
+>- *TapJoy: 12.9.1*
+>- *UnityAds: 4.0.1*
+>- *Vungle: 6.10.5*
+>- *Yahoo: 1.14.0*
+
 ### Version 2.9.0 *(2022-04-21)*
 Improvements:
 - Added support for sending keywords to all `HeliumAd` subclasses.
