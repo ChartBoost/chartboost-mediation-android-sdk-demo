@@ -75,20 +75,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBanner() {
         binding.bannerAd.let { bannerAd ->
-            binding.bannerAd.heliumBannerAdListener = createBannerAd {
-                if (bannerAd.readyToShow()) {
-                    bannerAd.show()
-                }
-            }
-
+            bannerAd.heliumBannerAdListener = createBannerAd()
             bannerAd.load()
             _bannerAd = bannerAd
         }
     }
 
-    private fun createBannerAd(
-        onLoaded: () -> Unit
-    ): HeliumBannerAdListener {
+    private fun createBannerAd(): HeliumBannerAdListener {
         val bannerListener = object : HeliumBannerAdListener {
             override fun didReceiveWinningBid(
                 placementName: String,
@@ -102,16 +95,7 @@ class MainActivity : AppCompatActivity() {
                 if (error != null) {
                     addToLogView("$placementName (HeliumBannerAd) didCache failed with heliumError: ${error.message}")
                 } else {
-                    onLoaded()
                     addToLogView("$placementName (HeliumBannerAd) didCache")
-                }
-            }
-
-            override fun didShow(placementName: String, error: HeliumAdError?) {
-                if (error != null) {
-                    addToLogView("$placementName (HeliumBannerAd) didShow failed with heliumError: ${error.message}")
-                } else {
-                    addToLogView("$placementName (HeliumBannerAd) didShow")
                 }
             }
 
@@ -123,12 +107,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun didClose(placementName: String, error: HeliumAdError?) {
-                if (error != null) {
-                    addToLogView("$placementName (HeliumBannerAd) didClose failed with heliumError: ${error.message}")
-                } else {
-                    addToLogView("$placementName (HeliumBannerAd) didClose")
-                }
+            override fun didRecordImpression(placementName: String) {
+                addToLogView("$placementName (HeliumBannerAd) didRecordImpression")
             }
         }
         return bannerListener
@@ -179,6 +159,10 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         addToLogView("$placementName (HeliumInterstitialAd) didClose")
                     }
+                }
+
+                override fun didRecordImpression(placementName: String) {
+                    addToLogView("$placementName (HeliumInterstitialAd) didRecordImpression")
                 }
             })
         return interstitialAd
@@ -233,6 +217,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun didReceiveReward(placementName: String, reward: String) {
                 addToLogView("$placementName (HeliumRewardedAd) didReceiveReward: $reward")
+            }
+
+            override fun didRecordImpression(placementName: String) {
+                addToLogView("$placementName (HeliumRewardedAd) didRecordImpression")
             }
         })
         return rewardedAd
