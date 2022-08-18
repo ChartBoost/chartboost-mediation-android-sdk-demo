@@ -26,7 +26,7 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:2.9.0'
+    implementation 'com.chartboost:helium:3.0.0'
     implementation 'org.greenrobot:eventbus:3.3.1'
 
     ...
@@ -122,6 +122,9 @@ HeliumInterstitialAd interstitialAd = new HeliumInterstitialAd(interstitialPlace
 
         @Override
         public void didClose(String placementName, HeliumAdError error) {}
+
+        @Override
+        public void didRecordImpression(String placementName) {}
     }
 );
 ```
@@ -166,6 +169,9 @@ HeliumRewardedAd rewardedAd = new HeliumRewardedAd(rewardedPlacementName,
 
         @Override
         public void didReceiveReward(String placementName, String reward) {}
+
+        @Override
+        public void didRecordImpression(String placementName) {}
     }
 );
 ```
@@ -206,13 +212,10 @@ If you want banner ads, this is how to create a banner ad object.
                 public void didCache(String placementName, HeliumAdError error) {}
 
                 @Override
-                public void didShow(String placementName, HeliumAdError error) {}
-
-                @Override
                 public void didClick(String placementName, HeliumAdError error) {}
 
                 @Override
-                public void didClose(String placementName, HeliumAdError error) {}
+                public void didRecordImpression(String placementName) {}
         }
     );
 
@@ -224,14 +227,6 @@ To load a rewarded ad, simply call the `HeliumBannerAd` you created
 ```Java
 bannerAd.load();
 ```
-
-To show the ad, make sure the ad is `readyToShow`, then show the ad.
-```Java
-if (bannerAd.readyToShow()) {
-    bannerAd.show();
-}
-```
-
 
 ## Test Mode
 ---
@@ -292,29 +287,29 @@ To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
 //TapJoy
-implementation 'com.chartboost:helium-tapjoy:2.9.0.0'
+implementation 'com.chartboost:helium-tapjoy:3.0.0.0'
 //Facebook
-implementation 'com.chartboost:helium-facebook:2.9.0.0'
+implementation 'com.chartboost:helium-facebook:3.0.0.0'
 //AdColony
-implementation 'com.chartboost:helium-adcolony:2.9.0.0'
+implementation 'com.chartboost:helium-adcolony:3.0.0.0'
 //AdMob
-implementation 'com.chartboost:helium-admob:2.9.0.0'
+implementation 'com.chartboost:helium-admob:3.0.0.0'
 //Vungle
-implementation 'com.chartboost:helium-vungle:2.9.0.0'
+implementation 'com.chartboost:helium-vungle:3.0.0.0'
 //Applovin
-implementation 'com.chartboost:helium-applovin:2.9.0.0'
+implementation 'com.chartboost:helium-applovin:3.0.0.0'
 //UnityAds
-implementation 'com.chartboost:helium-unityads:2.9.0.0'
+implementation 'com.chartboost:helium-unityads:3.0.0.0'
 //ironSource
-implementation 'com.chartboost:helium-ironsource:2.9.0.0'
+implementation 'com.chartboost:helium-ironsource:3.0.0.0'
 //Fyber
-implementation 'com.chartboost:helium-fyber:2.9.0.0'
+implementation 'com.chartboost:helium-fyber:3.0.0.0'
 //inMobi
-implementation 'com.chartboost:helium-inmobi:2.9.0.0'
+implementation 'com.chartboost:helium-inmobi:3.0.0.0'
 //Mintegral
-implementation 'com.chartboost:helium-mintegral:2.9.0.0'
+implementation 'com.chartboost:helium-mintegral:3.0.0.0'
 //Yahoo
-implementation 'com.chartboost:helium-yahoo:2.9.0.0'
+implementation 'com.chartboost:helium-yahoo:3.0.0.0'
 
 //Make sure to also include the 3rd-party sdks & their dependencies
 ...
