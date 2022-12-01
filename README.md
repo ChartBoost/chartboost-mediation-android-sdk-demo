@@ -26,7 +26,7 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:3.0.0'
+    implementation 'com.chartboost:helium:3.3.0'
     implementation 'org.greenrobot:eventbus:3.3.1'
 
     ...
