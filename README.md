@@ -26,7 +26,7 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:3.0.0'
+    implementation 'com.chartboost:helium:3.3.0'
     implementation 'org.greenrobot:eventbus:3.3.1'
 
     ...
@@ -287,29 +287,29 @@ To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
 //TapJoy
-implementation 'com.chartboost:helium-tapjoy:3.0.0.0'
+implementation 'com.chartboost:helium-tapjoy:3.3.0.0'
 //Facebook
-implementation 'com.chartboost:helium-facebook:3.0.0.0'
+implementation 'com.chartboost:helium-facebook:3.3.0.0'
 //AdColony
-implementation 'com.chartboost:helium-adcolony:3.0.0.0'
+implementation 'com.chartboost:helium-adcolony:3.3.0.0'
 //AdMob
-implementation 'com.chartboost:helium-admob:3.0.0.0'
+implementation 'com.chartboost:helium-admob:3.3.0.0'
 //Vungle
-implementation 'com.chartboost:helium-vungle:3.0.0.0'
+implementation 'com.chartboost:helium-vungle:3.3.0.0'
 //Applovin
-implementation 'com.chartboost:helium-applovin:3.0.0.0'
+implementation 'com.chartboost:helium-applovin:3.3.0.0'
 //UnityAds
-implementation 'com.chartboost:helium-unityads:3.0.0.0'
+implementation 'com.chartboost:helium-unityads:3.3.0.0'
 //ironSource
-implementation 'com.chartboost:helium-ironsource:3.0.0.0'
+implementation 'com.chartboost:helium-ironsource:3.3.0.0'
 //Fyber
-implementation 'com.chartboost:helium-fyber:3.0.0.0'
+implementation 'com.chartboost:helium-fyber:3.3.0.0'
 //inMobi
-implementation 'com.chartboost:helium-inmobi:3.0.0.0'
+implementation 'com.chartboost:helium-inmobi:3.3.0.0'
 //Mintegral
-implementation 'com.chartboost:helium-mintegral:3.0.0.0'
+implementation 'com.chartboost:helium-mintegral:3.3.0.0'
 //Yahoo
-implementation 'com.chartboost:helium-yahoo:3.0.0.0'
+implementation 'com.chartboost:helium-yahoo:3.3.0.0'
 
 //Make sure to also include the 3rd-party sdks & their dependencies
 ...
