@@ -30,25 +30,25 @@ android {
 
 dependencies {
     // Helium
-    implementation 'com.chartboost:helium:3.3.0'
+    implementation 'com.chartboost:helium:3.3.2'
 
     // Helium requirement
     implementation 'org.greenrobot:eventbus:3.3.1'
 
     // Helium Adapters
-    implementation 'com.chartboost:helium-tapjoy:3.3.0.0'
-    implementation 'com.chartboost:helium-facebook:3.3.0.0'
-    implementation 'com.chartboost:helium-adcolony:3.3.0.0'
-    implementation 'com.chartboost:helium-admob:3.3.0.0'
-    implementation 'com.chartboost:helium-googlebidding:3.3.0.0'
-    implementation 'com.chartboost:helium-vungle:3.3.0.0'
-    implementation 'com.chartboost:helium-applovin:3.3.0.0'
-    implementation 'com.chartboost:helium-unityads:3.3.0.0'
-    implementation 'com.chartboost:helium-ironsource:3.3.0.0'
-    implementation 'com.chartboost:helium-fyber:3.3.0.0'
-    implementation 'com.chartboost:helium-inmobi:3.3.0.0'
-    implementation 'com.chartboost:helium-mintegral:3.3.0.0'
-    implementation 'com.chartboost:helium-yahoo:3.3.0.0'
+    implementation 'com.chartboost:helium-tapjoy:3.3.2.0'
+    implementation 'com.chartboost:helium-facebook:3.3.2.0'
+    implementation 'com.chartboost:helium-adcolony:3.3.2.0'
+    implementation 'com.chartboost:helium-admob:3.3.2.0'
+    implementation 'com.chartboost:helium-googlebidding:3.3.2.0'
+    implementation 'com.chartboost:helium-vungle:3.3.2.0'
+    implementation 'com.chartboost:helium-applovin:3.3.2.0'
+    implementation 'com.chartboost:helium-unityads:3.3.2.0'
+    implementation 'com.chartboost:helium-ironsource:3.3.2.0'
+    implementation 'com.chartboost:helium-fyber:3.3.2.0'
+    implementation 'com.chartboost:helium-inmobi:3.3.2.0'
+    implementation 'com.chartboost:helium-mintegral:3.3.2.0'
+    implementation 'com.chartboost:helium-yahoo:3.3.2.0'
 
     // Google Play Services
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
