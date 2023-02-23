@@ -1,39 +1,37 @@
-Android Helium SDK
+Android Chartboost Mediation SDK
 ====
 
-The Android Helium SDK, by Chartboost, is a Unified-Auction & Mediated solution which helps developers increase their mobile apps' revenue with the inclusion of other supported Programmatic & Mediated SDKs.
+The Android Chartboost Mediation SDK, by Chartboost, is a Unified-Auction & Mediated solution which helps developers increase their mobile apps' revenue with the inclusion of other supported Programmatic & Mediated SDKs.
 
 ## Getting Started
 ---
 
-
 ### Before You Begin:
-1. Have you set up your app with Helium?
+1. Have you set up your app with Chartboost Mediation?
 2. Does your app have placements?
 
-If not, simply add your app and create the placements in the Helium dashboard by following the [documentation here.](https://helium.chartboost.com/resources/docs/import-app)
-
+If not, simply add your app and create the placements in the Chartboost Mediation dashboard by following the [documentation here.](https://developers.chartboost.com/docs/mediation-import-apps)
 
 ### Add Gradle Dependencies:
 To quickly get started, simply add the following dependencies inside your app's `build.gradle`:
 
 ```gradle
 repositories {
-  name "Helium's maven repo"
-  url 'https://cboost.jfrog.io/artifactory/helium'
+  name "Chartboost Mediation's maven repo"
+  url 'https://cboost.jfrog.io/artifactory/chartboost-mediation'
 }
 
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:3.3.2'
+    implementation 'com.chartboost:chartboost-mediation-sdk:4.0.0'
     implementation 'org.greenrobot:eventbus:3.3.1'
 
     ...
 }
 ```
 
-### Update your app's Manifest for Helium
+### Update your app's Manifest for Chartboost Mediation
 
 ```XML
 <uses-permission android:name="android.permission.INTERNET" />
@@ -47,24 +45,6 @@ These are optional
 <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 ```
 
-For Helium Chartboost, add the following:
-```XML
-<activity android:name="com.chartboost_helium.sdk.CBImpressionActivity"
-    android:excludeFromRecents="true"
-    android:hardwareAccelerated="true"
-    android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-    android:configChanges="keyboardHidden|orientation|screenSize" />
-```
-
-If using mediation (i.e. Admob), you also need to include the 'classic' chartboost activity.
-```XML
-<activity android:name="com.chartboost.sdk.CBImpressionActivity"
-    android:excludeFromRecents="true"
-    android:hardwareAccelerated="true"
-    android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-    android:configChanges="keyboardHidden|orientation|screenSize" />
-```
-
 ### Google Play Services
 
 ```Gradle
@@ -72,120 +52,113 @@ implementation "com.google.android.gms:play-services-base:18.0.1"
 implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
 ```
 
-### Proguard
-
-If using proguard, add the following to your `proguard-rules.pro` file.
-
-```Java
--keep class com.chartboost.** { *; }
-```
-
-## Start The Helium SDK:
+## Start The Chartboost Mediation SDK:
 ---
-In your application's `onCreate` method, start the Helium SDK by providing your app's app id, its app signature, and passing a _HeliumSdkListener_
+In your application's `onCreate` method, start the Chartboost Mediation SDK by providing your app's app id, its app signature, and passing a _HeliumSdkListener_
 
-```Java
-    HeliumSdk.start(this, "APP ID", "APP SIGNATURE",
-        new HeliumSdk.HeliumSdkListener() {
-            @Override
-            public void didInitialize(Error error) {
-                if (error != null) {
-                    // Helium failed to initialize
-                } else {
-                    // Helium did initialize
-                }
+```java Java
+HeliumSdk.start(
+    MyActivityContext.this,
+    myHeliumAppId,
+    myHeliumAppSignature,
+    new HeliumInitializationOptions(),
+    new HeliumSdk.HeliumSdkListener() {
+        @Override
+        public void didInitialize(Error error) {
+            if (error != null) {
+                Log.d(TAG,"Helium SDK failed to initialize. Reason: " + error.getMessage());
+            } else {
+                //SDK Started,
+                Log.d(TAG,"Helium SDK initialized successfully");
             }
         }
-    );
-```
-
-
-## Creating Interstitial Placements
----
-After initializing the Helium SDK, you want to create an interstitial ad object.
-
-```Java
-String interstitialPlacementName = "CBInterstitial";
-HeliumInterstitialAd interstitialAd = new HeliumInterstitialAd(interstitialPlacementName,
-    new HeliumInterstitialAdListener() {
-        @Override
-        public void didReceiveWinningBid(String placementName, HashMap<String, String> bidInfo) {}
-
-        @Override
-        public void didCache(String placementName, HeliumAdError error) {}
-
-        @Override
-        public void didShow(String placementName, HeliumAdError error) {}
-
-        @Override
-        public void didClick(String placementName, HeliumAdError error) {}
-
-        @Override
-        public void didClose(String placementName, HeliumAdError error) {}
-
-        @Override
-        public void didRecordImpression(String placementName) {}
     }
 );
 ```
 
+## Creating Interstitial Placements
+---
+After initializing the Chartboost Mediation SDK, you want to create an interstitial ad object.
+
+```java Java
+String interstitialPlacementName = "CBInterstitial";
+HeliumInterstitialAd interstitialAd = new HeliumInterstitialAd(interstitialPlacementName,
+    new HeliumInterstitialAdListener() {
+        @Override
+        public void didReceiveWinningBid(@NonNull String placementName, @NonNull HashMap bidInfo) {}
+        
+        @Override
+        public void didCache(@NonNull String placementName, @Nullable HeliumAdError error) {}
+     
+        @Override
+        public void didShow(@NonNull String placementName, @Nullable HeliumAdError error) {}
+     
+        @Override
+        public void didClick(@NonNull String placementName, @Nullable HeliumAdError error) {}
+     
+        @Override
+        public void didClose(@NonNull String placementName, @Nullable HeliumAdError error) {}
+    
+        @Override
+        public void didRecordImpression(@NonNull String placementName) {}
+    }
+);
+```
 
 ## Loading & Showing Interstitial Ads
 ---
 To load an interstitial ad, simply call the `HeliumInterstitialAd` you created
-```Java
+```java Java
 interstitialAd.load();
 ```
 
 To show the ad, make sure the ad is `readyToShow`, then show the ad.
-```Java
+```java Java
 if (interstitialAd.readyToShow()) {
     interstitialAd.show();
 }
 ```
 
-
 ## Creating Rewarded Placements
 ---
 If you want rewarded ads, this is how to create a rewarded ad object.
-```Java
+```java Java
 String rewardedPlacementName = "CBRewarded";
 HeliumRewardedAd rewardedAd = new HeliumRewardedAd(rewardedPlacementName,
     new HeliumRewardedAdListener() {
         @Override
-        public void didReceiveWinningBid(String placementName, HashMap<String, String> bidInfo) {}
-
+        public void didReceiveWinningBid(@NonNull String placementName, @NonNull HashMap bidInfo) {}
+     
         @Override
-        public void didCache(String placementName, HeliumAdError error) {}
-
+        public void didCache(@NonNull String placementName, @Nullable HeliumAdError error) {}
+     
         @Override
-        public void didShow(String placementName, HeliumAdError error) {}
-
+        public void didShow(@NonNull String placementName, @Nullable HeliumAdError error) {}
+     
         @Override
-        public void didClick(String placementName, HeliumAdError error) {}
-
+        public void didClick(@NonNull String placementName, @Nullable HeliumAdError error) {}
+     
         @Override
-        public void didClose(String placementName, HeliumAdError error) {}
-
+        public void didClose(@NonNull String placementName, @Nullable HeliumAdError error) {}
+     
         @Override
-        public void didReceiveReward(String placementName, String reward) {}
-
+        public void didReceiveReward(@NonNull String placementName, @NonNull String reward) {}
+    
         @Override
-        public void didRecordImpression(String placementName) {}
+        public void didRecordImpression(@NonNull String placementName) {}
     }
 );
 ```
 
-
 ## Loading & Showing Rewarded Ads
 ---
 To load a rewarded ad, simply call the `HeliumRewardedAd` you created
-```Java
+```java Java
 rewardedAd.load();
 ```
 
 To show the ad, make sure the ad is `readyToShow`, then show the ad.
-```Java
+```java Java
 if (rewardedAd.readyToShow()) {
     rewardedAd.show();
 }
@@ -194,67 +167,64 @@ if (rewardedAd.readyToShow()) {
 ## Creating Banner Placements
 ---
 If you want banner ads, this is how to create a banner ad object.
-```Java
+```java Java
 /*
-      The following Banner enum Sizes can be passed down:
-      HeliumBannerAd.Size.STANDARD
-      HeliumBannerAd.Size.MEDIUM
-      HeliumBannerAd.Size.LEADERBOARD
-    */
-    HeliumBannerAd.Size bannerSize = HeliumBannerAd.Size.STANDARD;
-    String bannerPlacementName = "CBBanner";
-    HeliumBannerAd heliumBannerAd = new HeliumBannerAd(context, bannerPlacementName, bannerSize,
-            new HeliumRewardedAdListener() {
-                @Override
-                public void didReceiveWinningBid(String placementName, HashMap<String, String> bidInfo) {}
-
-                @Override
-                public void didCache(String placementName, HeliumAdError error) {}
-
-                @Override
-                public void didClick(String placementName, HeliumAdError error) {}
-
-                @Override
-                public void didRecordImpression(String placementName) {}
-        }
-    );
-
+  The following Banner enum Sizes can be passed down:
+  HeliumBannerAd.HeliumBannerSize.STANDARD
+  HeliumBannerAd.HeliumBannerSize.MEDIUM
+  HeliumBannerAd.HeliumBannerSize.LEADERBOARD
+*/
+HeliumBannerAd.HeliumBannerSize bannerSize = HeliumBannerAd.HeliumBannerSize.STANDARD;
+String bannerPlacementName = "CBBanner";
+HeliumBannerAd heliumBannerAd = new HeliumBannerAd(context, bannerPlacementName, bannerSize,
+    new HeliumBannerAdListener() {
+        @Override
+        public void didReceiveWinningBid(@NonNull String placementName, @NonNull HashMap bindInfo) {}
+    
+        @Override
+        public void didCache(@NonNull String placementName, @Nullable HeliumAdError error) {}
+    
+        @Override
+        public void didClick(@NonNull String placementName, @Nullable HeliumAdError error) {}
+    
+        @Override
+        public void didRecordImpression(@NonNull String placementName) {}
+    }
+);
 ```
 
 ## Loading & Showing Banner Ads
 ---
-To load a rewarded ad, simply call the `HeliumBannerAd` you created
-```Java
+To load a banner ad, simply call the `HeliumBannerAd` you created
+```java Java
 bannerAd.load();
 ```
 
 ## Test Mode
 ---
-To set the SDK to Test Mode, simply call the following method _after_ initializing the Helium SDK after its `start` method.
-```Java
+To set the SDK to Test Mode, simply call the following method _after_ initializing the Chartboost Mediation SDK after its `start` method.
+```java Java
 // Start the Helium SDK first, before setting the sdk to Test Mode.
 HeliumSdk.start(this, "APP ID", "APP SIG", sdkListener);
 // Set the Helium SDK to Test Mode. Make sure to remove this before deployment.
 HeliumSdk.setTestMode(true);
 ```
 
-
 ## COPPA, GDPR & Additional Methods:
 ---
 To set the SDK for COPPA compliance:
-```Java
+```java Java
 HeliumSdk.setSubjectToCoppa(true);
 ```
 
-The Helium SDK includes methods that set the GDPR setting as well as the user consent.
-```Java
+The Chartboost Mediation SDK includes methods that set the GDPR setting as well as the user consent.
+```java Java
 HeliumSdk.setSubjectToGDPR(true);
 HeliumSdk.setUserHasGivenConsent(true);
 ```
 
-
-In addition to the methods already mentioned above, the Helium SDK also provides the following methods:
-```Java
+In addition to the methods already mentioned above, the Chartboost Mediation SDK also provides the following methods:
+```java Java
 HeliumSdk.getAppId();
 HeliumSdk.getAppSignature();
 HeliumSdk.getContext();
@@ -265,59 +235,48 @@ HeliumSdk.onBackPressed();
 
 Note: Not all partner SDKs have full support for GDPR. Please refer to its official documentation for more info on how the sdk handles GDPR.
 
-
 ## 3rd-Party Supported Partner SDKs & Adapters
 ---
-As of 2.9.0, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
+As of 4.0.0, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
 
-* Tapjoy
-* Facebook
 * AdColony
 * AdMob
-* Vungle
 * Applovin
-* UnityAds
-* ironSource
-* Fyber
+* Meta Audience Network
+* Digital Turbine Exchange
+* Google Bidding
 * inMobi
+* ironSource
 * Mintegral
+* Tapjoy
+* Pangle
+* UnityAds
+* Vungle
 * Yahoo
 
 To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
-//TapJoy
-implementation 'com.chartboost:helium-tapjoy:3.3.2.0'
-//Facebook
-implementation 'com.chartboost:helium-facebook:3.3.2.0'
-//AdColony
-implementation 'com.chartboost:helium-adcolony:3.3.2.0'
-//AdMob
-implementation 'com.chartboost:helium-admob:3.3.2.0'
-//Vungle
-implementation 'com.chartboost:helium-vungle:3.3.2.0'
-//Applovin
-implementation 'com.chartboost:helium-applovin:3.3.2.0'
-//UnityAds
-implementation 'com.chartboost:helium-unityads:3.3.2.0'
-//ironSource
-implementation 'com.chartboost:helium-ironsource:3.3.2.0'
-//Fyber
-implementation 'com.chartboost:helium-fyber:3.3.2.0'
-//inMobi
-implementation 'com.chartboost:helium-inmobi:3.3.2.0'
-//Mintegral
-implementation 'com.chartboost:helium-mintegral:3.3.2.0'
-//Yahoo
-implementation 'com.chartboost:helium-yahoo:3.3.2.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.21.3.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.5.5.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.2.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.6.2.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.21.3.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.1.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.2.5.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.12.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.0.31.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:4.12.9.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.4.3.0.4.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.4.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.6.12.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.3.0.0'
 
-//Make sure to also include the 3rd-party sdks & their dependencies
-...
-...
 ```
-
-
 
 Feel free to take a look at the HeliumExample app for an integration example
 
-For more information, please read https://helium.chartboost.com/resources/sdk
+For more information, please read https://developers.chartboost.com/docs/get-started-with-mediation

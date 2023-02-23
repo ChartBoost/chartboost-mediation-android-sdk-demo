@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MainTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:typeface">normal</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#1a222c</item>
+        <item name="colorPrimary">@color/cbGreen80</item>
+    </style>
+</resources>

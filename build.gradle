@@ -4,8 +4,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20'
+        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0'
     }
 }
 allprojects {
@@ -14,7 +14,7 @@ allprojects {
         mavenCentral()
         maven {
             name "Helium's maven repo"
-            url 'https://cboost.jfrog.io/artifactory/helium'
+            url 'https://cboost.jfrog.io/artifactory/chartboost-mediation'
         }
         maven {
             name "ironSource's maven repo"
@@ -31,6 +31,10 @@ allprojects {
         maven {
             name "Yahoo's maven repo"
             url 'https://artifactory.verizonmedia.com/artifactory/maven/'
+        }
+
+        maven {
+            url "https://artifact.bytedance.com/repository/pangle"
         }
     }
 }
