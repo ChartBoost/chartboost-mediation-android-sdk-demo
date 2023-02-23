@@ -12,7 +12,6 @@ The Android Chartboost Mediation SDK, by Chartboost, is a Unified-Auction & Medi
 
 If not, simply add your app and create the placements in the Chartboost Mediation dashboard by following the [documentation here.](https://developers.chartboost.com/docs/mediation-import-apps)
 
-
 ### Add Gradle Dependencies:
 To quickly get started, simply add the following dependencies inside your app's `build.gradle`:
 
@@ -58,9 +57,24 @@ implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
 In your application's `onCreate` method, start the Chartboost Mediation SDK by providing your app's app id, its app signature, and passing a _HeliumSdkListener_
 
 ```java Java
-HeliumSdk.start(MyActivityContext.this, myHeliumAppId, myHeliumAppSignature, new HeliumInitializationOptions(), heliumSdkListener);
+HeliumSdk.start(
+    MyActivityContext.this,
+    myHeliumAppId,
+    myHeliumAppSignature,
+    new HeliumInitializationOptions(),
+    new HeliumSdk.HeliumSdkListener() {
+        @Override
+        public void didInitialize(Error error) {
+            if (error != null) {
+                Log.d(TAG,"Helium SDK failed to initialize. Reason: " + error.getMessage());
+            } else {
+                //SDK Started,
+                Log.d(TAG,"Helium SDK initialized successfully");
+            }
+        }
+    }
+);
 ```
-
 
 ## Creating Interstitial Placements
 ---
@@ -90,7 +104,6 @@ HeliumInterstitialAd interstitialAd = new HeliumInterstitialAd(interstitialPlace
 };
 ```
 
-
 ## Loading & Showing Interstitial Ads
 ---
 To load an interstitial ad, simply call the `HeliumInterstitialAd` you created
@@ -104,7 +117,6 @@ if (interstitialAd.readyToShow()) {
     interstitialAd.show();
 }
 ```
-
 
 ## Creating Rewarded Placements
 ---
@@ -136,7 +148,6 @@ HeliumRewardedAd rewardedAd = new HeliumRewardedAd(rewardedPlacementName,
     }
 );
 ```
-
 
 ## Loading & Showing Rewarded Ads
 ---
