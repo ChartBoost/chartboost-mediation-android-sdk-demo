@@ -1,17 +1,16 @@
-Android Helium SDK
+Android Chartboost Mediation SDK
 ====
 
-The Android Helium SDK, by Chartboost, is a Unified-Auction & Mediated solution which helps developers increase their mobile apps' revenue with the inclusion of other supported Programmatic & Mediated SDKs.
+The Android Chartboost Mediation SDK, by Chartboost, is a Unified-Auction & Mediated solution which helps developers increase their mobile apps' revenue with the inclusion of other supported Programmatic & Mediated SDKs.
 
 ## Getting Started
 ---
 
-
 ### Before You Begin:
-1. Have you set up your app with Helium?
+1. Have you set up your app with Chartboost Mediation?
 2. Does your app have placements?
 
-If not, simply add your app and create the placements in the Helium dashboard by following the [documentation here.](https://helium.chartboost.com/resources/docs/import-app)
+If not, simply add your app and create the placements in the Chartboost Mediation dashboard by following the [documentation here.](https://developers.chartboost.com/docs/mediation-import-apps)
 
 
 ### Add Gradle Dependencies:
@@ -19,21 +18,21 @@ To quickly get started, simply add the following dependencies inside your app's 
 
 ```gradle
 repositories {
-  name "Helium's maven repo"
-  url 'https://cboost.jfrog.io/artifactory/helium'
+  name "Chartboost Mediation's maven repo"
+  url 'https://cboost.jfrog.io/artifactory/chartboost-mediation'
 }
 
 dependencies {
     ...
 
-    implementation 'com.chartboost:helium:3.3.2'
+    implementation 'com.chartboost:chartboost-mediation-sdk:4.0.0'
     implementation 'org.greenrobot:eventbus:3.3.1'
 
     ...
 }
 ```
 
-### Update your app's Manifest for Helium
+### Update your app's Manifest for Chartboost Mediation
 
 ```XML
 <uses-permission android:name="android.permission.INTERNET" />
@@ -47,24 +46,6 @@ These are optional
 <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 ```
 
-For Helium Chartboost, add the following:
-```XML
-<activity android:name="com.chartboost_helium.sdk.CBImpressionActivity"
-    android:excludeFromRecents="true"
-    android:hardwareAccelerated="true"
-    android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-    android:configChanges="keyboardHidden|orientation|screenSize" />
-```
-
-If using mediation (i.e. Admob), you also need to include the 'classic' chartboost activity.
-```XML
-<activity android:name="com.chartboost.sdk.CBImpressionActivity"
-    android:excludeFromRecents="true"
-    android:hardwareAccelerated="true"
-    android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-    android:configChanges="keyboardHidden|orientation|screenSize" />
-```
-
 ### Google Play Services
 
 ```Gradle
@@ -72,15 +53,7 @@ implementation "com.google.android.gms:play-services-base:18.0.1"
 implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
 ```
 
-### Proguard
-
-If using proguard, add the following to your `proguard-rules.pro` file.
-
-```Java
--keep class com.chartboost.** { *; }
-```
-
-## Start The Helium SDK:
+## Start The Chartboost Mediation SDK:
 ---
 In your application's `onCreate` method, start the Helium SDK by providing your app's app id, its app signature, and passing a _HeliumSdkListener_
 
@@ -270,50 +243,42 @@ Note: Not all partner SDKs have full support for GDPR. Please refer to its offic
 ---
 As of 2.9.0, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
 
-* Tapjoy
-* Facebook
 * AdColony
 * AdMob
-* Vungle
 * Applovin
-* UnityAds
-* ironSource
-* Fyber
+* Meta Audience Network
+* Digital Turbine Exchange
+* Google Bidding
 * inMobi
+* ironSource
 * Mintegral
+* Tapjoy
+* Pangle
+* UnityAds
+* Vungle
 * Yahoo
 
 To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
-//TapJoy
-implementation 'com.chartboost:helium-tapjoy:3.3.2.0'
-//Facebook
-implementation 'com.chartboost:helium-facebook:3.3.2.0'
-//AdColony
-implementation 'com.chartboost:helium-adcolony:3.3.2.0'
-//AdMob
-implementation 'com.chartboost:helium-admob:3.3.2.0'
-//Vungle
-implementation 'com.chartboost:helium-vungle:3.3.2.0'
-//Applovin
-implementation 'com.chartboost:helium-applovin:3.3.2.0'
-//UnityAds
-implementation 'com.chartboost:helium-unityads:3.3.2.0'
-//ironSource
-implementation 'com.chartboost:helium-ironsource:3.3.2.0'
-//Fyber
-implementation 'com.chartboost:helium-fyber:3.3.2.0'
-//inMobi
-implementation 'com.chartboost:helium-inmobi:3.3.2.0'
-//Mintegral
-implementation 'com.chartboost:helium-mintegral:3.3.2.0'
-//Yahoo
-implementation 'com.chartboost:helium-yahoo:3.3.2.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.21.3.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.5.5.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.2.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.6.2.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.21.3.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.1.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.2.5.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.12.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.0.31.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:4.12.9.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.4.3.0.4.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.4.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.6.12.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.3.0.0'
 
-//Make sure to also include the 3rd-party sdks & their dependencies
-...
-...
 ```
 
 
