@@ -8,7 +8,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chartboost.heliumsdk.HeliumSdk
 import com.chartboost.heliumsdk.ad.*
-import com.chartboost.heliumsdk.sampleapp.databinding.ActivityMainBinding
+import com.chartboost.heliumsdk.domain.ChartboostMediationAdException
+import com.chartboost.mediation.sdk.sampleapp.R
+import com.chartboost.mediation.sdk.sampleapp.databinding.ActivityMainBinding
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -82,32 +84,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun createBannerAd(): HeliumBannerAdListener {
         val bannerListener = object : HeliumBannerAdListener {
-            override fun didReceiveWinningBid(
+            override fun onAdCached(
                 placementName: String,
-                bidInfo: HashMap<String, String>
+                loadId: String,
+                winningBidInfo: Map<String, String>,
+                error: ChartboostMediationAdException?
             ) {
-                addToLogView("$placementName (HeliumBannerAd) didReceiveWinningBid")
-                addToLogView(bidInfo.toString())
-            }
-
-            override fun didCache(placementName: String, error: HeliumAdError?) {
                 if (error != null) {
-                    addToLogView("$placementName (HeliumBannerAd) didCache failed with heliumError: ${error.message}")
+                    addToLogView("$placementName (HeliumBannerAd) onAdCached failed with heliumError: ${error.message}")
                 } else {
-                    addToLogView("$placementName (HeliumBannerAd) didCache")
+                    addToLogView("$placementName (HeliumBannerAd) onAdCached")
+                    addToLogView("$placementName (HeliumBannerAd) winningBidInfo $winningBidInfo")
                 }
             }
 
-            override fun didClick(placementName: String, error: HeliumAdError?) {
-                if (error != null) {
-                    addToLogView("$placementName (HeliumBannerAd) didClick failed with heliumError: ${error.message}")
-                } else {
-                    addToLogView("$placementName (HeliumBannerAd) didClick")
-                }
+            override fun onAdClicked(placementName: String) {
+                addToLogView("$placementName (HeliumBannerAd) onAdClicked")
             }
 
-            override fun didRecordImpression(placementName: String) {
-                addToLogView("$placementName (HeliumBannerAd) didRecordImpression")
+            override fun onAdImpressionRecorded(placementName: String) {
+                addToLogView("$placementName (HeliumBannerAd) onAdImpressionRecorded")
             }
         }
         return bannerListener
@@ -118,50 +114,56 @@ class MainActivity : AppCompatActivity() {
             binding.interstitialPlacementName.text?.toString()
                 ?: getString(R.string.heliumInterstitial)
         val interstitialAd =
-            HeliumInterstitialAd(interstitialPlacement, object : HeliumInterstitialAdListener {
-                override fun didReceiveWinningBid(
-                    placementName: String,
-                    bidInfo: HashMap<String, String>
-                ) {
-                    addToLogView("$placementName (HeliumInterstitialAd) didReceiveWinningBid")
-                    addToLogView(bidInfo.toString())
-                }
+            HeliumInterstitialAd(this, interstitialPlacement, object : HeliumFullscreenAdListener {
 
-                override fun didCache(placementName: String, error: HeliumAdError?) {
+                override fun onAdCached(
+                    placementName: String,
+                    loadId: String,
+                    winningBidInfo: Map<String, String>,
+                    error: ChartboostMediationAdException?
+                ) {
                     if (error != null) {
                         addToLogView("$placementName (HeliumInterstitialAd) didCache failed with error: ${error.message}")
                     } else {
                         Handler(Looper.getMainLooper()).post { binding.btnShow.isEnabled = true }
                         addToLogView("$placementName (HeliumInterstitialAd) didCache")
+                        addToLogView("$placementName (HeliumInterstitialAd) didReceiveWinningBid")
+                        addToLogView(winningBidInfo.toString())
                     }
                 }
 
-                override fun didShow(placementName: String, error: HeliumAdError?) {
+                override fun onAdClicked(placementName: String) {
+                    addToLogView("$placementName (HeliumInterstitialAd) onAdClicked")
+                }
+
+                override fun onAdClosed(
+                    placementName: String,
+                    error: ChartboostMediationAdException?
+                ) {
+                    if (error != null) {
+                        addToLogView("$placementName (HeliumInterstitialAd) onAdClosed failed with error: ${error.message}")
+                    } else {
+                        addToLogView("$placementName (HeliumInterstitialAd) onAdClosed")
+                    }
+                }
+
+                override fun onAdImpressionRecorded(placementName: String) {
+                    addToLogView("$placementName (HeliumInterstitialAd) onAdImpressionRecorded")
+                }
+
+                override fun onAdRewarded(placementName: String) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onAdShown(
+                    placementName: String,
+                    error: ChartboostMediationAdException?
+                ) {
                     if (error != null) {
                         addToLogView("$placementName (HeliumInterstitialAd) didShow failed with error: ${error.message}")
                     } else {
                         addToLogView("$placementName (HeliumInterstitialAd) didShow")
                     }
-                }
-
-                override fun didClick(placementName: String, error: HeliumAdError?) {
-                    if (error != null) {
-                        addToLogView("$placementName (HeliumInterstitialAd) didClick failed with error: ${error.message}")
-                    } else {
-                        addToLogView("$placementName (HeliumInterstitialAd) didClick")
-                    }
-                }
-
-                override fun didClose(placementName: String, error: HeliumAdError?) {
-                    if (error != null) {
-                        addToLogView("$placementName (HeliumInterstitialAd) didClose failed with error: ${error.message}")
-                    } else {
-                        addToLogView("$placementName (HeliumInterstitialAd) didClose")
-                    }
-                }
-
-                override fun didRecordImpression(placementName: String) {
-                    addToLogView("$placementName (HeliumInterstitialAd) didRecordImpression")
                 }
             })
         return interstitialAd
@@ -170,16 +172,14 @@ class MainActivity : AppCompatActivity() {
     private fun createRewardedAd(): HeliumRewardedAd {
         val rewardedPlacement =
             binding.rewardedPlacementName.text?.toString() ?: getString(R.string.heliumRewarded)
-        val rewardedAd = HeliumRewardedAd(rewardedPlacement, object : HeliumRewardedAdListener {
-            override fun didReceiveWinningBid(
-                placementName: String,
-                bidInfo: HashMap<String, String>
-            ) {
-                addToLogView("$placementName (HeliumRewardedAd) didReceiveWinningBid")
-                addToLogView(bidInfo.toString())
-            }
+        val rewardedAd = HeliumRewardedAd(this, rewardedPlacement, object : HeliumFullscreenAdListener {
 
-            override fun didCache(placementName: String, error: HeliumAdError?) {
+            override fun onAdCached(
+                placementName: String,
+                loadId: String,
+                winningBidInfo: Map<String, String>,
+                error: ChartboostMediationAdException?
+            ) {
                 if (error != null) {
                     addToLogView("$placementName (HeliumRewardedAd) didCache failed with error: ${error.message}")
                 } else {
@@ -187,39 +187,36 @@ class MainActivity : AppCompatActivity() {
                         binding.btnShowRewarded.isEnabled = true
                     }
                     addToLogView("$placementName (HeliumRewardedAd) didCache")
+                    addToLogView("$placementName (HeliumRewardedAd) didReceiveWinningBid $winningBidInfo")
                 }
             }
 
-            override fun didShow(placementName: String, error: HeliumAdError?) {
+            override fun onAdClicked(placementName: String) {
+                addToLogView("$placementName (HeliumRewardedAd) onAdClicked")
+            }
+
+            override fun onAdClosed(placementName: String, error: ChartboostMediationAdException?) {
                 if (error != null) {
-                    addToLogView("$placementName (HeliumRewardedAd) didShow failed with error: ${error.message}")
+                    addToLogView("$placementName (HeliumRewardedAd) onAdClosed failed with error: ${error.message}")
                 } else {
-                    addToLogView("$placementName (HeliumRewardedAd) didShow")
+                    addToLogView("$placementName (HeliumRewardedAd) onAdClosed")
                 }
             }
 
-            override fun didClick(placementName: String, error: HeliumAdError?) {
+            override fun onAdImpressionRecorded(placementName: String) {
+                addToLogView("$placementName (HeliumRewardedAd) onAdImpressionRecorded")
+            }
+
+            override fun onAdRewarded(placementName: String) {
+                addToLogView("$placementName (HeliumRewardedAd) onAdRewarded: $placementName")
+            }
+
+            override fun onAdShown(placementName: String, error: ChartboostMediationAdException?) {
                 if (error != null) {
-                    addToLogView("$placementName (HeliumRewardedAd) didClick failed with error: ${error.message}")
+                    addToLogView("$placementName (HeliumRewardedAd) onAdShown failed with error: ${error.message}")
                 } else {
-                    addToLogView("$placementName (HeliumRewardedAd) didClick")
+                    addToLogView("$placementName (HeliumRewardedAd) onAdShown")
                 }
-            }
-
-            override fun didClose(placementName: String, error: HeliumAdError?) {
-                if (error != null) {
-                    addToLogView("$placementName (HeliumRewardedAd) didClose failed with error: ${error.message}")
-                } else {
-                    addToLogView("$placementName (HeliumRewardedAd) didClose")
-                }
-            }
-
-            override fun didReceiveReward(placementName: String, reward: String) {
-                addToLogView("$placementName (HeliumRewardedAd) didReceiveReward: $reward")
-            }
-
-            override fun didRecordImpression(placementName: String) {
-                addToLogView("$placementName (HeliumRewardedAd) didRecordImpression")
             }
         })
         return rewardedAd

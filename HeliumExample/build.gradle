@@ -2,12 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace "com.chartboost.mediation.sdk.sampleapp"
     compileSdkVersion 33
     buildToolsVersion '33.0.0'
 
     defaultConfig {
         multiDexEnabled true
-        applicationId "com.chartboost.heliumexample"
+        applicationId "com.chartboost.mediation.example"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
@@ -29,35 +30,40 @@ android {
 }
 
 dependencies {
-    // Helium
-    implementation 'com.chartboost:helium:3.3.2'
+    // Chartboost Mediation
+    implementation 'com.chartboost:chartboost-mediation-sdk:4.0+'
 
-    // Helium requirement
+    // Chartboost Mediation requirement
     implementation 'org.greenrobot:eventbus:3.3.1'
 
-    // Helium Adapters
-    implementation 'com.chartboost:helium-tapjoy:3.3.2.0'
-    implementation 'com.chartboost:helium-facebook:3.3.2.0'
-    implementation 'com.chartboost:helium-adcolony:3.3.2.0'
-    implementation 'com.chartboost:helium-admob:3.3.2.0'
-    implementation 'com.chartboost:helium-googlebidding:3.3.2.0'
-    implementation 'com.chartboost:helium-vungle:3.3.2.0'
-    implementation 'com.chartboost:helium-applovin:3.3.2.0'
-    implementation 'com.chartboost:helium-unityads:3.3.2.0'
-    implementation 'com.chartboost:helium-ironsource:3.3.2.0'
-    implementation 'com.chartboost:helium-fyber:3.3.2.0'
-    implementation 'com.chartboost:helium-inmobi:3.3.2.0'
-    implementation 'com.chartboost:helium-mintegral:3.3.2.0'
-    implementation 'com.chartboost:helium-yahoo:3.3.2.0'
+    // Chartboost Mediation Adapters
+    implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-admob:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-applovin:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-pangle:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-reference:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-vungle:+'
+    implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:+'
 
     // Google Play Services
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation 'com.google.android.gms:play-services-base:18.1.0'
 
     // android app
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.compose.material3:material3:1.1.0-alpha06'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 
     // Partner Adapter SDKs
 
