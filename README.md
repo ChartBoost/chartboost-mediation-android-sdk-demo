@@ -101,7 +101,8 @@ HeliumInterstitialAd interstitialAd = new HeliumInterstitialAd(interstitialPlace
     
         @Override
         public void didRecordImpression(@NonNull String placementName) {}
-};
+    }
+);
 ```
 
 ## Loading & Showing Interstitial Ads
