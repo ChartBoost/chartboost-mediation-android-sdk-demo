@@ -17,7 +17,7 @@
         <activity
             android:exported="true"
             android:theme="@style/MainTheme"
-            android:name="com.chartboost.mediation.sdk.sampleapp.MainActivity">
+            android:name="com.chartboost.mediation.sdk.demo.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,4 +1,4 @@
-package com.chartboost.mediation.sdk.sampleapp
+package com.chartboost.mediation.sdk.demo
 
 import android.os.Bundle
 import android.os.Handler
@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.chartboost.heliumsdk.HeliumSdk
 import com.chartboost.heliumsdk.ad.*
 import com.chartboost.heliumsdk.domain.ChartboostMediationAdException
-import com.chartboost.mediation.sdk.sampleapp.databinding.ActivityMainBinding
+import com.chartboost.mediation.sdk.demo.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
