@@ -256,23 +256,23 @@ As of 4.0.0, the Chartboost Mediation SDK currently supports the following 3rd-p
 To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
-implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.1'
 implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.21.5.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.8.1.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.2.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.8.1.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.2.1.1'
 implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.7.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.2.1'
 implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.21.5.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.1.1.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.2.5.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.12.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.3.91.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.1.3.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.2.7.0.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.12.0.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.3.91.2'
 implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:4.12.11.1.0'
 implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.4.9.1.3.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.0.1'
 implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.6.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.6.12.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.4.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.6.12.1.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.4.0.1'
 
 ```
 
