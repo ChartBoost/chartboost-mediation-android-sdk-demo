@@ -24,9 +24,7 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:chartboost-mediation-sdk:4.0.0'
-    implementation 'org.greenrobot:eventbus:3.3.1'
-
+    implementation 'com.chartboost:chartboost-mediation-sdk:4.1.0'
     ...
 }
 ```
@@ -66,10 +64,10 @@ HeliumSdk.start(
         @Override
         public void didInitialize(Error error) {
             if (error != null) {
-                Log.d(TAG,"Helium SDK failed to initialize. Reason: " + error.getMessage());
+                Log.d(TAG,"Chartboost Mediation SDK failed to initialize. Reason: " + error.getMessage());
             } else {
                 //SDK Started,
-                Log.d(TAG,"Helium SDK initialized successfully");
+                Log.d(TAG,"Chartboost Mediation SDK initialized successfully");
             }
         }
     }
@@ -237,19 +235,20 @@ Note: Not all partner SDKs have full support for GDPR. Please refer to its offic
 
 ## 3rd-Party Supported Partner SDKs & Adapters
 ---
-As of 4.0.0, the Helium SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
+As of 4.0.0, the Chartboost Mediation SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
 
 * AdColony
 * AdMob
+* Amazon Publisher Services
 * Applovin
-* Meta Audience Network
 * Digital Turbine Exchange
 * Google Bidding
 * inMobi
 * ironSource
+* Meta Audience Network
 * Mintegral
-* Tapjoy
 * Pangle
+* Tapjoy
 * UnityAds
 * Vungle
 * Yahoo
@@ -258,25 +257,25 @@ To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
 implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.21.3.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.5.5.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.21.5.0.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.8.1.0'
 implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.2.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.6.2.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.7.0.1'
 implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.1.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.21.3.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.21.5.0.1'
 implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.1.1.0'
 implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.2.5.0.0'
 implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.12.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.0.31.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:4.12.9.1.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.4.3.0.4.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.3.91.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:4.12.11.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.4.9.1.3.1'
 implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.4.1.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.6.0.1'
 implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.6.12.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.3.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.4.0.0'
 
 ```
 
-Feel free to take a look at the HeliumExample app for an integration example
+Feel free to take a look at the Chartboost Mediation Demo app for an integration example
 
 For more information, please read https://developers.chartboost.com/docs/get-started-with-mediation

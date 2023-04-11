@@ -9,7 +9,7 @@
     <string name="heliumBanner">CBBanner</string>
 
     <!-- SampleApp Values -->
-    <string name="app_name">Chartboost Mediation Sample</string>
+    <string name="app_name">Chartboost Mediation Demo</string>
     <string name="str_load">LOAD</string>
     <string name="str_show">SHOW</string>
     <string name="str_interstitial_ad">Interstitial Ad</string>
