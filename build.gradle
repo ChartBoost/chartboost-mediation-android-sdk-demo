@@ -13,6 +13,9 @@ allprojects {
         google()
         mavenCentral()
         maven {
+            url 'https://cboost.jfrog.io/artifactory/chartboost-ads/'
+        }
+        maven {
             name "Helium's maven repo"
             url 'https://cboost.jfrog.io/artifactory/chartboost-mediation'
         }
