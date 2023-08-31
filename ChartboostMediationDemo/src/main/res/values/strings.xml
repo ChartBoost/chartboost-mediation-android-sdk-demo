@@ -4,7 +4,6 @@
     <string name="appSignature">fd8002155dcc6f161e41a62bce49250141b1876b</string>
 
     <!-- Helium App Placement -->
-    <string name="heliumFullscreen">CBInterstitial</string>
     <string name="heliumInterstitial">CBInterstitial</string>
     <string name="heliumRewarded">CBRewarded</string>
     <string name="heliumBanner">CBBanner</string>

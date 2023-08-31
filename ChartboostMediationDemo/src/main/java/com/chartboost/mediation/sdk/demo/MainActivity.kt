@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.method.ScrollingMovementMethod
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chartboost.heliumsdk.HeliumSdk
 import com.chartboost.heliumsdk.ad.*
+import com.chartboost.heliumsdk.domain.AdFormat
 import com.chartboost.heliumsdk.domain.ChartboostMediationAdException
 import com.chartboost.heliumsdk.domain.Keywords
 import com.chartboost.mediation.sdk.demo.databinding.ActivityMainBinding
@@ -33,9 +35,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
         setupLogView()
         setupScreen()
-        setupInterstitial()
-        setupRewarded()
-        setupFullScreenAd()
+
+        val interstitialPlacement =
+            binding.interstitialPlacementName.text?.toString()
+                ?: getString(R.string.heliumInterstitial)
+
+        val rewardedPlacement =
+            binding.rewardedPlacementName.text?.toString() ?: getString(R.string.heliumRewarded)
+
+        binding.fullscreenSwitch.setOnCheckedChangeListener { _, isOn ->
+            if (isOn) {
+                addToLogView("Using new Chartboost Mediation Fullscreen APIs.")
+                setupFullScreenAd(interstitialPlacement, AdFormat.INTERSTITIAL)
+                setupFullScreenAd(rewardedPlacement, AdFormat.REWARDED)
+            } else {
+                addToLogView("Using deprecated Chartboost Mediation Fullscreen APIs.")
+                setupInterstitial(interstitialPlacement)
+                setupRewarded(rewardedPlacement)
+            }
+        }
+
+        setupInterstitial(interstitialPlacement)
+        setupRewarded(rewardedPlacement)
         setupListeners()
         setupSdk()
     }
@@ -51,39 +72,42 @@ class MainActivity : AppCompatActivity() {
         _fullscreenAd = null
     }
 
-    private fun setupFullScreenAd() {
-        var fullscreenAd =
-            binding.interstitialPlacementName.text?.toString() ?: getString(R.string.heliumInterstitial)
-
-        binding.fullscreenSwitch.setOnCheckedChangeListener { _, isOn ->
-            fullscreenAd = if (isOn) {
-                binding.rewardedPlacementName.text?.toString() ?: getString(R.string.heliumRewarded)
-            } else {
-                binding.interstitialPlacementName.text?.toString() ?: getString(R.string.heliumInterstitial)
+    private fun setupFullScreenAd(placement: String, adFormat: AdFormat) {
+        when (adFormat) {
+            AdFormat.INTERSTITIAL -> {
+                setUpLoadShowBinding(placement, binding.btnLoad, binding.btnShow)
             }
+            AdFormat.REWARDED -> {
+                setUpLoadShowBinding(placement, binding.btnLoadRewarded, binding.btnShowRewarded)
+            }
+            else -> return
         }
-
-//             CoroutineScope(IO).launch{
-//                 _fullscreenAd = createFullScreenAd(fullscreenAd)
-//
-//                 withContext(Main) {
-//                     _fullscreenAd?.ad?.let {
-//                         binding.btnShowFullscreen.isEnabled = true
-//                         addToLogView("${it.request.placementName} (FullscreenAd) cached with bid info: ${it.winningBidInfo}")
-//                     }
-//                 }
-//            }
-
-//            _fullscreenAd?.ad?.let { ad ->
-//                CoroutineScope(Main).launch {
-//                    it.isEnabled = false
-//                    ad.show(baseContext)
-//                }
-//            }
     }
 
-    private fun setupRewarded() {
-        _rewardedAd = createRewardedAd()
+    private fun setUpLoadShowBinding(placement: String, load: Button, show: Button) {
+        load.setOnClickListener {
+            CoroutineScope(IO).launch {
+                val request = ChartboostMediationAdLoadRequest(placement, Keywords())
+                _fullscreenAd = createFullScreenAd(request)
+                _fullscreenAd?.ad?.let { ad ->
+                    withContext(Main) {
+                        show.isEnabled = true
+                        addToLogView("${ad.request.placementName} (FullscreenAd) cached with bid info: ${ad.winningBidInfo}")
+                    }
+
+                    show.setOnClickListener {
+                        CoroutineScope(Main).launch {
+                            show.isEnabled = false
+                            ad.show(baseContext)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupRewarded(placement: String) {
+        _rewardedAd = createRewardedAd(placement)
             .also { newRewardedAd ->
                 binding.btnLoadRewarded.setOnClickListener { newRewardedAd.load() }
 
@@ -98,8 +122,8 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun setupInterstitial() {
-        _interstitialAd = createInterstitialAd()
+    private fun setupInterstitial(placement: String) {
+        _interstitialAd = createInterstitialAd(placement)
             .also { newInterstitialAd ->
                 binding.btnLoad.setOnClickListener { newInterstitialAd.load() }
                 binding.btnShow.setOnClickListener {
@@ -147,10 +171,7 @@ class MainActivity : AppCompatActivity() {
         return bannerListener
     }
 
-    private fun createInterstitialAd(): HeliumInterstitialAd {
-        val interstitialPlacement =
-            binding.interstitialPlacementName.text?.toString()
-                ?: getString(R.string.heliumInterstitial)
+    private fun createInterstitialAd(interstitialPlacement: String): HeliumInterstitialAd {
         val interstitialAd =
             HeliumInterstitialAd(this, interstitialPlacement, object : HeliumFullscreenAdListener {
 
@@ -205,9 +226,7 @@ class MainActivity : AppCompatActivity() {
         return interstitialAd
     }
 
-    private fun createRewardedAd(): HeliumRewardedAd {
-        val rewardedPlacement =
-            binding.rewardedPlacementName.text?.toString() ?: getString(R.string.heliumRewarded)
+    private fun createRewardedAd(rewardedPlacement: String): HeliumRewardedAd {
         val rewardedAd = HeliumRewardedAd(this, rewardedPlacement, object : HeliumFullscreenAdListener {
 
             override fun onAdCached(
@@ -257,9 +276,7 @@ class MainActivity : AppCompatActivity() {
         return rewardedAd
     }
 
-    private suspend fun createFullScreenAd(placement: String) = withContext(IO) {
-        val request = ChartboostMediationAdLoadRequest(placement, Keywords())
-
+    private suspend fun createFullScreenAd(request: ChartboostMediationAdLoadRequest) = withContext(IO) {
         HeliumSdk.loadFullscreenAd(this@MainActivity, request, object : ChartboostMediationFullscreenAdListener {
             override fun onAdClicked(ad: ChartboostMediationFullscreenAd) {
                 addToLogView("${ad.request.placementName} (FullscreenAd) onAdClicked")
