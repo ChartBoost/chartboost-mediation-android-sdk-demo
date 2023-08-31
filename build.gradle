@@ -4,7 +4,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'com.android.tools.build:gradle:7.4.2'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0'
     }
 }
@@ -18,6 +18,10 @@ allprojects {
         maven {
             name "Helium's maven repo"
             url 'https://cboost.jfrog.io/artifactory/chartboost-mediation'
+        }
+        maven {
+            name "Chartboost's maven repo"
+            url 'https://cboost.jfrog.io/artifactory/chartboost-ads'
         }
         maven {
             name "ironSource's maven repo"

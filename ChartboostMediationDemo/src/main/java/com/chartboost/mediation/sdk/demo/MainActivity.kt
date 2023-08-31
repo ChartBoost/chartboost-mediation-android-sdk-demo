@@ -9,16 +9,21 @@ import androidx.appcompat.app.AppCompatActivity
 import com.chartboost.heliumsdk.HeliumSdk
 import com.chartboost.heliumsdk.ad.*
 import com.chartboost.heliumsdk.domain.ChartboostMediationAdException
+import com.chartboost.heliumsdk.domain.Keywords
 import com.chartboost.mediation.sdk.demo.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private var _bannerAd: HeliumBannerAd? = null
     private lateinit var binding: ActivityMainBinding
+    private var _fullscreenAd: ChartboostMediationFullscreenAdLoadResult? = null
     private var _rewardedAd: HeliumRewardedAd? = null
     private var _interstitialAd: HeliumInterstitialAd? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setupScreen()
         setupInterstitial()
         setupRewarded()
+        setupFullScreenAd()
         setupListeners()
         setupSdk()
     }
@@ -42,6 +48,38 @@ class MainActivity : AppCompatActivity() {
         _interstitialAd = null
         _rewardedAd?.destroy()
         _rewardedAd = null
+        _fullscreenAd = null
+    }
+
+    private fun setupFullScreenAd() {
+        var fullscreenAd =
+            binding.interstitialPlacementName.text?.toString() ?: getString(R.string.heliumInterstitial)
+
+        binding.fullscreenSwitch.setOnCheckedChangeListener { _, isOn ->
+            fullscreenAd = if (isOn) {
+                binding.rewardedPlacementName.text?.toString() ?: getString(R.string.heliumRewarded)
+            } else {
+                binding.interstitialPlacementName.text?.toString() ?: getString(R.string.heliumInterstitial)
+            }
+        }
+
+//             CoroutineScope(IO).launch{
+//                 _fullscreenAd = createFullScreenAd(fullscreenAd)
+//
+//                 withContext(Main) {
+//                     _fullscreenAd?.ad?.let {
+//                         binding.btnShowFullscreen.isEnabled = true
+//                         addToLogView("${it.request.placementName} (FullscreenAd) cached with bid info: ${it.winningBidInfo}")
+//                     }
+//                 }
+//            }
+
+//            _fullscreenAd?.ad?.let { ad ->
+//                CoroutineScope(Main).launch {
+//                    it.isEnabled = false
+//                    ad.show(baseContext)
+//                }
+//            }
     }
 
     private fun setupRewarded() {
@@ -219,6 +257,37 @@ class MainActivity : AppCompatActivity() {
         return rewardedAd
     }
 
+    private suspend fun createFullScreenAd(placement: String) = withContext(IO) {
+        val request = ChartboostMediationAdLoadRequest(placement, Keywords())
+
+        HeliumSdk.loadFullscreenAd(this@MainActivity, request, object : ChartboostMediationFullscreenAdListener {
+            override fun onAdClicked(ad: ChartboostMediationFullscreenAd) {
+                addToLogView("${ad.request.placementName} (FullscreenAd) onAdClicked")
+            }
+
+            override fun onAdClosed(ad: ChartboostMediationFullscreenAd, error: ChartboostMediationAdException?) {
+                if (error != null) {
+                    addToLogView("${ad.request.placementName} (FullscreenAd) onAdClosed failed with error: ${error.message}")
+                } else {
+                    addToLogView("${ad.request.placementName} (FullscreenAd) onAdClosed")
+                }
+            }
+
+            override fun onAdExpired(ad: ChartboostMediationFullscreenAd) {
+                addToLogView("${ad.request.placementName} (FullscreenAd) onAdExpired")
+            }
+
+            override fun onAdImpressionRecorded(ad: ChartboostMediationFullscreenAd) {
+                addToLogView("${ad.request.placementName} (FullscreenAd) onAdImpressionRecorded")
+
+            }
+
+            override fun onAdRewarded(ad: ChartboostMediationFullscreenAd) {
+                addToLogView("${ad.request.placementName} (FullscreenAd) onAdRewarded")
+            }
+        })
+    }
+
     private fun setupScreen() {
         binding.btnShow.isEnabled = false
         binding.btnShowRewarded.isEnabled = false
@@ -248,22 +317,26 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Main).launch {
             HeliumSdk.start(
                 this@MainActivity, getString(R.string.appID),
-                getString(R.string.appSignature)
-            ) { error: Error? ->
-                if (error != null) {
-                    val errorMessage = "Chartboost Mediation SDK failed to initialize. Reason: " + error.message
-                    Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_LONG).show()
-                    addToLogView("Chartboost Mediation SDK failed to initialize.")
-                } else {
-                    addToLogView("Chartboost Mediation SDK (${HeliumSdk.getVersion()}) initialized successfully")
-                    configSdk()
-                    setupBanner()
+                getString(R.string.appSignature),
+                heliumSdkListener = object : HeliumSdk.HeliumSdkListener {
+                    override fun didInitialize(error: Error?) {
+                        if (error != null) {
+                            val errorMessage = "Chartboost Mediation SDK failed to initialize. Reason: " + error.message
+                            Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_LONG).show()
+                            addToLogView("Chartboost Mediation SDK failed to initialize.")
+                        } else {
+                            addToLogView("Chartboost Mediation SDK (${HeliumSdk.getVersion()}) initialized successfully")
+                            configSdk()
+                            setupBanner()
+                        }
+                    }
                 }
-            }
+            )
         }
     }
 
     private fun configSdk() {
+        HeliumSdk.setTestMode(true)
         HeliumSdk.setDebugMode(false) // Only for debug builds!
         HeliumSdk.setSubjectToCoppa(false)
         HeliumSdk.setSubjectToGDPR(false)
