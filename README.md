@@ -24,7 +24,17 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:chartboost-mediation-sdk:4.2.0'
+    implementation 'com.chartboost:chartboost-mediation-sdk:4.5.0'
+
+    // Chartboost Mediation SDK Dependencies
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1'
+
     ...
 }
 ```
@@ -72,6 +82,77 @@ HeliumSdk.start(
         }
     }
 );
+```
+
+## Creating Fullscreen Placements
+
+You can implement the HeliumFullscreenAdListener interface to receive notifications about interstitial and rewarded ads loading, displaying, and closing.
+
+```java Java
+HeliumFullscreenAdListener heliumFullscreenAdListener = new HeliumFullscreenAdListener() {
+    @Override
+    public void onAdCached(@NonNull String placementName, @NonNull String loadId, @NonNull Map<String, String> winningBidInfo, @Nullable ChartboostMediationAdException error) {
+        if (error != null) {
+            Log.d(TAG, "Ad cache failed for placement: " + placementName + " reason: " + error.getMessage());
+        } else {
+            // Show the ad if it's ready
+            Log.d(TAG, "Ad cached for placement: " + placementName);
+        }
+    }
+ 
+    @Override
+    public void onAdShown(@NonNull String placementName, @Nullable ChartboostMediationAdException error) {
+        if (error != null) {
+            Log.d(TAG, "Ad show failed for placement: " + placementName + " reason: " + error.getMessage());
+        } else {
+            Log.d(TAG, "Ad shown for placement: " + placementName);
+        }
+    }
+ 
+    @Override
+    public void onAdClicked(@NonNull String placementName) {
+        Log.d(TAG, "Ad clicked for placement: " + placementName);
+    }
+ 
+    @Override
+    public void onAdClosed(@NonNull String placementName, @Nullable ChartboostMediationAdException error) {
+        if (error != null) {
+            Log.d(TAG, "Ad closed with error for placement: " + placementName + " reason: " + error.getMessage());
+        } else {
+            Log.d(TAG, "Ad closed for placement: " + placementName);
+        }
+    }
+
+    @Override
+    public void onAdImpressionRecorded(@NonNull String placementName) {
+        Log.d(TAG, "Ad recorded impression for placement: " + placementName);
+    }
+
+    @Override
+    public void onAdRewarded(@NonNull String placementName) {
+        Log.d(TAG, "Ad rewarded user for placement: " + placementName);
+    }
+};
+```
+
+## Loading & Showing Fullscreen Ads
+
+To load a fullscreen ad,
+```java Java
+ChartboostMediationAdLoadRequest adRequest = new ChartboostMediationAdLoadRequest([Your Placement Name], new Keywords());
+HeliumSdk.loadFullscreenAdFromJava(context, adRequest, heliumFullscreenAdListener);
+```
+
+To show the ad,
+```java Java
+// After loading an ad
+public void onAdLoaded(ChartboostMediationFullscreenAd ad) {
+    ad.showFullscreenAdFromJava(context, new ChartboostMediationFullscreenAdShowListener() {
+        public void onAdShown(ChartboostMediationAdShowResult result) {
+            // Shown
+        }
+    )
+}
 ```
 
 ## Creating Interstitial Placements
@@ -256,23 +337,23 @@ As of 4.0.0, the Chartboost Mediation SDK currently supports the following 3rd-p
 To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
-implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.21.5.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.8.2.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.2.1.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.7.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.2.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.21.5.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.1.3.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.3.0.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.13.7.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.3.91.3'
-implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:4.12.11.1.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.4.9.1.3.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.0.3'
-implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.6.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.6.12.1.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.4.0.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.2'
+implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.22.3.0.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.8.4.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.11.2.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.4.1.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.3.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.22.3.0.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.5.7.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.4.0.0.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.15.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.3.91.4'
+implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:4.12.11.1.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.4.9.1.3.2'
+implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.0.4'
+implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.8.0.1'
+implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.6.12.1.4'
+implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.4.0.2'
 
 ```
 

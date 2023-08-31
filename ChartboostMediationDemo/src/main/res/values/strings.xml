@@ -18,4 +18,6 @@
     <string name="str_config">Configuration</string>
     <string name="str_config_request">Config Request</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="str_fullscreen_ad">Fullscreen Ad</string>
+    <string name="switch_label">Use Fullscreen API</string>
 </resources>
