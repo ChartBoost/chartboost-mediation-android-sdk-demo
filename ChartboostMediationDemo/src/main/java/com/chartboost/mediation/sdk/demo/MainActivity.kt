@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                     show.setOnClickListener {
                         CoroutineScope(Main).launch {
                             show.isEnabled = false
-                            ad.show(baseContext)
+                            ad.show(this@MainActivity)
                         }
                     }
                 }
