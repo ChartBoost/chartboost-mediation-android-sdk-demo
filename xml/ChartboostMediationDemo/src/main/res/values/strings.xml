@@ -1,0 +1,23 @@
+<resources>
+    <!-- Helium App Credentials-->
+    <string name="appID">54d513920d60252b519eefd2</string>
+    <string name="appSignature">c98420673ebd4f6302f4d7bccdf08ca6d607a3cc</string>
+
+    <!-- Helium App Placement -->
+    <string name="heliumInterstitial">CBInterstitial</string>
+    <string name="heliumRewarded">rewardedVideo</string>
+    <string name="heliumBanner">CBBanner</string>
+
+    <!-- SampleApp Values -->
+    <string name="app_name">Chartboost Mediation Demo</string>
+    <string name="str_load">LOAD</string>
+    <string name="str_show">SHOW</string>
+    <string name="str_interstitial_ad">Interstitial Ad</string>
+    <string name="str_rewarded_ad">Rewarded Ad</string>
+    <string name="log_clean">Clean Log</string>
+    <string name="str_config">Configuration</string>
+    <string name="str_config_request">Config Request</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="str_fullscreen_ad">Fullscreen Ad</string>
+    <string name="switch_label">Use Fullscreen API</string>
+</resources>
