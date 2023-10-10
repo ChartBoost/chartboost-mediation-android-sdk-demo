@@ -305,6 +305,7 @@ object AdController : DefaultLifecycleObserver {
                         error: ChartboostMediationAdException?,
                     ) {
                         logState.add("Fullscreen ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
+                        showBtnEnabled.value = false
                     }
 
                     override fun onAdExpired(ad: ChartboostMediationFullscreenAd) {
@@ -346,7 +347,6 @@ object AdController : DefaultLifecycleObserver {
         showBtnEnabled: MutableState<Boolean>,
     ) {
         logState.add("Interstitial ad is about to load")
-        showBtnEnabled.value = false
 
         interstitialAd = HeliumInterstitialAd(
             context,
@@ -371,6 +371,7 @@ object AdController : DefaultLifecycleObserver {
                     error: ChartboostMediationAdException?,
                 ) {
                     logState.add("Interstitial ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
+                    showBtnEnabled.value = false
                 }
 
                 override fun onAdImpressionRecorded(placementName: String) {
@@ -410,7 +411,6 @@ object AdController : DefaultLifecycleObserver {
         showBtnEnabled: MutableState<Boolean>,
     ) {
         logState.add("Rewarded ad is about to load")
-        showBtnEnabled.value = false
 
         rewardedAd = HeliumRewardedAd(
             context,
@@ -435,6 +435,7 @@ object AdController : DefaultLifecycleObserver {
                     error: ChartboostMediationAdException?,
                 ) {
                     logState.add("Rewarded ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
+                    showBtnEnabled.value = false
                 }
 
                 override fun onAdImpressionRecorded(placementName: String) {

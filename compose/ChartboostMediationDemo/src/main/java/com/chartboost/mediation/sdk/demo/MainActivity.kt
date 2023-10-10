@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -188,14 +189,14 @@ fun App() {
                 }
 
                 item {
-                    Column {
-                        // The log console displays the log messages.
-                        LogConsole(logState)
+                    // The log console displays the log messages.
+                    LogConsole(logState)
+                }
 
-                        // The banner ad is loaded and shown automatically after the SDK is initialized.
-                        if (isSdkInitialized) {
-                            HeliumBannerAdCompose(bannerPlacement, logState)
-                        }
+                item {
+                    // The banner ad is loaded and shown automatically after the SDK is initialized.
+                    if (isSdkInitialized) {
+                        HeliumBannerAdCompose(bannerPlacement, logState)
                     }
                 }
             }
@@ -346,8 +347,10 @@ fun FullscreenApiToggle(
  * @param logs The list of log messages to display.
  */
 @Composable
-fun LogConsole(logs: List<String>) {
+fun LogConsole(logs: MutableList<String>) {
     val listState = rememberLazyListState()
+    val context = LocalContext.current
+    val buttonColor = remember { Color(ContextCompat.getColor(context, R.color.chartboost_green)) }
 
     // Scroll to the bottom of the list when the list is updated.
     LaunchedEffect(key1 = logs.size) {
@@ -356,16 +359,36 @@ fun LogConsole(logs: List<String>) {
         }
     }
 
-    LazyColumn(
-        state = listState,
-        modifier = Modifier
-            .padding(top = 16.dp)
-            .background(Color.LightGray)
-            .fillMaxWidth()
-            .height(350.dp)
-    ) {
-        items(logs) { log ->
-            Text(log, modifier = Modifier.padding(8.dp))
+    Column {
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .background(Color.LightGray)
+                .fillMaxWidth()
+                .height(350.dp)
+        ) {
+            items(logs) { log ->
+                Text(log, modifier = Modifier.padding(8.dp))
+            }
+        }
+
+        // Move button to right side
+        Row {
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                onClick = {
+                    logs.clear()
+                },
+                modifier = Modifier
+                    .padding(top = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = buttonColor,
+                    contentColor = Color.White
+                )
+            ) {
+                Text(text = "Clear Logs")
+            }
         }
     }
 }

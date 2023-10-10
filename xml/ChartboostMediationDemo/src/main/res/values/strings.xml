@@ -14,7 +14,7 @@
     <string name="str_show">SHOW</string>
     <string name="str_interstitial_ad">Interstitial Ad</string>
     <string name="str_rewarded_ad">Rewarded Ad</string>
-    <string name="log_clean">Clean Log</string>
+    <string name="log_clear">Clear Logs</string>
     <string name="str_config">Configuration</string>
     <string name="str_config_request">Config Request</string>
     <string name="title_activity_splash">SplashActivity</string>

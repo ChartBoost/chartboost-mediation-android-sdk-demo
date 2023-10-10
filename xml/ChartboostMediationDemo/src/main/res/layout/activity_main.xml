@@ -156,7 +156,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="@string/log_clean"
+        android:text="@string/log_clear"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/bannerContainer"
         app:layout_constraintEnd_toEndOf="parent"
