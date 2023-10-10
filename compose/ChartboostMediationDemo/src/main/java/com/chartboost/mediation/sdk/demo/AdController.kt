@@ -56,13 +56,13 @@ object AdController : DefaultLifecycleObserver {
 
     /**
      * The Chartboost Mediation interstitial ad (deprecated). This is only used here for demo purposes.
-     * Use the fullscreen ad instead.
+     * Use the [ChartboostMediationFullscreenAd] instead.
      */
     private var interstitialAd: HeliumInterstitialAd? = null
 
     /**
      * The Chartboost Mediation rewarded ad (deprecated). This is only used here for demo purposes.
-     * Use the fullscreen ad instead.
+     * Use the [ChartboostMediationFullscreenAd] instead.
      */
     private var rewardedAd: HeliumRewardedAd? = null
 
@@ -240,8 +240,8 @@ object AdController : DefaultLifecycleObserver {
             }
         })
 
-        continuation.resume(if (error != null) Result.failure(error) else Result.success(Unit))
         logState.add("Chartboost Mediation SDK initialization ${if (error != null) "failed with error: ${error.cause}" else "succeeded"}")
+        continuation.resume(if (error != null) Result.failure(error) else Result.success(Unit))
     }
 
     /**

@@ -20,10 +20,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import com.chartboost.heliumsdk.ad.HeliumBannerAd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -114,77 +117,85 @@ fun App() {
 
     Scaffold(
         content = {
-            Column(
+            LazyColumn(
                 Modifier
                     .padding(16.dp)
                     .fillMaxSize()
             ) {
-                // An "AdSection" is a row that contains a heading, a placement name, and buttons
-                // to load and show the ad.
-                AdSection(
-                    heading = "Interstitial Ad",
-                    placementName = interstitialPlacement,
-                    loadAd = {
-                        AdController.loadAd(
-                            context,
-                            AdController.AdType.INTERSTITIAL,
-                            interstitialPlacement,
-                            logState,
-                            shouldUseFullscreenApi,
-                            isInterstitialShowBtnEnabled,
-                        )
-                    },
-                    showAd = {
-                        AdController.showAd(
-                            context,
-                            AdController.AdType.INTERSTITIAL,
-                            logState,
-                            shouldUseFullscreenApi,
-                        )
-                    },
-                    enabled = isInterstitialShowBtnEnabled.value,
-                )
+                item {
+                    // An "AdSection" is a row that contains a heading, a placement name, and buttons
+                    // to load and show the ad.
+                    AdSection(
+                        heading = "Interstitial Ad",
+                        placementName = interstitialPlacement,
+                        loadAd = {
+                            AdController.loadAd(
+                                context,
+                                AdController.AdType.INTERSTITIAL,
+                                interstitialPlacement,
+                                logState,
+                                shouldUseFullscreenApi,
+                                isInterstitialShowBtnEnabled,
+                            )
+                        },
+                        showAd = {
+                            AdController.showAd(
+                                context,
+                                AdController.AdType.INTERSTITIAL,
+                                logState,
+                                shouldUseFullscreenApi,
+                            )
+                        },
+                        enabled = isInterstitialShowBtnEnabled.value,
+                    )
+                }
 
-                AdSection(
-                    heading = "Rewarded Video Ad",
-                    placementName = rewardedAdPlacement,
-                    loadAd = {
-                        AdController.loadAd(
-                            context,
-                            AdController.AdType.REWARDED_VIDEO,
-                            rewardedAdPlacement,
-                            logState,
-                            shouldUseFullscreenApi,
-                            isRewardedShowBtnEnabled,
-                        )
-                    },
-                    showAd = {
-                        AdController.showAd(
-                            context,
-                            AdController.AdType.REWARDED_VIDEO,
-                            logState,
-                            shouldUseFullscreenApi
-                        )
-                    },
-                    enabled = isRewardedShowBtnEnabled.value,
-                )
+                item {
+                    AdSection(
+                        heading = "Rewarded Video Ad",
+                        placementName = rewardedAdPlacement,
+                        loadAd = {
+                            AdController.loadAd(
+                                context,
+                                AdController.AdType.REWARDED_VIDEO,
+                                rewardedAdPlacement,
+                                logState,
+                                shouldUseFullscreenApi,
+                                isRewardedShowBtnEnabled,
+                            )
+                        },
+                        showAd = {
+                            AdController.showAd(
+                                context,
+                                AdController.AdType.REWARDED_VIDEO,
+                                logState,
+                                shouldUseFullscreenApi
+                            )
+                        },
+                        enabled = isRewardedShowBtnEnabled.value,
+                    )
+                }
 
-                FullscreenApiToggle(
-                    settingKey = "fullscreen_api",
-                    context = context,
-                    onSettingChange = { newValue ->
-                        shouldUseFullscreenApi = mutableStateOf(newValue)
-                        logState.add("Interstitial and rewarded ads will ${if (newValue) "use" else "not use"} the fullscreen API")
-                    },
-                )
+                item {
+                    FullscreenApiToggle(
+                        settingKey = "fullscreen_api",
+                        context = context,
+                        onSettingChange = { newValue ->
+                            shouldUseFullscreenApi = mutableStateOf(newValue)
+                            logState.add("Interstitial and rewarded ads will ${if (newValue) "use" else "not use"} the fullscreen API")
+                        },
+                    )
+                }
 
-                Column {
-                    // The log console displays the log messages.
-                    LogConsole(logState)
+                item {
+                    Column {
+                        // The log console displays the log messages.
+                        LogConsole(logState)
 
-                    // The banner ad is loaded and shown automatically after the SDK is initialized.
-                    if (isSdkInitialized) {
-                        HeliumBannerAdCompose(bannerPlacement, logState)
+                        // The banner ad is loaded and shown automatically after the SDK is initialized.
+                        if (isSdkInitialized) {
+                            HeliumBannerAdCompose(bannerPlacement, logState)
+                        }
                     }
                 }
             }
@@ -252,10 +263,17 @@ fun AdButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
 ) {
+    val context = LocalContext.current
+    val color = remember { Color(ContextCompat.getColor(context, R.color.chartboost_green)) }
+
     Button(
         onClick = onClick,
         enabled = enabled,
-        modifier = Modifier.padding(end = 16.dp, bottom = 16.dp)
+        modifier = Modifier.padding(end = 16.dp, bottom = 16.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = color,
+            contentColor = Color.White
+        )
     ) {
         Text(text = text)
     }
@@ -304,6 +322,20 @@ fun FullscreenApiToggle(
         Switch(
             checked = toggleState,
             onCheckedChange = null,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = Color(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.white
+                    )
+                ),
+                checkedTrackColor = Color(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.chartboost_green
+                    )
+                ),
+            )
         )
     }
 }
@@ -324,9 +356,6 @@ fun LogConsole(logs: List<String>) {
         }
     }
 
-    // For simplicity, hard-coding the height of the list to 350dp to avoid the list taking up the entire screen.
-    // Adjust as needed depending on the height of the banner ad below it.
-    // In a real app, you would want to use a ConstraintLayout to constrain the list to the top of the banner ad.
     LazyColumn(
         state = listState,
         modifier = Modifier
@@ -352,7 +381,11 @@ fun HeliumBannerAdCompose(
     placementName: String,
     logState: MutableList<String>,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 16.dp)
+    ) {
         AndroidView(
             factory = { context ->
                 val banner = AdController.loadBannerAd(

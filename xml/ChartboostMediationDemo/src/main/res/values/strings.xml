@@ -1,7 +1,7 @@
 <resources>
     <!-- Helium App Credentials-->
-    <string name="appID">54d513920d60252b519eefd2</string>
-    <string name="appSignature">c98420673ebd4f6302f4d7bccdf08ca6d607a3cc</string>
+    <string name="appID">5ce82fbffde3570afb4647bc</string>
+    <string name="appSignature">fd8002155dcc6f161e41a62bce49250141b1876b</string>
 
     <!-- Helium App Placement -->
     <string name="heliumInterstitial">CBInterstitial</string>

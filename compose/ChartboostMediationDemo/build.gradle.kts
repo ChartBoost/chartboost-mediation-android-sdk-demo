@@ -54,7 +54,7 @@ dependencies {
     implementation("com.chartboost:chartboost-mediation-sdk:4.5.0")
 
     // Chartboost Mediation adapters
-    implementation("com.chartboost:chartboost-mediation-adapter-adcolony:+")
+    implementation("com.chartboost:chartboost-mediation-adapter-adcolony:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-admob:+")
     implementation("com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:+")
     implementation("com.chartboost:chartboost-mediation-adapter-applovin:+")
@@ -70,7 +70,7 @@ dependencies {
     implementation("com.chartboost:chartboost-mediation-adapter-pangle:+")
     implementation("com.chartboost:chartboost-mediation-adapter-reference:+")
     implementation("com.chartboost:chartboost-mediation-adapter-tapjoy:+")
-    implementation("com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.8.0.2")
+    implementation("com.chartboost:chartboost-mediation-adapter-unity-ads:+")
     implementation("com.chartboost:chartboost-mediation-adapter-verve:+")
     implementation("com.chartboost:chartboost-mediation-adapter-vungle:+")
     implementation("com.chartboost:chartboost-mediation-adapter-yahoo:+")

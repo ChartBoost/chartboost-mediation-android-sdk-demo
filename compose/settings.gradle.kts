@@ -39,4 +39,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ChartboostMediationDemo"
-include(":app")
+include(":ChartboostMediationDemo")
