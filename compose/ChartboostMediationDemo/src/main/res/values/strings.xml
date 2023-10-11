@@ -2,7 +2,7 @@
     <string name="app_name">ChartboostMediationDemo</string>
     <string name="app_id">5ce82fbffde3570afb4647bc</string>
     <string name="app_signature">fd8002155dcc6f161e41a62bce49250141b1876b</string>
-    <string name="banner_placement">AMBanner</string>
+    <string name="banner_placement">CBBanner</string>
     <string name="interstitial_placement">CBInterstitial</string>
     <string name="rewarded_placement">CBRewarded</string>
 </resources>
