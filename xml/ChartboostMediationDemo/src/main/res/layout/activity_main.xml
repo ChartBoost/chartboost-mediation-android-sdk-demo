@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="7dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/str_interstitial_ad"
+        android:textColor="@color/cbGreen80"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/interstitialPlacementLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="5dp"
+        tools:text="Placement"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@id/interstitialPlacementName"
+        app:layout_constraintStart_toEndOf="@id/textView"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/interstitialPlacementName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/interstitialPlacementLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/interstitialPlacementLabel"
+        app:layout_constraintTop_toTopOf="@id/interstitialPlacementLabel"
+        tools:text="Interstitial"/>
+
+    <Button
+        android:id="@+id/btn_load"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="@string/str_load"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toStartOf="@+id/btn_show"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/btn_show"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="@string/str_show"
+        android:textColor="@android:color/white"
+        android:textColorHighlight="#5AC648"
+        android:textColorLink="#5AC648"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_load"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_load"
+        app:layout_constraintTop_toTopOf="@+id/btn_load" />
+
+    <TextView
+        android:id="@+id/rewardedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/str_rewarded_ad"
+        android:textColor="@color/cbGreen80"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_load" />
+
+    <TextView
+        android:id="@+id/rewardedPlacementLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="5dp"
+        tools:text="Placement"
+        app:layout_constraintBottom_toBottomOf="@id/rewardedTextView"
+        app:layout_constraintEnd_toStartOf="@id/rewardedPlacementName"
+        app:layout_constraintStart_toEndOf="@id/rewardedTextView"
+        app:layout_constraintTop_toTopOf="@id/rewardedTextView" />
+
+    <TextView
+        android:id="@+id/rewardedPlacementName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/rewardedPlacementLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rewardedPlacementLabel"
+        app:layout_constraintTop_toTopOf="@id/rewardedPlacementLabel"
+        tools:text="Rewarded" />
+
+    <Button
+        android:id="@+id/btn_load_rewarded"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_weight="1"
+        android:text="@string/str_load"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toStartOf="@id/btn_show_rewarded"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rewardedTextView" />
+
+    <Button
+        android:id="@+id/btn_show_rewarded"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_weight="1"
+        android:text="@string/str_show"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@id/btn_load_rewarded"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_load_rewarded"
+        app:layout_constraintTop_toTopOf="@id/btn_load_rewarded" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/fullscreenSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/switch_label"
+        app:layout_constraintTop_toBottomOf="@id/btn_load_rewarded"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/logView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:background="@color/navy40"
+        android:gravity="bottom"
+        android:padding="5dp"
+        android:scrollbars="vertical"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Tooltip"
+        android:textColor="@color/cbGreen80"
+        app:layout_constraintBottom_toTopOf="@id/btn_clean"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fullscreenSwitch" />
+
+    <Button
+        android:id="@+id/btn_clean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/log_clear"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@id/bannerContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logView" />
+
+    <RelativeLayout
+        android:id="@+id/bannerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.chartboost.heliumsdk.ad.HeliumBannerAd
+            android:id="@+id/bannerAd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:heliumBannerSize="STANDARD"
+            app:heliumPlacementName="@string/heliumBanner"
+            tools:layout_height="50dp" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
