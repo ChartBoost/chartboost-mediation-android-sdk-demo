@@ -24,7 +24,7 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:chartboost-mediation-sdk:4.5.0'
+    implementation 'com.chartboost:chartboost-mediation-sdk:4.6.0'
 
     // Chartboost Mediation SDK Dependencies
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0'
@@ -337,23 +337,23 @@ As of 4.0.0, the Chartboost Mediation SDK currently supports the following 3rd-p
 To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
-implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.2'
-implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.22.3.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.8.4.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.11.2.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.4.1.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.3.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.22.3.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.5.7.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.4.0.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.15.0.0'
-implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.3.91.4'
-implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:4.12.11.1.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.4.9.1.3.2'
-implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.0.4'
-implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.8.0.1'
-implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.6.12.1.4'
-implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.4.0.2'
+implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.3'
+implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.22.3.0.3'
+implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.8.5.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.11.2.3'
+implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.4.1.2'
+implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.4.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.22.3.0.3'
+implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.5.7.2'
+implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.5.1.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.16.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.3.91.5'
+implementation 'com.chartboost:chartboost-mediation-adapter-tapjoy:4.13.0.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.4.9.1.3.3'
+implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.1.2'
+implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.8.0.2'
+implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.7.0.0.0'
+implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.4.0.3'
 
 ```
 
