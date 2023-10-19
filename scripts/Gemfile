@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+ruby '2.7.0'
+
+# sdk-version-update-alert.rb
+gem 'slack-ruby-client'

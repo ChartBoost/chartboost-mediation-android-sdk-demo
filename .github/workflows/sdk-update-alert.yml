@@ -1,0 +1,32 @@
+name: Check Chartboost Mediation SDK Version
+
+on:
+  schedule:
+    # Runs every day at midnight
+    - cron: '0 0 * * *'
+  # TODO: The next PR will revert the workflow_dispatch. It's here for testing purposes.
+  workflow_dispatch:
+
+env:
+    MEDIATION_APP_SLACK_TOKEN: ${{ secrets.MEDIATION_APP_SLACK_TOKEN }}
+
+jobs:
+  check_version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.7.0'
+
+    - name: Bundle install
+      run: |
+        cd scripts
+        bundle install
+
+    - name: Check SDK version and notify Slack
+      run: ruby scripts/sdk-version-update-alert.rb
