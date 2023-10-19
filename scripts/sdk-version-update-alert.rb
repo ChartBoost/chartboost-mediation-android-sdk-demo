@@ -40,9 +40,8 @@ def main
     maven_xml = fetch_url_content(MAVEN_URL)
     latest_version = parse_maven_metadata(maven_xml)
 
-    # TODO: The next PR will revert the "4.5.0". Hardcoding for testing purpospes.
     gradle_content = fetch_url_content(GITHUB_URL)
-    current_version = "4.5.0" # extract_version_from_gradle(gradle_content)
+    current_version = extract_version_from_gradle(gradle_content)
 
     if current_version
         puts "Current integrated version: #{current_version}"
