@@ -51,7 +51,7 @@ android {
 
 dependencies {
     // Chartboost Mediation SDK
-    implementation("com.chartboost:chartboost-mediation-sdk:4.6.0")
+    implementation("com.chartboost:chartboost-mediation-sdk:4.7.0")
 
     // Chartboost Mediation adapters
     implementation("com.chartboost:chartboost-mediation-adapter-adcolony:4.+")
