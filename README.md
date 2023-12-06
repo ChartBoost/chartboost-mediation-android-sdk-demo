@@ -24,7 +24,7 @@ repositories {
 dependencies {
     ...
 
-    implementation 'com.chartboost:chartboost-mediation-sdk:4.7.0'
+    implementation 'com.chartboost:chartboost-mediation-sdk:4.7.1'
 
     // Chartboost Mediation SDK Dependencies
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0'
