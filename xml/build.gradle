@@ -36,11 +36,6 @@ allprojects {
             url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea"
         }
         maven {
-            name "Yahoo's maven repo"
-            url 'https://artifactory.verizonmedia.com/artifactory/maven/'
-        }
-
-        maven {
             url "https://artifact.bytedance.com/repository/pangle"
         }
     }

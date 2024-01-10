@@ -59,7 +59,6 @@ dependencies {
     implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.1.2'
     implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.9.1.0'
     implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.7.0.0.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-yahoo:4.1.4.0.3'
 
     // Google Play Services
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'

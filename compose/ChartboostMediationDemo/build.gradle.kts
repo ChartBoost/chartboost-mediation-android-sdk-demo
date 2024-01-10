@@ -73,7 +73,6 @@ dependencies {
     implementation("com.chartboost:chartboost-mediation-adapter-unity-ads:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-verve:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-vungle:4.+")
-    implementation("com.chartboost:chartboost-mediation-adapter-yahoo:4.+")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
