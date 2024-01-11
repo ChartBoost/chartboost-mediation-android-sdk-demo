@@ -26,9 +26,6 @@ dependencyResolutionManagement {
         maven("https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea") {
             name = "Mintegral's maven repo"
         }
-        maven("https://artifactory.verizonmedia.com/artifactory/maven/") {
-            name = "Yahoo's maven repo"
-        }
         maven("https://artifact.bytedance.com/repository/pangle") {
             name = "Pangle's maven repo"
         }
