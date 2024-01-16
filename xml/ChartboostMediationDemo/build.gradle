@@ -43,7 +43,6 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1'
 
     // Chartboost Mediation Adapters
-    implementation 'com.chartboost:chartboost-mediation-adapter-adcolony:4.4.8.0.4'
     implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.22.3.0.3'
     implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.8.6.0'
     implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.11.11.3.0'
