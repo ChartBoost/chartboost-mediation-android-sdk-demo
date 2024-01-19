@@ -54,7 +54,6 @@ dependencies {
     implementation("com.chartboost:chartboost-mediation-sdk:4.7.1")
 
     // Chartboost Mediation adapters
-    implementation("com.chartboost:chartboost-mediation-adapter-adcolony:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-admob:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-applovin:4.+")
