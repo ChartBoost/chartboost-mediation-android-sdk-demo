@@ -16,10 +16,6 @@ dependencyResolutionManagement {
         maven("https://cboost.jfrog.io/artifactory/chartboost-ads/") {
             name = "Chartboost's maven repo"
         }
-
-        maven("https://sdk.tapjoy.com/") {
-            name = "Tapjoy's maven repo"
-        }
         maven("https://android-sdk.is.com/") {
             name = "IronSource's maven repo"
         }

@@ -68,7 +68,6 @@ dependencies {
     implementation("com.chartboost:chartboost-mediation-adapter-mobilefuse:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-pangle:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-reference:4.+")
-    implementation("com.chartboost:chartboost-mediation-adapter-tapjoy:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-unity-ads:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-verve:4.+")
     implementation("com.chartboost:chartboost-mediation-adapter-vungle:4.+")
