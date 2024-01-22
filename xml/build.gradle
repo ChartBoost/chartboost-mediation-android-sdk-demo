@@ -28,10 +28,6 @@ allprojects {
             url 'https://android-sdk.is.com/'
         }
         maven {
-            name "Tapjoy's maven repo"
-            url "https://sdk.tapjoy.com/"
-        }
-        maven {
             name "Mintegral's maven repo"
             url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea"
         }
