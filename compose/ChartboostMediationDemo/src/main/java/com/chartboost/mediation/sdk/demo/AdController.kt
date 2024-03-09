@@ -8,9 +8,13 @@ import com.chartboost.heliumsdk.HeliumInitializationOptions
 import com.chartboost.heliumsdk.HeliumSdk
 import com.chartboost.heliumsdk.PartnerInitializationResultsData
 import com.chartboost.heliumsdk.PartnerInitializationResultsObserver
+import com.chartboost.heliumsdk.ad.AdLoadResult
 import com.chartboost.heliumsdk.ad.ChartboostMediationAdLoadRequest
 import com.chartboost.heliumsdk.ad.ChartboostMediationFullscreenAd
 import com.chartboost.heliumsdk.ad.ChartboostMediationFullscreenAdListener
+import com.chartboost.heliumsdk.ad.ChartboostMediationFullscreenAdQueue
+import com.chartboost.heliumsdk.ad.ChartboostMediationFullscreenAdQueueListener
+import com.chartboost.heliumsdk.ad.ChartboostMediationFullscreenAdQueueManager
 import com.chartboost.heliumsdk.ad.HeliumBannerAd
 import com.chartboost.heliumsdk.ad.HeliumBannerAdListener
 import com.chartboost.heliumsdk.ad.HeliumFullscreenAdListener
@@ -102,7 +106,7 @@ object AdController : DefaultLifecycleObserver {
                     override fun didInitialize(error: Error?) {
                         handleInitializationResults(error, continuation, logState)
                     }
-                }
+                },
             )
 
             HeliumSdk.setDebugMode(true)
@@ -125,24 +129,28 @@ object AdController : DefaultLifecycleObserver {
         placementName: String,
         logState: MutableList<String>,
         shouldUseFullscreenApi: MutableState<Boolean>,
+        shouldUseFullscreenAdQueue: MutableState<Boolean>,
         showBtnEnabled: MutableState<Boolean>,
     ) {
         when (adType) {
-            AdType.BANNER -> loadBannerAd(
-                context,
-                placementName,
-                HeliumBannerAd.HeliumBannerSize.STANDARD,
-                logState
-            )
+            AdType.BANNER ->
+                loadBannerAd(
+                    context,
+                    placementName,
+                    HeliumBannerAd.HeliumBannerSize.STANDARD,
+                    logState,
+                )
 
-            AdType.INTERSTITIAL, AdType.REWARDED_VIDEO, AdType.REWARDED_INTERSTITIAL -> funnelFullscreenAdFlavor(
-                adType,
-                shouldUseFullscreenApi.value,
-                context,
-                placementName,
-                logState,
-                showBtnEnabled
-            )
+            AdType.INTERSTITIAL, AdType.REWARDED_VIDEO, AdType.REWARDED_INTERSTITIAL ->
+                funnelFullscreenAdFlavor(
+                    adType,
+                    shouldUseFullscreenApi.value,
+                    shouldUseFullscreenAdQueue.value,
+                    context,
+                    placementName,
+                    logState,
+                    showBtnEnabled,
+                )
         }
     }
 
@@ -151,14 +159,19 @@ object AdController : DefaultLifecycleObserver {
      *
      * @param context The context.
      * @param adType The type of ad to show.
+     * @param placementName The placement name.
      * @param logState The log state to update.
      * @param shouldUseFullscreenApi True if the fullscreen API should be used, false otherwise.
+     * @param showBtnEnabled True if the corresponding show button should be enabled, false otherwise.
      */
     fun showAd(
         context: Context,
         adType: AdType,
+        placementName: String,
         logState: MutableList<String>,
         shouldUseFullscreenApi: MutableState<Boolean>,
+        shouldUseFullscreenAdQueue: MutableState<Boolean>,
+        showBtnEnabled: MutableState<Boolean>,
     ) {
         when (adType) {
             AdType.BANNER -> {
@@ -166,22 +179,43 @@ object AdController : DefaultLifecycleObserver {
             }
 
             AdType.INTERSTITIAL ->
-                if (shouldUseFullscreenApi.value) showFullscreenAd(
-                    context,
-                    logState
-                ) else showInterstitialAd(
-                    logState
-                )
+                if (shouldUseFullscreenApi.value) {
+                    showFullscreenAd(
+                        context,
+                        placementName,
+                        shouldUseFullscreenAdQueue,
+                        logState,
+                        showBtnEnabled,
+                    )
+                } else {
+                    showInterstitialAd(
+                        logState,
+                    )
+                }
 
             AdType.REWARDED_VIDEO ->
-                if (shouldUseFullscreenApi.value) showFullscreenAd(
-                    context,
-                    logState
-                ) else showRewardedAd(
-                    logState
-                )
+                if (shouldUseFullscreenApi.value) {
+                    showFullscreenAd(
+                        context,
+                        placementName,
+                        shouldUseFullscreenAdQueue,
+                        logState,
+                        showBtnEnabled,
+                    )
+                } else {
+                    showRewardedAd(
+                        logState,
+                    )
+                }
 
-            AdType.REWARDED_INTERSTITIAL -> showFullscreenAd(context, logState)
+            AdType.REWARDED_INTERSTITIAL ->
+                showFullscreenAd(
+                    context,
+                    placementName,
+                    shouldUseFullscreenAdQueue,
+                    logState,
+                    showBtnEnabled,
+                )
         }
     }
 
@@ -201,24 +235,31 @@ object AdController : DefaultLifecycleObserver {
     ): HeliumBannerAd {
         logState.add("Banner ad is about to load")
 
-        return HeliumBannerAd(context, placementName, size, object : HeliumBannerAdListener {
-            override fun onAdCached(
-                placementName: String,
-                loadId: String,
-                winningBidInfo: Map<String, String>,
-                error: ChartboostMediationAdException?,
-            ) {
-                logState.add("Banner ad loaded ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
-            }
+        return HeliumBannerAd(
+            context,
+            placementName,
+            size,
+            object : HeliumBannerAdListener {
+                override fun onAdCached(
+                    placementName: String,
+                    loadId: String,
+                    winningBidInfo: Map<String, String>,
+                    error: ChartboostMediationAdException?,
+                ) {
+                    logState.add(
+                        "Banner ad loaded ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}",
+                    )
+                }
 
-            override fun onAdClicked(placementName: String) {
-                logState.add("Banner ad clicked")
-            }
+                override fun onAdClicked(placementName: String) {
+                    logState.add("Banner ad clicked")
+                }
 
-            override fun onAdImpressionRecorded(placementName: String) {
-                logState.add("Banner ad impression recorded")
-            }
-        })
+                override fun onAdImpressionRecorded(placementName: String) {
+                    logState.add("Banner ad impression recorded")
+                }
+            },
+        )
     }
 
     /**
@@ -234,11 +275,13 @@ object AdController : DefaultLifecycleObserver {
         logState: MutableList<String>,
     ) {
         // [Optional] Subscribe to partner initialization results to get the initialization metrics data.
-        HeliumSdk.subscribeInitializationResults(object : PartnerInitializationResultsObserver {
-            override fun onPartnerInitializationResultsReady(data: PartnerInitializationResultsData) {
-                logState.add("Partner initialization metrics data is available: ${data.data}")
-            }
-        })
+        HeliumSdk.subscribeInitializationResults(
+            object : PartnerInitializationResultsObserver {
+                override fun onPartnerInitializationResultsReady(data: PartnerInitializationResultsData) {
+                    logState.add("Partner initialization metrics data is available: ${data.data}")
+                }
+            },
+        )
 
         logState.add("Chartboost Mediation SDK initialization ${if (error != null) "failed with error: ${error.cause}" else "succeeded"}")
         continuation.resume(if (error != null) Result.failure(error) else Result.success(Unit))
@@ -257,21 +300,27 @@ object AdController : DefaultLifecycleObserver {
     private fun funnelFullscreenAdFlavor(
         adType: AdType,
         useFullscreen: Boolean,
+        useFullscreenAdQueue: Boolean,
         context: Context,
         placementName: String,
         logState: MutableList<String>,
         showBtnEnabled: MutableState<Boolean>,
     ) {
-        val method = if (useFullscreen) ::loadFullscreenAd else when (adType) {
-            AdType.INTERSTITIAL -> ::loadInterstitialAd
-            AdType.REWARDED_VIDEO, AdType.REWARDED_INTERSTITIAL -> ::loadRewardedAd
-            else -> {
-                logState.add("Failed to load fullscreen ad. Ad type '$adType' is not supported")
-                return
+        val method =
+            if (useFullscreen) {
+                ::loadFullscreenAd
+            } else {
+                when (adType) {
+                    AdType.INTERSTITIAL -> ::loadInterstitialAd
+                    AdType.REWARDED_VIDEO, AdType.REWARDED_INTERSTITIAL -> ::loadRewardedAd
+                    else -> {
+                        logState.add("Failed to load fullscreen ad. Ad type '$adType' is not supported")
+                        return
+                    }
+                }
             }
-        }
 
-        method(context, placementName, logState, showBtnEnabled)
+        method(context, placementName, logState, useFullscreenAdQueue, showBtnEnabled)
     }
 
     /**
@@ -286,49 +335,40 @@ object AdController : DefaultLifecycleObserver {
         context: Context,
         placementName: String,
         logState: MutableList<String>,
+        isFullscreenAdQueue: Boolean,
         showBtnEnabled: MutableState<Boolean>,
     ) {
         CoroutineScope(Main).launch {
-            logState.add("Fullscreen ad is about to load")
-
-            val request = ChartboostMediationAdLoadRequest(placementName, Keywords())
-            val result = HeliumSdk.loadFullscreenAd(
-                context,
-                request,
-                object : ChartboostMediationFullscreenAdListener {
-                    override fun onAdClicked(ad: ChartboostMediationFullscreenAd) {
-                        logState.add("Fullscreen ad clicked")
-                    }
-
-                    override fun onAdClosed(
-                        ad: ChartboostMediationFullscreenAd,
-                        error: ChartboostMediationAdException?,
-                    ) {
-                        logState.add("Fullscreen ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
-                        showBtnEnabled.value = false
-                    }
-
-                    override fun onAdExpired(ad: ChartboostMediationFullscreenAd) {
-                        logState.add("Fullscreen ad expired")
-                    }
-
-                    override fun onAdImpressionRecorded(ad: ChartboostMediationFullscreenAd) {
-                        logState.add("Fullscreen ad impression recorded")
-                    }
-
-                    override fun onAdRewarded(ad: ChartboostMediationFullscreenAd) {
-                        logState.add("Fullscreen ad rewarded")
-                    }
-                })
-
-            if (result.error != null) {
-                logState.add("Fullscreen ad failed to load with error: ${result.error?.cause}")
+            if (isFullscreenAdQueue) {
+                val queue = creteQueue(context, placementName, logState, showBtnEnabled)
+                if (!queue.isRunning) {
+                    queue.start()
+                    logState.add("Fullscreen ad queue has stared.")
+                } else {
+                    queue.stop()
+                    logState.add("Fullscreen ad queue has stopped.")
+                }
             } else {
-                fullscreenAd = result.ad
-                logState.add("Fullscreen ad loaded successfully")
-            }
+                logState.add("Fullscreen ad queue ")
+                logState.add("Fullscreen ad is about to load")
 
-            showBtnEnabled.value = result.error == null
+                val request = ChartboostMediationAdLoadRequest(placementName, Keywords())
+                val result =
+                    HeliumSdk.loadFullscreenAd(
+                        context,
+                        request,
+                        createFullscreenAdListener(logState, false, showBtnEnabled),
+                    )
+
+                if (result.error != null) {
+                    logState.add("Fullscreen ad failed to load with error: ${result.error?.cause}")
+                } else {
+                    fullscreenAd = result.ad
+                    logState.add("Fullscreen ad loaded successfully")
+                }
+
+                showBtnEnabled.value = result.error == null
+            }
         }
     }
 
@@ -344,51 +384,61 @@ object AdController : DefaultLifecycleObserver {
         context: Context,
         placementName: String,
         logState: MutableList<String>,
+        isFullscreenAdQueue: Boolean = false,
         showBtnEnabled: MutableState<Boolean>,
     ) {
+        if (isFullscreenAdQueue) logState.add("Fullscreen ad queue is only supported with fullscreen ads.")
         logState.add("Interstitial ad is about to load")
 
-        interstitialAd = HeliumInterstitialAd(
-            context,
-            placementName,
-            object : HeliumFullscreenAdListener {
-                override fun onAdCached(
-                    placementName: String,
-                    loadId: String,
-                    winningBidInfo: Map<String, String>,
-                    error: ChartboostMediationAdException?,
-                ) {
-                    logState.add("Interstitial ad loaded ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
-                    showBtnEnabled.value = error == null
-                }
+        interstitialAd =
+            HeliumInterstitialAd(
+                context,
+                placementName,
+                object : HeliumFullscreenAdListener {
+                    override fun onAdCached(
+                        placementName: String,
+                        loadId: String,
+                        winningBidInfo: Map<String, String>,
+                        error: ChartboostMediationAdException?,
+                    ) {
+                        logState.add(
+                            "Interstitial ad loaded ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}",
+                        )
+                        showBtnEnabled.value = error == null
+                    }
 
-                override fun onAdClicked(placementName: String) {
-                    logState.add("Interstitial ad clicked")
-                }
+                    override fun onAdClicked(placementName: String) {
+                        logState.add("Interstitial ad clicked")
+                    }
 
-                override fun onAdClosed(
-                    placementName: String,
-                    error: ChartboostMediationAdException?,
-                ) {
-                    logState.add("Interstitial ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
-                    showBtnEnabled.value = false
-                }
+                    override fun onAdClosed(
+                        placementName: String,
+                        error: ChartboostMediationAdException?,
+                    ) {
+                        logState.add(
+                            "Interstitial ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}",
+                        )
+                        showBtnEnabled.value = false
+                    }
 
-                override fun onAdImpressionRecorded(placementName: String) {
-                    logState.add("Interstitial ad impression recorded")
-                }
+                    override fun onAdImpressionRecorded(placementName: String) {
+                        logState.add("Interstitial ad impression recorded")
+                    }
 
-                override fun onAdRewarded(placementName: String) {
-                    logState.add("Interstitial ad rewarded")
-                }
+                    override fun onAdRewarded(placementName: String) {
+                        logState.add("Interstitial ad rewarded")
+                    }
 
-                override fun onAdShown(
-                    placementName: String,
-                    error: ChartboostMediationAdException?,
-                ) {
-                    logState.add("Interstitial ad shown ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
-                }
-            })
+                    override fun onAdShown(
+                        placementName: String,
+                        error: ChartboostMediationAdException?,
+                    ) {
+                        logState.add(
+                            "Interstitial ad shown ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}",
+                        )
+                    }
+                },
+            )
 
         interstitialAd?.load() ?: run {
             logState.add("Interstitial ad failed to load. Ad is null")
@@ -408,52 +458,61 @@ object AdController : DefaultLifecycleObserver {
         context: Context,
         placementName: String,
         logState: MutableList<String>,
+        isFullscreenAdQueue: Boolean = false,
         showBtnEnabled: MutableState<Boolean>,
     ) {
+        if (isFullscreenAdQueue) logState.add("Fullscreen ad queue is only supported with fullscreen ads.")
         logState.add("Rewarded ad is about to load")
 
-        rewardedAd = HeliumRewardedAd(
-            context,
-            placementName,
-            object : HeliumFullscreenAdListener {
-                override fun onAdCached(
-                    placementName: String,
-                    loadId: String,
-                    winningBidInfo: Map<String, String>,
-                    error: ChartboostMediationAdException?,
-                ) {
-                    logState.add("Rewarded ad loaded ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
-                    showBtnEnabled.value = error == null
-                }
+        rewardedAd =
+            HeliumRewardedAd(
+                context,
+                placementName,
+                object : HeliumFullscreenAdListener {
+                    override fun onAdCached(
+                        placementName: String,
+                        loadId: String,
+                        winningBidInfo: Map<String, String>,
+                        error: ChartboostMediationAdException?,
+                    ) {
+                        logState.add(
+                            "Rewarded ad loaded ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}",
+                        )
+                        showBtnEnabled.value = error == null
+                    }
 
-                override fun onAdClicked(placementName: String) {
-                    logState.add("Rewarded ad clicked")
-                }
+                    override fun onAdClicked(placementName: String) {
+                        logState.add("Rewarded ad clicked")
+                    }
 
-                override fun onAdClosed(
-                    placementName: String,
-                    error: ChartboostMediationAdException?,
-                ) {
-                    logState.add("Rewarded ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
-                    showBtnEnabled.value = false
-                }
+                    override fun onAdClosed(
+                        placementName: String,
+                        error: ChartboostMediationAdException?,
+                    ) {
+                        logState.add(
+                            "Rewarded ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}",
+                        )
+                        showBtnEnabled.value = false
+                    }
 
-                override fun onAdImpressionRecorded(placementName: String) {
-                    logState.add("Rewarded ad impression recorded")
-                }
+                    override fun onAdImpressionRecorded(placementName: String) {
+                        logState.add("Rewarded ad impression recorded")
+                    }
 
-                override fun onAdRewarded(placementName: String) {
-                    logState.add("Rewarded ad rewarded")
-                }
+                    override fun onAdRewarded(placementName: String) {
+                        logState.add("Rewarded ad rewarded")
+                    }
 
-                override fun onAdShown(
-                    placementName: String,
-                    error: ChartboostMediationAdException?,
-                ) {
-                    logState.add("Rewarded ad shown ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}")
-                }
-            }
-        )
+                    override fun onAdShown(
+                        placementName: String,
+                        error: ChartboostMediationAdException?,
+                    ) {
+                        logState.add(
+                            "Rewarded ad shown ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}",
+                        )
+                    }
+                },
+            )
 
         rewardedAd?.load() ?: run {
             logState.add("Rewarded ad failed to load. Ad is null")
@@ -467,8 +526,33 @@ object AdController : DefaultLifecycleObserver {
      * @param context The context.
      * @param logState The log state to update.
      */
-    private fun showFullscreenAd(context: Context, logState: MutableList<String>) {
+    private fun showFullscreenAd(
+        context: Context,
+        placementName: String,
+        shouldUseFullscreenAdQueue: MutableState<Boolean>,
+        logState: MutableList<String>,
+        showBtnEnabled: MutableState<Boolean>,
+    ) {
         CoroutineScope(Main).launch {
+            if (shouldUseFullscreenAdQueue.value) {
+                logState.add("Getting fullscreen ad from queue.")
+                val queue = getQueue(context, placementName)
+                if (queue.hasNextAd()) {
+                    fullscreenAd =
+                        queue.getNextAd()?.apply {
+                            listener =
+                                createFullscreenAdListener(
+                                    logState,
+                                    shouldUseFullscreenAdQueue.value,
+                                    showBtnEnabled,
+                                )
+                        }
+                } else {
+                    logState.add("Could not retrieve ad from queue.")
+                    showBtnEnabled.value = false
+                }
+            }
+
             logState.add("Fullscreen ad is about to show")
             val result = fullscreenAd?.show(context)
 
@@ -498,5 +582,97 @@ object AdController : DefaultLifecycleObserver {
     private fun showRewardedAd(logState: MutableList<String>) {
         logState.add("Rewarded ad is about to show")
         rewardedAd?.show() ?: logState.add("Rewarded ad failed to show. Ad is null")
+    }
+
+    private fun createFullscreenAdListener(
+        logState: MutableList<String>,
+        isFullscreenAdQueue: Boolean,
+        showBtnEnabled: MutableState<Boolean>,
+    ): ChartboostMediationFullscreenAdListener =
+        object : ChartboostMediationFullscreenAdListener {
+            override fun onAdClicked(ad: ChartboostMediationFullscreenAd) {
+                logState.add("Fullscreen ad clicked")
+            }
+
+            override fun onAdClosed(
+                ad: ChartboostMediationFullscreenAd,
+                error: ChartboostMediationAdException?,
+            ) {
+                logState.add(
+                    "Fullscreen ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}",
+                )
+                if (!isFullscreenAdQueue) showBtnEnabled.value = false
+            }
+
+            override fun onAdExpired(ad: ChartboostMediationFullscreenAd) {
+                logState.add("Fullscreen ad expired")
+            }
+
+            override fun onAdImpressionRecorded(ad: ChartboostMediationFullscreenAd) {
+                logState.add("Fullscreen ad impression recorded")
+            }
+
+            override fun onAdRewarded(ad: ChartboostMediationFullscreenAd) {
+                logState.add("Fullscreen ad rewarded")
+            }
+        }
+
+    /**
+     * Get a queue.
+     *
+     * @param context [Context] The context.
+     * @param placementName [String] The name of the placement.
+     *
+     * @return A [ChartboostMediationFullscreenAdQueue].
+     */
+    private fun getQueue(
+        context: Context,
+        placementName: String,
+    ) = ChartboostMediationFullscreenAdQueueManager.queue(context, placementName)
+
+    /**
+     * Creates an ad queue and attach a [ChartboostMediationFullscreenAdQueueListener].
+     *
+     * @param context [Context] The context.
+     * @param placementName [String] The name of the placement.
+     *
+     * @return A [ChartboostMediationFullscreenAdQueue].
+     */
+    private fun creteQueue(
+        context: Context,
+        placementName: String,
+        logState: MutableList<String>,
+        showBtnEnabled: MutableState<Boolean>,
+    ) = ChartboostMediationFullscreenAdQueueManager.queue(context, placementName).apply {
+        adQueueListener =
+            object : ChartboostMediationFullscreenAdQueueListener {
+                override fun onFullScreenAdQueueUpdated(
+                    adQueue: ChartboostMediationFullscreenAdQueue,
+                    result: AdLoadResult,
+                    numberOfAdsReady: Int,
+                ) {
+                    logState.add(
+                        "Fullscreen ad queue loaded ${
+                            if (result.error != null) {
+                                " with error: ${result.error?.cause}"
+                            } else {
+                                ""
+                            }
+                        }",
+                    )
+
+                    if (numberOfAdsReady > 0) {
+                        logState.add("Fullscreen ad queue updated. Number of ads ready: $numberOfAdsReady")
+                        showBtnEnabled.value = true
+                    }
+                }
+
+                override fun onFullscreenAdQueueExpiredAdRemoved(
+                    adQueue: ChartboostMediationFullscreenAdQueue,
+                    numberOfAdsReady: Int,
+                ) {
+                    logState.add("Fullscreen ad queue removed an expired ad. Number of ads ready: $numberOfAdsReady")
+                }
+            }
     }
 }
