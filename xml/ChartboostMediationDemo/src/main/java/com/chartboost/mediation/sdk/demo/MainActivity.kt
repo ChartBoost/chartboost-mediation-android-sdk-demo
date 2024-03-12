@@ -87,12 +87,7 @@ class MainActivity : AppCompatActivity() {
                             ?: "LOAD"
                 } else {
                     addToLogView("Using Chartboost Mediation Fullscreen APIs to load ads.")
-                    binding.btnLoad.text = "LOAD"
-                    binding.btnShow.text = "SHOW"
-                    binding.btnShow.isEnabled = false
-                    binding.btnLoadRewarded.text = "LOAD"
-                    binding.btnShowRewarded.text = "SHOW"
-                    binding.btnShowRewarded.isEnabled = false
+                    resetButtons()
                 }
 
                 addToLogView("Using new Chartboost Mediation Fullscreen APIs.")
@@ -181,7 +176,7 @@ class MainActivity : AppCompatActivity() {
 
             showBtn.apply {
                 fullscreenAdQueue?.let { queue ->
-                    text = "SHOW (${queue.numberOfAdsReady})"
+                    text = context.getString(R.string.show, queue.numberOfAdsReady)
                     isEnabled = queue.numberOfAdsReady != 0
                     setOnClickListener {
                         if (queue.hasNextAd()) {
@@ -192,7 +187,7 @@ class MainActivity : AppCompatActivity() {
                                 ad?.listener = createFullscreenAdListener()
                                 ad?.show(this@MainActivity)
                                     ?: addToLogView("Cannot show queued ad.")
-                                text = "SHOW (${queue.numberOfAdsReady})"
+                                text = context.getString(R.string.show, queue.numberOfAdsReady)
                             }
                         } else {
                             showBtn.isEnabled = queue.numberOfAdsReady != 0
@@ -255,11 +250,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBanner() {
-//        binding.bannerAd.let { bannerAd ->
-//            bannerAd.heliumBannerAdListener = createBannerAd()
-//            bannerAd.load()
-//            _bannerAd = bannerAd
-//        }
+        binding.bannerAd.let { bannerAd ->
+            bannerAd.heliumBannerAdListener = createBannerAd()
+            bannerAd.load()
+            _bannerAd = bannerAd
+        }
     }
 
     private fun createBannerAd(): HeliumBannerAdListener {
@@ -512,7 +507,7 @@ class MainActivity : AppCompatActivity() {
                 numberOfAdsReady: Int,
             ) {
                 showBtn.isEnabled = numberOfAdsReady != 0
-                showBtn.text = "SHOW ($numberOfAdsReady)"
+                showBtn.text = showBtn.context.getString(R.string.show, numberOfAdsReady)
                 val resultError = result.error?.let { " with error $it" } ?: ""
                 addToLogView("${adQueue.placementName} queue has been updated with $resultError. Number of ads ready: $numberOfAdsReady")
             }
@@ -524,4 +519,13 @@ class MainActivity : AppCompatActivity() {
                 addToLogView("${adQueue.placementName} queue had a queued ad expired. Number of ads ready: $numberOfAdsReady")
             }
         }
+
+    private fun resetButtons() {
+        binding.btnLoad.text = getString(R.string.str_load)
+        binding.btnShow.text = getString(R.string.str_show)
+        binding.btnShow.isEnabled = false
+        binding.btnLoadRewarded.text = getString(R.string.str_load)
+        binding.btnShowRewarded.text = getString(R.string.str_show)
+        binding.btnShowRewarded.isEnabled = false
+    }
 }

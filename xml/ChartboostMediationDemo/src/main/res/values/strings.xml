@@ -21,4 +21,5 @@
     <string name="str_fullscreen_ad">Fullscreen Ad</string>
     <string name="switch_label">Use Fullscreen API</string>
     <string name="ad_queue_switch_label">Use Fullscreen Ad Queue</string>
+    <string name="show">SHOW (%d)</string>
 </resources>
