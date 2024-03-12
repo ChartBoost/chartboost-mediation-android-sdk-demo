@@ -5,7 +5,7 @@
 
     <!-- Helium App Placement -->
     <string name="heliumInterstitial">CBInterstitial</string>
-    <string name="heliumRewarded">rewardedVideo</string>
+    <string name="heliumRewarded">CBRewarded</string>
     <string name="heliumBanner">CBBanner</string>
 
     <!-- SampleApp Values -->
@@ -20,4 +20,5 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="str_fullscreen_ad">Fullscreen Ad</string>
     <string name="switch_label">Use Fullscreen API</string>
+    <string name="ad_queue_switch_label">Use Fullscreen Ad Queue</string>
 </resources>

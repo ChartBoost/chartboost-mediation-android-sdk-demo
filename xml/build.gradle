@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
         google()
     }
@@ -11,6 +12,7 @@ buildscript {
 allprojects {
     repositories {
         google()
+        mavenLocal()
         mavenCentral()
         maven {
             url 'https://cboost.jfrog.io/artifactory/chartboost-ads/'
