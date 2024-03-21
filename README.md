@@ -339,18 +339,18 @@ To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
     implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.22.3.0.5'
-    implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.8.10.1'
-    implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.12.1.0.1'
-    implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.6.1.1'
+    implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.9.2.0'
+    implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.12.2.0.0'
+    implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.7.0.0'
     implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.6.0'
     implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.22.3.0.5'
-    implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.6.3.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.7.0.0.1'
+    implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.6.7.0'
+    implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.9.0.0.0'
     implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.16.0.1'
     implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.6.31.0'
     implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.5.5.0.9.0'
     implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.1.2'
-    implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.9.2.1'
+    implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.9.3.0'
     implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.7.1.0.1'
 
 ```

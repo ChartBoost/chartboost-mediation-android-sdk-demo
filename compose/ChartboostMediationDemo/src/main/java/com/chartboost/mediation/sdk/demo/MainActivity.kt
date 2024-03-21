@@ -110,7 +110,7 @@ fun App() {
                 context.getSharedPreferences(
                     "com.chartboost.mediation.sdk.demo",
                     Context.MODE_PRIVATE,
-                ).getBoolean("fullscreen_api", false),
+                ).getBoolean("fullscreen_api", true),
             )
         }
 
