@@ -25,7 +25,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -51,7 +51,7 @@ android {
 
 dependencies {
     // Chartboost Mediation SDK
-    implementation("com.chartboost:chartboost-mediation-sdk:4.8.0")
+    implementation("com.chartboost:chartboost-mediation-sdk:4.9.0")
 
     // Chartboost Mediation adapters
     implementation("com.chartboost:chartboost-mediation-adapter-admob:4.+")

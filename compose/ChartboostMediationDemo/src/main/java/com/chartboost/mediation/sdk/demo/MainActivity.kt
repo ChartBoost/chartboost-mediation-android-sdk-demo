@@ -104,13 +104,26 @@ fun App() {
 
     // Whether to use the fullscreen API for interstitial and rewarded ads. This is the new and recommended
     // way to load and show all fullscreen ads. It is enabled by default, but can be disabled by the user.
-    var shouldUseFullscreenApi = remember {
-        mutableStateOf(
-            context.getSharedPreferences(
-                "com.chartboost.mediation.sdk.demo", Context.MODE_PRIVATE
-            ).getBoolean("fullscreen_api", true)
-        )
-    }
+    var shouldUseFullscreenApi =
+        remember {
+            mutableStateOf(
+                context.getSharedPreferences(
+                    "com.chartboost.mediation.sdk.demo",
+                    Context.MODE_PRIVATE,
+                ).getBoolean("fullscreen_api", true),
+            )
+        }
+
+    // Whether to use the fullscreen ad queue to load ads for each placement.
+    var shouldUseFullscreenAdQueue =
+        remember {
+            mutableStateOf(
+                context.getSharedPreferences(
+                    "com.chartboost.mediation.sdk.demo",
+                    Context.MODE_PRIVATE,
+                ).getBoolean("fullscreen_ad_queue", true),
+            )
+        }
 
     // Whether the Chartboost Mediation SDK has been initialized. This is used to determine whether to
     // show the banner ad (since it is loaded automatically and should be done so after the SDK is initialized).
@@ -121,7 +134,7 @@ fun App() {
             LazyColumn(
                 Modifier
                     .padding(16.dp)
-                    .fillMaxSize()
+                    .fillMaxSize(),
             ) {
                 item {
                     // An "AdSection" is a row that contains a heading, a placement name, and buttons
@@ -136,6 +149,7 @@ fun App() {
                                 interstitialPlacement,
                                 logState,
                                 shouldUseFullscreenApi,
+                                shouldUseFullscreenAdQueue,
                                 isInterstitialShowBtnEnabled,
                             )
                         },
@@ -143,8 +157,11 @@ fun App() {
                             AdController.showAd(
                                 context,
                                 AdController.AdType.INTERSTITIAL,
+                                interstitialPlacement,
                                 logState,
                                 shouldUseFullscreenApi,
+                                shouldUseFullscreenAdQueue,
+                                isInterstitialShowBtnEnabled,
                             )
                         },
                         enabled = isInterstitialShowBtnEnabled.value,
@@ -162,6 +179,7 @@ fun App() {
                                 rewardedAdPlacement,
                                 logState,
                                 shouldUseFullscreenApi,
+                                shouldUseFullscreenAdQueue,
                                 isRewardedShowBtnEnabled,
                             )
                         },
@@ -169,8 +187,11 @@ fun App() {
                             AdController.showAd(
                                 context,
                                 AdController.AdType.REWARDED_VIDEO,
+                                rewardedAdPlacement,
                                 logState,
-                                shouldUseFullscreenApi
+                                shouldUseFullscreenApi,
+                                shouldUseFullscreenAdQueue,
+                                isRewardedShowBtnEnabled,
                             )
                         },
                         enabled = isRewardedShowBtnEnabled.value,
@@ -184,6 +205,18 @@ fun App() {
                         onSettingChange = { newValue ->
                             shouldUseFullscreenApi = mutableStateOf(newValue)
                             logState.add("Interstitial and rewarded ads will ${if (newValue) "use" else "not use"} the fullscreen API")
+                        },
+                    )
+                }
+
+                item {
+                    FullscreenAdQueueToggle(
+                        settingKey = "fullscreen_ad_queue",
+                        context = context,
+                        shouldUseFullscreenApi = shouldUseFullscreenApi.value,
+                        onSettingChange = { newValue ->
+                            shouldUseFullscreenAdQueue = mutableStateOf(newValue)
+                            logState.add("Fullscreen Ad Queue will be ${if (newValue) "used" else "not used"}")
                         },
                     )
                 }
@@ -242,7 +275,7 @@ fun AdSection(
         Text(
             text = placementName,
             modifier = Modifier.padding(start = 8.dp),
-            color = Color.LightGray
+            color = Color.LightGray,
         )
     }
     Row {
@@ -271,10 +304,11 @@ fun AdButton(
         onClick = onClick,
         enabled = enabled,
         modifier = Modifier.padding(end = 16.dp, bottom = 16.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = color,
-            contentColor = Color.White
-        )
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = color,
+                contentColor = Color.White,
+            ),
     ) {
         Text(text = text)
     }
@@ -294,28 +328,32 @@ fun FullscreenApiToggle(
     context: Context,
     onSettingChange: (Boolean) -> Unit,
 ) {
-    val sharedPref = context.getSharedPreferences(
-        "com.chartboost.mediation.sdk.demo", Context.MODE_PRIVATE
-    )
+    val sharedPref =
+        context.getSharedPreferences(
+            "com.chartboost.mediation.sdk.demo",
+            Context.MODE_PRIVATE,
+        )
     var toggleState by remember {
         mutableStateOf(sharedPref.getBoolean(settingKey, true))
     }
 
     Row(
-        modifier = Modifier
-            .toggleable(
-                role = Role.Switch,
-                value = toggleState,
-                onValueChange = { newValue ->
-                    toggleState = newValue
-                    sharedPref
-                        .edit()
-                        .putBoolean(settingKey, newValue)
-                        .apply()
-                    onSettingChange(newValue)
-                },
-            )
-            .fillMaxWidth(),
+        modifier =
+            Modifier
+                .toggleable(
+                    role = Role.Switch,
+                    value = toggleState,
+                    onValueChange = { newValue ->
+                        toggleState = newValue
+                        sharedPref
+                            .edit()
+                            .putBoolean(settingKey, newValue)
+                            .apply()
+                        onSettingChange(newValue)
+                    },
+                )
+                .padding(top = 4.dp, bottom = 4.dp, end = 0.dp)
+                .fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -323,20 +361,92 @@ fun FullscreenApiToggle(
         Switch(
             checked = toggleState,
             onCheckedChange = null,
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = Color(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.white
-                    )
+            colors =
+                SwitchDefaults.colors(
+                    checkedThumbColor =
+                        Color(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.white,
+                            ),
+                        ),
+                    checkedTrackColor =
+                        Color(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.chartboost_green,
+                            ),
+                        ),
                 ),
-                checkedTrackColor = Color(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.chartboost_green
-                    )
+        )
+    }
+}
+
+/**
+ * A toggle to enable or disable the fullscreen API for interstitial and rewarded ads. It is enabled by default
+ * and effective immediately upon change.
+ *
+ * @param settingKey The key to use to store the setting in SharedPreferences.
+ * @param context The context to use to get the SharedPreferences.
+ * @param onSettingChange A function to call when the setting is changed.
+ */
+@Composable
+fun FullscreenAdQueueToggle(
+    settingKey: String,
+    context: Context,
+    shouldUseFullscreenApi: Boolean,
+    onSettingChange: (Boolean) -> Unit,
+) {
+    val sharedPref =
+        context.getSharedPreferences(
+            "com.chartboost.mediation.sdk.demo",
+            Context.MODE_PRIVATE,
+        )
+    var toggleState by remember {
+        mutableStateOf(sharedPref.getBoolean(settingKey, false))
+    }
+
+    Row(
+        modifier =
+            Modifier
+                .toggleable(
+                    role = Role.Switch,
+                    value = toggleState,
+                    onValueChange = { newValue ->
+                        toggleState = newValue
+                        sharedPref
+                            .edit()
+                            .putBoolean(settingKey, newValue)
+                            .apply()
+                        onSettingChange(newValue)
+                    },
+                )
+                .padding(top = 4.dp, end = 0.dp)
+                .fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(text = "Use Fullscreen Ad Queue", modifier = Modifier.padding(end = 8.dp))
+        Switch(
+            checked = toggleState,
+            onCheckedChange = null,
+            colors =
+                SwitchDefaults.colors(
+                    checkedThumbColor =
+                        Color(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.white,
+                            ),
+                        ),
+                    checkedTrackColor =
+                        Color(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.chartboost_green,
+                            ),
+                        ),
                 ),
-            )
         )
     }
 }
@@ -362,11 +472,12 @@ fun LogConsole(logs: MutableList<String>) {
     Column {
         LazyColumn(
             state = listState,
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .background(Color.LightGray)
-                .fillMaxWidth()
-                .height(350.dp)
+            modifier =
+                Modifier
+                    .padding(top = 16.dp)
+                    .background(Color.LightGray)
+                    .fillMaxWidth()
+                    .height(350.dp),
         ) {
             items(logs) { log ->
                 Text(log, modifier = Modifier.padding(8.dp))
@@ -380,12 +491,14 @@ fun LogConsole(logs: MutableList<String>) {
                 onClick = {
                     logs.clear()
                 },
-                modifier = Modifier
-                    .padding(top = 16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = buttonColor,
-                    contentColor = Color.White
-                )
+                modifier =
+                    Modifier
+                        .padding(top = 16.dp),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = buttonColor,
+                        contentColor = Color.White,
+                    ),
             ) {
                 Text(text = "Clear Logs")
             }
@@ -405,30 +518,34 @@ fun HeliumBannerAdCompose(
     logState: MutableList<String>,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 16.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(top = 16.dp),
     ) {
         AndroidView(
             factory = { context ->
-                val banner = AdController.loadBannerAd(
-                    context,
-                    placementName,
-                    HeliumBannerAd.HeliumBannerSize.STANDARD,
-                    logState
-                )
-
-                val relativeLayout = RelativeLayout(context).apply {
-                    layoutParams = RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.MATCH_PARENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT
+                val banner =
+                    AdController.loadBannerAd(
+                        context,
+                        placementName,
+                        HeliumBannerAd.HeliumBannerSize.STANDARD,
+                        logState,
                     )
-                }
+
+                val relativeLayout =
+                    RelativeLayout(context).apply {
+                        layoutParams =
+                            RelativeLayout.LayoutParams(
+                                RelativeLayout.LayoutParams.MATCH_PARENT,
+                                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                            )
+                    }
 
                 relativeLayout.addView(banner)
                 relativeLayout
             },
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.BottomCenter),
         )
     }
 }

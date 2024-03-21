@@ -134,6 +134,14 @@
         app:layout_constraintTop_toBottomOf="@id/btn_load_rewarded"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/fullscreenAdQueueSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ad_queue_switch_label"
+        app:layout_constraintTop_toBottomOf="@id/fullscreenSwitch"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <TextView
         android:id="@+id/logView"
         android:layout_width="match_parent"
@@ -149,7 +157,7 @@
         app:layout_constraintBottom_toTopOf="@id/btn_clean"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fullscreenSwitch" />
+        app:layout_constraintTop_toBottomOf="@id/fullscreenAdQueueSwitch" />
 
     <Button
         android:id="@+id/btn_clean"
