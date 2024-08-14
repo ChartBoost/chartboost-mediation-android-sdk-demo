@@ -180,12 +180,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.chartboost.heliumsdk.ad.HeliumBannerAd
-            android:id="@+id/bannerAd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:heliumBannerSize="STANDARD"
-            app:heliumPlacementName="@string/heliumBanner"
-            tools:layout_height="50dp" />
+<!--        <com.chartboost.heliumsdk.ad.HeliumBannerAd-->
+<!--            android:id="@+id/bannerAd"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:heliumBannerSize="STANDARD"-->
+<!--            app:heliumPlacementName="@string/heliumBanner"-->
+<!--            tools:layout_height="50dp" />-->
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

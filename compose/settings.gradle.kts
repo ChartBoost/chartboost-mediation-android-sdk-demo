@@ -30,6 +30,5 @@ dependencyResolutionManagement {
         }
     }
 }
-
-rootProject.name = "ChartboostMediationDemo"
-include(":ChartboostMediationDemo")
+rootProject.name = "ChartboostMediationDemoCompose"
+include(":ChartboostMediationDemoCompose")

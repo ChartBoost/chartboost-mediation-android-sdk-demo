@@ -85,7 +85,6 @@ object AdController : DefaultLifecycleObserver {
      *
      * @param context The context.
      * @param appId The Chartboost Mediation app ID.
-     * @param appSignature The Chartboost Mediation app signature.
      * @param logState The log state to update.
      *
      * @return A result indicating whether the SDK was initialized successfully.
