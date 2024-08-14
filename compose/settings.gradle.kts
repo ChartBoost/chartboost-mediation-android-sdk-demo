@@ -30,5 +30,6 @@ dependencyResolutionManagement {
         }
     }
 }
+
 rootProject.name = "ChartboostMediationDemoCompose"
 include(":ChartboostMediationDemoCompose")

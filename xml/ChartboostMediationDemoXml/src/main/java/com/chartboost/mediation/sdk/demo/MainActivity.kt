@@ -250,11 +250,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBanner() {
-//        binding.bannerAd.let { bannerAd ->
-//            bannerAd.heliumBannerAdListener = createBannerAd()
-//            bannerAd.load()
-//            _bannerAd = bannerAd
-//        }
+        binding.bannerAd.let { bannerAd ->
+            bannerAd.heliumBannerAdListener = createBannerAd()
+            bannerAd.load()
+            _bannerAd = bannerAd
+        }
     }
 
     private fun createBannerAd(): HeliumBannerAdListener {
@@ -452,7 +452,7 @@ class MainActivity : AppCompatActivity() {
                             } else {
                                 addToLogView("Chartboost Mediation SDK (${HeliumSdk.getVersion()}) initialized successfully")
                                 configSdk()
-//                                setupBanner()
+                                setupBanner()
                             }
                         }
                     },
