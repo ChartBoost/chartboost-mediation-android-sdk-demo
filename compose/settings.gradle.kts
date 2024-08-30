@@ -13,6 +13,9 @@ dependencyResolutionManagement {
         maven("https://cboost.jfrog.io/artifactory/chartboost-mediation/") {
             name = "Chartboost Mediation's Production Repo"
         }
+        maven("https://cboost.jfrog.io/artifactory/chartboost-core/") {
+            name = "Chartboost Core's Production Repo"
+        }
         maven("https://cboost.jfrog.io/artifactory/chartboost-ads/") {
             name = "Chartboost's maven repo"
         }
