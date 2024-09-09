@@ -30,11 +30,11 @@ repositories {
 dependencies {
     ...
 
-	// Chartboost Mediation SDK
+    // Chartboost Mediation SDK
     implementation("com.chartboost:chartboost-mediation-sdk:5.+")
     implementation("com.chartboost:chartboost-core-sdk:1.+")
 	
-	// Chartboost Mediation Adapters
+    // Chartboost Mediation Adapters
     implementation("com.chartboost:chartboost-mediation-adapter-chartboost:5.+")
 
     // Chartboost Mediation SDK Dependencies
