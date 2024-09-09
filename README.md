@@ -75,7 +75,7 @@ implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
 
 ## Start The Chartboost Mediation SDK:
 ---
-In your application's `onCreate` method, start the Chartboost Mediation SDK by providing your app's app id, its app signature, and passing a _HeliumSdkListener_
+In your application's `onCreate` method, start the Chartboost Mediation SDK by providing your app's app id in an `SdkConfiguration` and passing it to `ChartboostCore.initializeSdk()`.
 
 ```kotlin Kotlin
 val configuration = SdkConfiguration(
@@ -102,7 +102,7 @@ ChartboostCore.initializeSdk(
 
 ## Creating Fullscreen Placements
 
-You can implement the HeliumFullscreenAdListener interface to receive notifications about interstitial and rewarded ads loading, displaying, and closing.
+You can implement the `ChartboostMediationFullscreenAdListener` interface to receive notifications about fullscreen ads loading, displaying, and closing.
 
 ```kotlin Kotlin
 private fun createFullscreenAdListener(): ChartboostMediationFullscreenAdListener =
