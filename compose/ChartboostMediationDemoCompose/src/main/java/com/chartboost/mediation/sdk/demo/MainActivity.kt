@@ -44,7 +44,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.chartboost.heliumsdk.ad.HeliumBannerAd
+import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdView.ChartboostMediationBannerSize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -102,18 +102,6 @@ fun App() {
     val isInterstitialShowBtnEnabled = remember { mutableStateOf(false) }
     val isRewardedShowBtnEnabled = remember { mutableStateOf(false) }
 
-    // Whether to use the fullscreen API for interstitial and rewarded ads. This is the new and recommended
-    // way to load and show all fullscreen ads. It is enabled by default, but can be disabled by the user.
-    var shouldUseFullscreenApi =
-        remember {
-            mutableStateOf(
-                context.getSharedPreferences(
-                    "com.chartboost.mediation.sdk.demo",
-                    Context.MODE_PRIVATE,
-                ).getBoolean("fullscreen_api", true),
-            )
-        }
-
     // Whether to use the fullscreen ad queue to load ads for each placement.
     var shouldUseFullscreenAdQueue =
         remember {
@@ -148,7 +136,6 @@ fun App() {
                                 AdController.AdType.INTERSTITIAL,
                                 interstitialPlacement,
                                 logState,
-                                shouldUseFullscreenApi,
                                 shouldUseFullscreenAdQueue,
                                 isInterstitialShowBtnEnabled,
                             )
@@ -159,7 +146,6 @@ fun App() {
                                 AdController.AdType.INTERSTITIAL,
                                 interstitialPlacement,
                                 logState,
-                                shouldUseFullscreenApi,
                                 shouldUseFullscreenAdQueue,
                                 isInterstitialShowBtnEnabled,
                             )
@@ -178,7 +164,6 @@ fun App() {
                                 AdController.AdType.REWARDED_VIDEO,
                                 rewardedAdPlacement,
                                 logState,
-                                shouldUseFullscreenApi,
                                 shouldUseFullscreenAdQueue,
                                 isRewardedShowBtnEnabled,
                             )
@@ -189,7 +174,6 @@ fun App() {
                                 AdController.AdType.REWARDED_VIDEO,
                                 rewardedAdPlacement,
                                 logState,
-                                shouldUseFullscreenApi,
                                 shouldUseFullscreenAdQueue,
                                 isRewardedShowBtnEnabled,
                             )
@@ -199,21 +183,9 @@ fun App() {
                 }
 
                 item {
-                    FullscreenApiToggle(
-                        settingKey = "fullscreen_api",
-                        context = context,
-                        onSettingChange = { newValue ->
-                            shouldUseFullscreenApi = mutableStateOf(newValue)
-                            logState.add("Interstitial and rewarded ads will ${if (newValue) "use" else "not use"} the fullscreen API")
-                        },
-                    )
-                }
-
-                item {
                     FullscreenAdQueueToggle(
                         settingKey = "fullscreen_ad_queue",
                         context = context,
-                        shouldUseFullscreenApi = shouldUseFullscreenApi.value,
                         onSettingChange = { newValue ->
                             shouldUseFullscreenAdQueue = mutableStateOf(newValue)
                             logState.add("Fullscreen Ad Queue will be ${if (newValue) "used" else "not used"}")
@@ -244,7 +216,6 @@ fun App() {
             AdController.initialize(
                 context,
                 appId,
-                appSignature,
                 logState,
             )
 
@@ -394,7 +365,6 @@ fun FullscreenApiToggle(
 fun FullscreenAdQueueToggle(
     settingKey: String,
     context: Context,
-    shouldUseFullscreenApi: Boolean,
     onSettingChange: (Boolean) -> Unit,
 ) {
     val sharedPref =
@@ -529,7 +499,7 @@ fun HeliumBannerAdCompose(
                     AdController.loadBannerAd(
                         context,
                         placementName,
-                        HeliumBannerAd.HeliumBannerSize.STANDARD,
+                        ChartboostMediationBannerSize.STANDARD,
                         logState,
                     )
 

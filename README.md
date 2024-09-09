@@ -17,24 +17,36 @@ To quickly get started, simply add the following dependencies inside your app's 
 
 ```gradle
 repositories {
-  name "Chartboost Mediation's maven repo"
-  url 'https://cboost.jfrog.io/artifactory/chartboost-mediation'
+    maven {
+      name "Chartboost Mediation's maven repo"
+      url "https://cboost.jfrog.io/artifactory/chartboost-mediation"
+    }
+    maven {
+      name "Chartboost Core's maven repo"
+      url "https://cboost.jfrog.io/artifactory/chartboost-core"
+    }
 }
 
 dependencies {
     ...
 
-    implementation 'com.chartboost:chartboost-mediation-sdk:4.9.0'
+    // Chartboost Mediation SDK
+    implementation("com.chartboost:chartboost-mediation-sdk:5.+")
+    implementation("com.chartboost:chartboost-core-sdk:1.+")
+	
+    // Chartboost Mediation Adapters
+    implementation("com.chartboost:chartboost-mediation-adapter-chartboost:5.+")
 
     // Chartboost Mediation SDK Dependencies
-    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1'
-    implementation 'androidx.lifecycle:lifecycle-common:2.5.1'
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.lifecycle:lifecycle-common:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha02")
 
     ...
 }
@@ -63,263 +75,142 @@ implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
 
 ## Start The Chartboost Mediation SDK:
 ---
-In your application's `onCreate` method, start the Chartboost Mediation SDK by providing your app's app id, its app signature, and passing a _HeliumSdkListener_
+In your application's `onCreate` method, start the Chartboost Mediation SDK by providing your app's app id in an `SdkConfiguration` and passing it to `ChartboostCore.initializeSdk()`.
 
-```java Java
-HeliumSdk.start(
-    MyActivityContext.this,
-    myHeliumAppId,
-    myHeliumAppSignature,
-    new HeliumInitializationOptions(),
-    new HeliumSdk.HeliumSdkListener() {
-        @Override
-        public void didInitialize(Error error) {
-            if (error != null) {
-                Log.d(TAG,"Chartboost Mediation SDK failed to initialize. Reason: " + error.getMessage());
-            } else {
-                //SDK Started,
-                Log.d(TAG,"Chartboost Mediation SDK initialized successfully");
+```kotlin Kotlin
+val configuration = SdkConfiguration(
+    chartboostApplicationIdentifier = myHeliumAppId,
+    modules = listOf()
+)
+ChartboostCore.initializeSdk(
+    context,
+    configuration,
+    object : ModuleObserver {
+        override fun onModuleInitializationCompleted(result: ModuleInitializationResult) {
+            if (result.moduleId == ChartboostMediationSdk.CORE_MODULE_ID) {
+	            if (result.exception != null) {
+	                Log.d(TAG,"Chartboost Mediation SDK failed to initialize. Reason: ${result.exception.cause}");
+	            } else {
+	                //SDK Started,
+	                Log.d(TAG,"Chartboost Mediation SDK initialized successfully");
+	            }
             }
         }
-    }
-);
+    },
+)
 ```
 
 ## Creating Fullscreen Placements
 
-You can implement the HeliumFullscreenAdListener interface to receive notifications about interstitial and rewarded ads loading, displaying, and closing.
+You can implement the `ChartboostMediationFullscreenAdListener` interface to receive notifications about fullscreen ads loading, displaying, and closing.
 
-```java Java
-HeliumFullscreenAdListener heliumFullscreenAdListener = new HeliumFullscreenAdListener() {
-    @Override
-    public void onAdCached(@NonNull String placementName, @NonNull String loadId, @NonNull Map<String, String> winningBidInfo, @Nullable ChartboostMediationAdException error) {
-        if (error != null) {
-            Log.d(TAG, "Ad cache failed for placement: " + placementName + " reason: " + error.getMessage());
-        } else {
-            // Show the ad if it's ready
-            Log.d(TAG, "Ad cached for placement: " + placementName);
+```kotlin Kotlin
+private fun createFullscreenAdListener(): ChartboostMediationFullscreenAdListener =
+    object : ChartboostMediationFullscreenAdListener {
+        override fun onAdClicked(ad: ChartboostMediationFullscreenAd) {
+            Log.d(TAG, "Fullscreen ad clicked")
+        }
+
+        override fun onAdClosed(
+            ad: ChartboostMediationFullscreenAd,
+            error: ChartboostMediationAdException?,
+        ) {
+            Log.d(TAG,
+                "Fullscreen ad closed ${if (error != null) "with error: ${error.chartboostMediationError}" else "successfully"}",
+            )
+        }
+
+        override fun onAdExpired(ad: ChartboostMediationFullscreenAd) {
+            Log.d(TAG, "Fullscreen ad expired")
+        }
+
+        override fun onAdImpressionRecorded(ad: ChartboostMediationFullscreenAd) {
+            Log.d(TAG, "Fullscreen ad impression recorded")
+        }
+
+        override fun onAdRewarded(ad: ChartboostMediationFullscreenAd) {
+            Log.d(TAG, "Fullscreen ad rewarded")
         }
     }
- 
-    @Override
-    public void onAdShown(@NonNull String placementName, @Nullable ChartboostMediationAdException error) {
-        if (error != null) {
-            Log.d(TAG, "Ad show failed for placement: " + placementName + " reason: " + error.getMessage());
-        } else {
-            Log.d(TAG, "Ad shown for placement: " + placementName);
-        }
-    }
- 
-    @Override
-    public void onAdClicked(@NonNull String placementName) {
-        Log.d(TAG, "Ad clicked for placement: " + placementName);
-    }
- 
-    @Override
-    public void onAdClosed(@NonNull String placementName, @Nullable ChartboostMediationAdException error) {
-        if (error != null) {
-            Log.d(TAG, "Ad closed with error for placement: " + placementName + " reason: " + error.getMessage());
-        } else {
-            Log.d(TAG, "Ad closed for placement: " + placementName);
-        }
-    }
-
-    @Override
-    public void onAdImpressionRecorded(@NonNull String placementName) {
-        Log.d(TAG, "Ad recorded impression for placement: " + placementName);
-    }
-
-    @Override
-    public void onAdRewarded(@NonNull String placementName) {
-        Log.d(TAG, "Ad rewarded user for placement: " + placementName);
-    }
-};
 ```
-
 ## Loading & Showing Fullscreen Ads
 
 To load a fullscreen ad,
-```java Java
-ChartboostMediationAdLoadRequest adRequest = new ChartboostMediationAdLoadRequest([Your Placement Name], new Keywords());
-HeliumSdk.loadFullscreenAdFromJava(context, adRequest, heliumFullscreenAdListener);
+```kotlin Kotlin
+val request = ChartboostMediationFullscreenAdLoadRequest([Your Placement Name], Keywords())
+val result =
+    ChartboostMediationFullscreenAd.loadFullscreenAd(
+        context,
+        request,
+        createFullscreenAdListener(),
+    )
+if (result.error != null) {
+    Log.d(TAG, "Fullscreen ad failed to load with error: ${result.error?.cause}")
+} else {
+    fullscreenAd = result.ad
+    Log.d(TAG, "Fullscreen ad loaded successfully")
+}
 ```
 
 To show the ad,
-```java Java
-// After loading an ad
-public void onAdLoaded(ChartboostMediationFullscreenAd ad) {
-    ad.showFullscreenAdFromJava(context, new ChartboostMediationFullscreenAdShowListener() {
-        public void onAdShown(ChartboostMediationAdShowResult result) {
-            // Shown
-        }
-    )
-}
-```
+```kotlin Kotlin
+val result = fullscreenAd?.show(context as Activity)
 
-## Creating Interstitial Placements
----
-After initializing the Chartboost Mediation SDK, you want to create an interstitial ad object.
-
-```java Java
-String interstitialPlacementName = "CBInterstitial";
-HeliumInterstitialAd interstitialAd = new HeliumInterstitialAd(interstitialPlacementName,
-    new HeliumInterstitialAdListener() {
-        @Override
-        public void didReceiveWinningBid(@NonNull String placementName, @NonNull HashMap bidInfo) {}
-        
-        @Override
-        public void didCache(@NonNull String placementName, @Nullable HeliumAdError error) {}
-     
-        @Override
-        public void didShow(@NonNull String placementName, @Nullable HeliumAdError error) {}
-     
-        @Override
-        public void didClick(@NonNull String placementName, @Nullable HeliumAdError error) {}
-     
-        @Override
-        public void didClose(@NonNull String placementName, @Nullable HeliumAdError error) {}
-    
-        @Override
-        public void didRecordImpression(@NonNull String placementName) {}
-    }
-);
-```
-
-## Loading & Showing Interstitial Ads
----
-To load an interstitial ad, simply call the `HeliumInterstitialAd` you created
-```java Java
-interstitialAd.load();
-```
-
-To show the ad, make sure the ad is `readyToShow`, then show the ad.
-```java Java
-if (interstitialAd.readyToShow()) {
-    interstitialAd.show();
-}
-```
-
-## Creating Rewarded Placements
----
-If you want rewarded ads, this is how to create a rewarded ad object.
-```java Java
-String rewardedPlacementName = "CBRewarded";
-HeliumRewardedAd rewardedAd = new HeliumRewardedAd(rewardedPlacementName,
-    new HeliumRewardedAdListener() {
-        @Override
-        public void didReceiveWinningBid(@NonNull String placementName, @NonNull HashMap bidInfo) {}
-     
-        @Override
-        public void didCache(@NonNull String placementName, @Nullable HeliumAdError error) {}
-     
-        @Override
-        public void didShow(@NonNull String placementName, @Nullable HeliumAdError error) {}
-     
-        @Override
-        public void didClick(@NonNull String placementName, @Nullable HeliumAdError error) {}
-     
-        @Override
-        public void didClose(@NonNull String placementName, @Nullable HeliumAdError error) {}
-     
-        @Override
-        public void didReceiveReward(@NonNull String placementName, @NonNull String reward) {}
-    
-        @Override
-        public void didRecordImpression(@NonNull String placementName) {}
-    }
-);
-```
-
-## Loading & Showing Rewarded Ads
----
-To load a rewarded ad, simply call the `HeliumRewardedAd` you created
-```java Java
-rewardedAd.load();
-```
-
-To show the ad, make sure the ad is `readyToShow`, then show the ad.
-```java Java
-if (rewardedAd.readyToShow()) {
-    rewardedAd.show();
+if (result?.error != null) {
+    Log.d(TAG, "Fullscreen ad failed to show with error: ${result.error?.cause}")
+} else {
+    Log.d(TAG, "Fullscreen ad shown successfully")
 }
 ```
 
 ## Creating Banner Placements
 ---
-If you want banner ads, this is how to create a banner ad object.
-```java Java
-/*
-  The following Banner enum Sizes can be passed down:
-  HeliumBannerAd.HeliumBannerSize.STANDARD
-  HeliumBannerAd.HeliumBannerSize.MEDIUM
-  HeliumBannerAd.HeliumBannerSize.LEADERBOARD
-*/
-HeliumBannerAd.HeliumBannerSize bannerSize = HeliumBannerAd.HeliumBannerSize.STANDARD;
-String bannerPlacementName = "CBBanner";
-HeliumBannerAd heliumBannerAd = new HeliumBannerAd(context, bannerPlacementName, bannerSize,
-    new HeliumBannerAdListener() {
-        @Override
-        public void didReceiveWinningBid(@NonNull String placementName, @NonNull HashMap bindInfo) {}
-    
-        @Override
-        public void didCache(@NonNull String placementName, @Nullable HeliumAdError error) {}
-    
-        @Override
-        public void didClick(@NonNull String placementName, @Nullable HeliumAdError error) {}
-    
-        @Override
-        public void didRecordImpression(@NonNull String placementName) {}
-    }
-);
-```
+If you want banner ads, this is how to create, load, and show a banner ad. This is all done automatically.
+```kotlin Kotlin
+ChartboostMediationBannerAdView(
+    context,
+    placementName,
+    size,
+    object : ChartboostMediationBannerAdViewListener {
+        override fun onAdClicked(placementName: String) {
+            Log.d(TAG, "Banner ad clicked")
+        }
 
-## Loading & Showing Banner Ads
----
-To load a banner ad, simply call the `HeliumBannerAd` you created
-```java Java
-bannerAd.load();
+        override fun onAdImpressionRecorded(placementName: String) {
+            Log.d(TAG, "Banner ad impression recorded")
+        }
+
+        override fun onAdViewAdded(
+            placement: String,
+            child: View?,
+        ) {
+            Log.d(TAG, "Banner ad view added")
+        }
+    },
+)
 ```
 
 ## Test Mode
 ---
 To set the SDK to Test Mode, simply call the following method _after_ initializing the Chartboost Mediation SDK after its `start` method.
-```java Java
-// Start the Helium SDK first, before setting the sdk to Test Mode.
-HeliumSdk.start(this, "APP ID", "APP SIG", sdkListener);
-// Set the Helium SDK to Test Mode. Make sure to remove this before deployment.
-HeliumSdk.setTestMode(true);
+```kotlin Kotlin
+// Start the Chartboost Core SDK first, before setting the sdk to Test Mode.
+ChartboostCore.initializeSdk(...)
+// Set the Chartboost Mediation SDK to Test Mode. Make sure to remove this before deployment.
+ChartboostMediationSdk.setTestMode(context, true)
 ```
 
 ## COPPA, GDPR & Additional Methods:
+
 ---
-To set the SDK for COPPA compliance:
-```java Java
-HeliumSdk.setSubjectToCoppa(true);
-```
-
-The Chartboost Mediation SDK includes methods that set the GDPR setting as well as the user consent.
-```java Java
-HeliumSdk.setSubjectToGDPR(true);
-HeliumSdk.setUserHasGivenConsent(true);
-```
-
-In addition to the methods already mentioned above, the Chartboost Mediation SDK also provides the following methods:
-```java Java
-HeliumSdk.getAppId();
-HeliumSdk.getAppSignature();
-HeliumSdk.getContext();
-HeliumSdk.getTestMode();
-HeliumSdk.getVersion();
-HeliumSdk.onBackPressed();
-```
+For details on how to implement user privacy requirements, refer to the [Core SDK documentation](https://docs.chartboost.com/en/mediation/integrate/core/android/get-started/).
 
 Note: Not all partner SDKs have full support for GDPR. Please refer to its official documentation for more info on how the sdk handles GDPR.
 
 ## 3rd-Party Supported Partner SDKs & Adapters
 ---
-As of 4.0.0, the Chartboost Mediation SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
+As of 5.0.0, the Chartboost Mediation SDK currently supports the following 3rd-party programmatic & mediated partner sdks:
 
-* AdColony
 * AdMob
 * Amazon Publisher Services
 * Applovin
@@ -329,29 +220,30 @@ As of 4.0.0, the Chartboost Mediation SDK currently supports the following 3rd-p
 * ironSource
 * Meta Audience Network
 * Mintegral
+* MobileFuse
 * Pangle
-* Tapjoy
 * UnityAds
+* Verve
 * Vungle
-* Yahoo
 
 To integrate, add the adapter you need by updating your app's build.gradle:
 ```Gradle
 
-    implementation 'com.chartboost:chartboost-mediation-adapter-admob:4.22.3.0.5'
-    implementation 'com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:4.9.9.2.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-applovin:4.12.2.0.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-chartboost:4.9.7.0.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:4.8.2.6.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-google-bidding:4.22.3.0.5'
-    implementation 'com.chartboost:chartboost-mediation-adapter-inmobi:4.10.6.7.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-ironsource:4.7.9.0.0.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-meta-audience-network:4.6.16.0.1'
-    implementation 'com.chartboost:chartboost-mediation-adapter-mintegral:4.16.6.31.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-pangle:4.5.5.0.9.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-reference:4.1.0.1.2'
-    implementation 'com.chartboost:chartboost-mediation-adapter-unity-ads:4.4.9.3.0'
-    implementation 'com.chartboost:chartboost-mediation-adapter-vungle:4.7.1.0.1'
+    implementation("com.chartboost:chartboost-mediation-adapter-admob:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-amazon-publisher-services:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-applovin:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-digital-turbine-exchange:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-google-bidding:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-hyprmx:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-inmobi:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-ironsource:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-meta-audience-network:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-mintegral:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-mobilefuse:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-pangle:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-unity-ads:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-verve:5.+")
+    implementation("com.chartboost:chartboost-mediation-adapter-vungle:5.+")
 
 ```
 
