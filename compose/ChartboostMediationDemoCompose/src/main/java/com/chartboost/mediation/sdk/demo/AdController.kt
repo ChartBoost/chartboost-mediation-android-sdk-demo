@@ -76,8 +76,6 @@ object AdController : DefaultLifecycleObserver {
      * @param context The context.
      * @param appId The Chartboost Mediation app ID.
      * @param logState The log state to update.
-     *
-     * @return A result indicating whether the SDK was initialized successfully.
      */
     suspend fun initialize(
         context: Context,
@@ -113,6 +111,7 @@ object AdController : DefaultLifecycleObserver {
      * @param adType The type of ad to load.
      * @param placementName The name of the placement to load.
      * @param logState The log state to update.
+     * @param shouldUseFullscreenAdQueue True if the full screen ad queue is enabled, false otherwise.
      * @param showBtnEnabled True if the corresponding show button should be enabled, false otherwise.
      */
     fun loadAd(
@@ -150,6 +149,7 @@ object AdController : DefaultLifecycleObserver {
      * @param adType The type of ad to show.
      * @param placementName The placement name.
      * @param logState The log state to update.
+     * @param shouldUseFullscreenAdQueue True if the full screen ad queue is enabled, false otherwise.
      * @param showBtnEnabled True if the corresponding show button should be enabled, false otherwise.
      */
     fun showAd(
