@@ -321,12 +321,17 @@ object AdController : DefaultLifecycleObserver {
             }
 
             logState.add("Fullscreen ad is about to show")
-            val result = fullscreenAd?.show(context as Activity)
+            val activity = context as? Activity
+            if (activity != null) {
+                val result = fullscreenAd?.show(activity)
 
-            if (result?.error != null) {
-                logState.add("Fullscreen ad failed to show with error: ${result.error?.cause}")
+                if (result?.error != null) {
+                    logState.add("Fullscreen ad failed to show with error: ${result.error?.cause}")
+                } else {
+                    logState.add("Fullscreen ad shown successfully")
+                }
             } else {
-                logState.add("Fullscreen ad shown successfully")
+                logState.add("context for Fullscreen ad is not an Activity")
             }
         }
     }
