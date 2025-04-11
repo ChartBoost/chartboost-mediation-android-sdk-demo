@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ChartboostMediationDemoJava</string>
+    <string name="app_id">5a4e797538a5f00cf60738d6</string>
+    <string name="default_app_id">5ce82fbffde3570afb4647bc</string>
+    <string name="load_ad_text">Load</string>
+    <string name="show_ad_text">Show</string>
+    <string name="clear_logs_text">Clear logs</string>
+    <string name="use_fullscreen_ad_queue">Use Fullscreen Ad Queue</string>
+    <string name="banner_placement">CBBanner</string>
+    <string name="interstitial_placement">CBInterstitial</string>
+    <string name="rewarded_placement">CBRewarded</string>
+    <string name="interstitial_ad_header">Interstitial Ad</string>
+    <string name="rewarded_video_ad_header">Rewarded Video Ad</string>
+</resources>
