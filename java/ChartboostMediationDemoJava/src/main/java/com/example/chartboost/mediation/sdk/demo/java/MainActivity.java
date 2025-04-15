@@ -2,6 +2,7 @@ package com.example.chartboost.mediation.sdk.demo.java;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,14 +14,13 @@ import com.example.chartboost.mediation.sdk.demo.java.databinding.ActivityMainBi
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnLogStateChangeListener {
+public class MainActivity extends AppCompatActivity implements UILogsListener, OnInitializationCompleteListener {
 
     private ActivityMainBinding binding;
-    private AdController adController = new AdController();
-    private final static String TAG = "MainActivity";
+    private final AdController adController = new AdController();
     private RecyclerView logRecyclerView;
     private LogAdapter logAdapter;
-    private final List<String> logs = new ArrayList<>();
+    private final List<String> uiLogs = new ArrayList<>();
 
     String interstitialPlacementName;
     String rewardedPlacementName;
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements OnLogStateChangeL
                 getString(R.string.default_app_id),
                 this,
                 getBaseContext(),
-                this::loadBanner
+                this
         );
 
         binding.loadInterstitialBtn.setOnClickListener(v -> onLoadClick(interstitialPlacementName, binding.showInterstitialBtn));
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnLogStateChangeL
         logRecyclerView = binding.logsRv;
         Button clearLogsButton = binding.clearLogsBtn;
         logRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        logAdapter = new LogAdapter(logs);
+        logAdapter = new LogAdapter(uiLogs);
         logRecyclerView.setAdapter(logAdapter);
         clearLogsButton.setOnClickListener(v -> clearLogs());
     }
@@ -76,22 +76,36 @@ public class MainActivity extends AppCompatActivity implements OnLogStateChangeL
     }
 
     private void addLog(String log) {
-        logs.add(log);
-        logAdapter.notifyItemInserted(logs.size() - 1);
-        logRecyclerView.post(() -> logRecyclerView.scrollToPosition(logs.size() - 1));
+        uiLogs.add(log);
+        logAdapter.notifyItemInserted(uiLogs.size() - 1);
+        logRecyclerView.post(() -> logRecyclerView.scrollToPosition(uiLogs.size() - 1));
     }
 
     private void clearLogs() {
-        logs.clear();
+        uiLogs.clear();
         logAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void logState(String log) {
+    public void add(String log) {
         addLog(log);
     }
 
-    public interface OnInitializationCompleteListener {
-        void onInitializationCompleted();
+    @Override
+    public void onInitializationCompleted() {
+        loadBanner();
+        adController.createAdQueue(interstitialPlacementName, binding.showInterstitialBtn, getBaseContext(), this);
+        adController.createAdQueue(rewardedPlacementName, binding.showRewardedBtn, getBaseContext(), this);
+    }
+
+    @Override
+    public void onInitializationException() {
+        Toast.makeText(getBaseContext(), "Initialization failed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adController.clear();
     }
 }
