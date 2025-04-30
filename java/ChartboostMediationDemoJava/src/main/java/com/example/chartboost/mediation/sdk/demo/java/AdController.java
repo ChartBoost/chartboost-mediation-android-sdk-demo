@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AdController {
 
-    private static final int UNCONFIGURED_AD_QUEUE_CAPACITY = 46;
+    private static final int UNCONFIGURED_AD_QUEUE_CAPACITY = 5;
     private final Map<String, ChartboostMediationFullscreenAd> fullscreenAds = new ConcurrentHashMap();
     private final Map<String, ChartboostMediationFullscreenAdQueue> adQueues = new ConcurrentHashMap();
     private boolean shouldUseQueue = false;
@@ -89,7 +89,7 @@ public class AdController {
                         if (chartboostMediationBannerAdLoadResult.getError() == null) {
                             uiLogsListener.add("Banner loaded");
                         } else {
-                            uiLogsListener.add(String.format("Error loading ad: %s", chartboostMediationBannerAdLoadResult.getError().getMessage()));
+                            uiLogsListener.add(String.format("Error loading ad, code %s : ", chartboostMediationBannerAdLoadResult.getError().getCode(), chartboostMediationBannerAdLoadResult.getError().getMessage()));
 
                         }
                     }
@@ -99,24 +99,17 @@ public class AdController {
     final public void loadFullscreenAd(
             String placementName,
             Context context,
+            Button loadButton,
             Button correspondingShowButton,
             UILogsListener uiLogsListener
     ) {
-        ChartboostMediationFullscreenAdQueue queue = getAdQueue(placementName);
-        if (shouldUseQueue && queue != null && !queue.isRunning()) {
-            queue.start();
-            uiLogsListener.add(String.format("FullscreenAdQueue for %s started", placementName));
-        } else if (!shouldUseQueue && queue != null && queue.isRunning()) {
-            queue.stop();
-            uiLogsListener.add(String.format("FullscreenAdQueue for %s stopped", placementName));
-        }
         uiLogsListener.add("Loading ad");
         ChartboostMediationFullscreenAdLoadRequest request = new ChartboostMediationFullscreenAdLoadRequest(placementName, new Keywords(), new HashMap<>());
         ChartboostMediationFullscreenAd.loadFullscreenAdFromJava(
                 context,
                 request,
                 createFullscreenAdListener(placementName, correspondingShowButton, uiLogsListener),
-                createFullscreenAdLoadListener(placementName, correspondingShowButton, uiLogsListener)
+                createFullscreenAdLoadListener(placementName, loadButton, correspondingShowButton, uiLogsListener)
         );
     }
 
@@ -164,17 +157,25 @@ public class AdController {
     ) {
         ChartboostMediationFullscreenAdQueue queue = ChartboostMediationFullscreenAdQueueManager.queue(context, placement);
         queue.setQueueCapacity(UNCONFIGURED_AD_QUEUE_CAPACITY);// this will update queue capacity only to the maximum capacity received on initialization
-        queue.setAdQueueListener(createFullscreenAdQueueListener(correspondingShowButton, uiLogsListener));
+        queue.setAdQueueListener(createFullscreenAdQueueListener(placement, correspondingShowButton, uiLogsListener));
         adQueues.put(placement, queue);
     }
 
-    final public void setShouldUseQueue(boolean shouldUseQueue) {
+    final public void handleQueueToggle(boolean shouldUseQueue) {
         this.shouldUseQueue = shouldUseQueue;
+        for (ChartboostMediationFullscreenAdQueue queue : adQueues.values()) {
+            if (shouldUseQueue) {
+                queue.start();
+            } else {
+                queue.stop();
+            }
+        }
     }
 
     private ChartboostMediationFullscreenAdLoadListener createFullscreenAdLoadListener(
             String placementName,
-            Button button,
+            Button loadButton,
+            Button correspondingShowButton,
             UILogsListener uiLogsListener
     ) {
         return new ChartboostMediationFullscreenAdLoadListener() {
@@ -183,10 +184,11 @@ public class AdController {
                 if (chartboostMediationFullscreenAdLoadResult.getError() == null) {
                     uiLogsListener.add("Ad loaded");
                     fullscreenAds.put(placementName, chartboostMediationFullscreenAdLoadResult.getAd());
-                    button.setEnabled(fullscreenAds.get(placementName) != null);
+                    correspondingShowButton.setEnabled(fullscreenAds.get(placementName) != null);
                 } else {
-                    uiLogsListener.add(String.format("Error loading ad: %s", chartboostMediationFullscreenAdLoadResult.getError().getMessage()));
+                    uiLogsListener.add(String.format("Error loading ad, code: %s : %s", chartboostMediationFullscreenAdLoadResult.getError().getCode(), chartboostMediationFullscreenAdLoadResult.getError().getMessage()));
                 }
+                loadButton.setEnabled(true);
             }
         };
     }
@@ -233,20 +235,19 @@ public class AdController {
 
     // To listen to ad queue events, you can use the ChartboostMediationFullscreenAdQueueListener
     private ChartboostMediationFullscreenAdQueueListener createFullscreenAdQueueListener(
-            Button showButton,
-            UILogsListener uiLogsListener
-    ) {
+            String placementName, Button showButton,
+            UILogsListener uiLogsListener) {
         return new ChartboostMediationFullscreenAdQueueListener() {
 
             @Override
             public void onFullScreenAdQueueUpdated(@NonNull ChartboostMediationFullscreenAdQueue adQueue, @NonNull AdLoadResult result, int numberOfAdsReady) {
-                uiLogsListener.add("Fullscreen ad queue has been updated for placement " + "placementName" + ". Number of ads ready to show: " + numberOfAdsReady);
+                uiLogsListener.add("Fullscreen ad queue has been updated for placement " + placementName + ". Number of ads ready to show: " + numberOfAdsReady);
                 showButton.setEnabled(numberOfAdsReady > 0);
             }
 
             @Override
             public void onFullscreenAdQueueExpiredAdRemoved(@NonNull ChartboostMediationFullscreenAdQueue adQueue, int numberOfAdsReady) {
-                uiLogsListener.add("Fullscreen ad queue expired ad has been removed for placement " + "placementName" + ". Number of ads ready to show: " + numberOfAdsReady);
+                uiLogsListener.add("Fullscreen ad queue expired ad has been removed for placement " + placementName + ". Number of ads ready to show: " + numberOfAdsReady);
                 showButton.setEnabled(numberOfAdsReady > 0);
             }
         };

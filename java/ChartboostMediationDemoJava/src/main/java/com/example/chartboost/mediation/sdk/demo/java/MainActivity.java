@@ -42,14 +42,14 @@ public class MainActivity extends AppCompatActivity implements UILogsListener, O
                 this
         );
 
-        binding.loadInterstitialBtn.setOnClickListener(v -> onLoadClick(interstitialPlacementName, binding.showInterstitialBtn));
+        binding.loadInterstitialBtn.setOnClickListener(v -> onLoadClick(interstitialPlacementName, (Button) v, binding.showInterstitialBtn));
         binding.showInterstitialBtn.setOnClickListener(v -> onShowClick(interstitialPlacementName, (Button) v));
 
-        binding.loadRewardedBtn.setOnClickListener(v -> onLoadClick(rewardedPlacementName, binding.showRewardedBtn));
+        binding.loadRewardedBtn.setOnClickListener(v -> onLoadClick(rewardedPlacementName, (Button) v, binding.showRewardedBtn));
         binding.showRewardedBtn.setOnClickListener(v -> onShowClick(rewardedPlacementName, (Button) v));
 
         binding.queueSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            adController.setShouldUseQueue(isChecked);
+            adController.handleQueueToggle(isChecked);
             addLog(String.format("Fullscreen Ad Queue will %s", isChecked ? "be used" : "not be used"));
         });
     }
@@ -63,8 +63,9 @@ public class MainActivity extends AppCompatActivity implements UILogsListener, O
         clearLogsButton.setOnClickListener(v -> clearLogs());
     }
 
-    private void onLoadClick(String placementName, Button correspondingShowButton) {
-        adController.loadFullscreenAd(placementName, getBaseContext(), correspondingShowButton, this);
+    private void onLoadClick(String placementName, Button loadButton, Button correspondingShowButton) {
+        loadButton.setEnabled(false);
+        adController.loadFullscreenAd(placementName, getBaseContext(), loadButton, correspondingShowButton, this);
     }
 
     private void onShowClick(String interstitialPlacementName, Button showButton) {
