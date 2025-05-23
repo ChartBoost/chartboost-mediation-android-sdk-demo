@@ -7,6 +7,24 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.1"
+chartboostMediationSdk = "5.2.0"
+chartboostCoreSdk = "1.+"
+chartboostMediationAdapters = "5.+"
+lifecycleCommon = "2.6.2"
+lifecycleExtensions = "2.2.0"
+retrofitKotlinxSerializationConverter = "1.0.0"
+kotlinReflect = "1.8.10"
+kotlinStdlibJdk8 = "1.9.21"
+kotlinxCoroutinesAndroid = "1.7.3"
+kotlinxSerializationJson = "1.5.1"
+okhttpLoggingInterceptor = "4.11.0"
+okhttp = "4.11.0"
+retrofitConverterScalars = "2.9.0"
+retrofit = "2.9.0"
+playServicesBase = "18.1.0"
+playServicesAdsIdentifier = "18.0.1"
+playServicesAppset = "16.0.2"
+
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -16,6 +34,39 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version.ref = "lifecycleCommon" }
+lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycleExtensions" }
+retrofit2-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationConverter" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlinReflect" }
+kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlinStdlibJdk8" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpLoggingInterceptor" }
+okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+retrofit2-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofitConverterScalars" }
+retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref= "retrofit" }
+play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
+play-services-ads-identifier = { group = "com.google.android.gms", name = "play-services-ads-identifier", version.ref = "playServicesAdsIdentifier" }
+play-services-appset = { group = "com.google.android.gms", name = "play-services-appset", version.ref = "playServicesAppset" }
+chartboost-mediation-sdk = { group = "com.chartboost", name = "chartboost-mediation-sdk", version.ref = "chartboostMediationSdk" }
+chartboost-core-sdk = { group = "com.chartboost", name = "chartboost-core-sdk", version.ref = "chartboostCoreSdk" }
+chartboost-mediation-adapter-admob = { group = "com.chartboost", name = "chartboost-mediation-adapter-admob", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-amazon-publisher-services = { group = "com.chartboost", name = "chartboost-mediation-adapter-amazon-publisher-services", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-applovin = { group = "com.chartboost", name = "chartboost-mediation-adapter-applovin", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-chartboost = { group = "com.chartboost", name = "chartboost-mediation-adapter-chartboost", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-digital-turbine-exchange = { group = "com.chartboost", name = "chartboost-mediation-adapter-digital-turbine-exchange", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-google-bidding = { group = "com.chartboost", name = "chartboost-mediation-adapter-google-bidding", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-hyprmx = { group = "com.chartboost", name = "chartboost-mediation-adapter-hyprmx", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-inmobi = { group = "com.chartboost", name = "chartboost-mediation-adapter-inmobi", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-ironsource = {group = "com.chartboost", name = "chartboost-mediation-adapter-ironsource", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-meta-audience-network = { group = "com.chartboost", name = "chartboost-mediation-adapter-meta-audience-network", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-mintegral = { group = "com.chartboost", name = "chartboost-mediation-adapter-mintegral", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-mobilefuse = { group = "com.chartboost", name = "chartboost-mediation-adapter-mobilefuse", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-pangle = { group = "com.chartboost", name = "chartboost-mediation-adapter-pangle", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-reference = { group = "com.chartboost", name = "chartboost-mediation-adapter-reference", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-unity-ads = { group = "com.chartboost", name = "chartboost-mediation-adapter-unity-ads", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-verve = { group = "com.chartboost", name = "chartboost-mediation-adapter-verve", version.ref = "chartboostMediationAdapters" }
+chartboost-mediation-adapter-vungle = { group = "com.chartboost", name = "chartboost-mediation-adapter-vungle", version.ref = "chartboostMediationAdapters" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

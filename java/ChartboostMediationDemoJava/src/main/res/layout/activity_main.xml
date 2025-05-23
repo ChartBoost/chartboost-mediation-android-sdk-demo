@@ -1,162 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/appbar_height"
-        android:theme="@style/ThemeOverlay.AppCompat"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:title="@string/app_name" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <FrameLayout
-        android:id="@+id/banner_layout"
+    <Button
+        android:id="@+id/manual_load_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"
-        app:chartboostMediationBannerSize="STANDARD"
+        android:text="@string/non_queued_ads"
+        app:layout_constraintBottom_toTopOf="@+id/queued_ads_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        tools:layout_height="@dimen/banner_standard_height" />
-
-    <TextView
-        android:id="@+id/interstitial_header_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginTop="82dp"
-        android:text="@string/interstitial_ad_header"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
-
-    <TextView
-        android:id="@+id/interstitial_placement_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_small"
-        android:text="@string/interstitial_placement"
-        app:layout_constraintStart_toEndOf="@+id/interstitial_header_tv"
-        app:layout_constraintTop_toTopOf="@id/interstitial_header_tv" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
-        android:id="@+id/load_interstitial_btn"
+        android:id="@+id/queued_ads_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:backgroundTint="@color/chartboost_green"
-        android:text="@string/load_ad_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/interstitial_header_tv" />
-
-    <Button
-        android:id="@+id/show_interstitial_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:backgroundTint="@color/chartboost_green"
-        android:enabled="false"
-        android:text="@string/show_ad_text"
-        android:textColor="@color/show_btn_text_color"
-        app:layout_constraintStart_toEndOf="@+id/load_interstitial_btn"
-        app:layout_constraintTop_toTopOf="@+id/load_interstitial_btn" />
-
-    <TextView
-        android:id="@+id/rewarded_header_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:text="@string/rewarded_video_ad_header"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/load_interstitial_btn" />
-
-    <TextView
-        android:id="@+id/rewarded_placement_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_small"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:text="@string/rewarded_placement"
-        app:layout_constraintStart_toEndOf="@+id/rewarded_header_tv"
-        app:layout_constraintTop_toBottomOf="@+id/show_interstitial_btn" />
-
-    <Button
-        android:id="@+id/load_rewarded_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:backgroundTint="@color/chartboost_green"
-        android:text="@string/load_ad_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rewarded_header_tv" />
-
-    <Button
-        android:id="@+id/show_rewarded_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:backgroundTint="@color/chartboost_green"
-        android:enabled="false"
-        android:text="@string/show_ad_text"
-        android:textColor="@color/show_btn_text_color"
-        app:layout_constraintStart_toEndOf="@+id/load_rewarded_btn"
-        app:layout_constraintTop_toTopOf="@+id/load_rewarded_btn" />
-
-
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/queue_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_large"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:backgroundTint="@color/chartboost_green"
-        android:text="@string/use_fullscreen_ad_queue"
-        android:textOff="Off"
-        android:textOn="On"
+        android:layout_marginTop="16dp"
+        android:text="@string/queued_ads"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_rewarded_btn"
-        app:thumbTint="@color/switch_thumb_color"
-        app:trackTint="@color/switch_track_color" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/logs_rv"
-        android:layout_width="0dp"
-        android:layout_height="320dp"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_medium"
-        android:background="@color/light_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/queue_switch"/>
-
-    <Button
-        android:id="@+id/clear_logs_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:backgroundTint="@color/chartboost_green"
-        android:text="@string/clear_logs_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logs_rv" />
-
+        app:layout_constraintTop_toBottomOf="@+id/manual_load_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

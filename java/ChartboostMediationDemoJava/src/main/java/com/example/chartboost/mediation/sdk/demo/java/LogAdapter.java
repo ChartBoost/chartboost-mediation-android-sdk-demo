@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
@@ -15,7 +16,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
     private List<String> logs;
 
     public LogAdapter(List<String> logs) {
-        this.logs = logs;
+        this.logs = new ArrayList<>(logs);
     }
 
     @NonNull
@@ -42,5 +43,13 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
             super(itemView);
             logTextView = itemView.findViewById(R.id.logTextView);
         }
+    }
+
+    public void setLogs(List<String> logs) {
+        this.logs = new ArrayList<>(logs);
+    }
+
+    public void clearLogs() {
+        this.logs = new ArrayList<>();
     }
 }
