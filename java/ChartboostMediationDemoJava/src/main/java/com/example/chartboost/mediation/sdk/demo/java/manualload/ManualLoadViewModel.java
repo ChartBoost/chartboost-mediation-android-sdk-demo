@@ -23,7 +23,7 @@ public class ManualLoadViewModel extends BaseAdsViewModel {
 
     private ChartboostMediationFullscreenAd interstitialAd;
     private ChartboostMediationFullscreenAd rewardedAd;
-    private MutableLiveData<ManualLoadUIStateModel> _uiState = new MutableLiveData(ManualLoadUIStateModel.initialState());
+    private final MutableLiveData<ManualLoadUIStateModel> _uiState = new MutableLiveData(ManualLoadUIStateModel.initialState());
 
     private final MutableLiveData<Event<ChartboostMediationFullscreenAd>> _showAdEvent = new MutableLiveData<>();
     public final LiveData<Event<ChartboostMediationFullscreenAd>> showAdEvent = _showAdEvent;
@@ -119,14 +119,14 @@ public class ManualLoadViewModel extends BaseAdsViewModel {
     }
 
     public ChartboostMediationFullscreenAdShowListener getFullscreenAdShowListener(String placementName) {
-        if (placementName == interstitialPlacement) {
+        if (placementName.equals(interstitialPlacement)) {
             return createFullscreenAdShowListener(
                     interstitialPlacement,
                     /* onAdShownFailure */() -> updateState(getState().withInterstitialShowEnabled(false)),
                     /* onAdShownSuccess */() -> addUiLogs(String.format("%s fullscreen ad shown", interstitialPlacement))
             );
         }
-        if (placementName == rewardedPlacement) {
+        if (placementName.equals(rewardedPlacement)) {
             return createFullscreenAdShowListener(
                     rewardedPlacement,
                     /* onAdShownFailure */() -> updateState(getState().withRewardedShowEnabled(false)),

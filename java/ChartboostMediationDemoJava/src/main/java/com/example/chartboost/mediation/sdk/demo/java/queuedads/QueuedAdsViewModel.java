@@ -49,7 +49,7 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
             String placementName,
             Activity activity
     ) {
-        ChartboostMediationFullscreenAd ad = null;
+        ChartboostMediationFullscreenAd ad;
         ChartboostMediationFullscreenAdQueue queue = queues.get(placementName);
         if (queue.hasNextAd()) {
             addUiLogs("Using queue to show the ad");
@@ -84,7 +84,7 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
         queues.put(placement, queue);
     }
 
-    private BiConsumer<String, Boolean> updateShowButtonState = (placementName, isEnabled) -> {
+    private final BiConsumer<String, Boolean> updateShowButtonState = (placementName, isEnabled) -> {
         if (Objects.equals(placementName, interstitialPlacement)) {
             _uiState.postValue(_uiState.getValue().withIsShowInterstitialButtonEnabled(isEnabled));
             return;
@@ -96,7 +96,7 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
 
     private QueueControlState updateQueueControlButtonState(String placementName) {
         QueuedAdsUIState currentState = _uiState.getValue();
-        QueueControlState nextState = null;
+        QueueControlState nextState;
         if (placementName.equals(interstitialPlacement)) {
             nextState = getNextState(currentState.interstitialQueueControlState);
             _uiState.postValue(currentState.withInterstitialQueueControlState(nextState));
