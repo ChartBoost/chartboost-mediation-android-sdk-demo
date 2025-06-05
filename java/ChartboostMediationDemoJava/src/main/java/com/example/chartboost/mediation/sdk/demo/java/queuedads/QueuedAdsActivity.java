@@ -3,30 +3,15 @@ package com.example.chartboost.mediation.sdk.demo.java.queuedads;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdLoadRequest;
-import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdView;
-import com.chartboost.chartboostmediationsdk.domain.Keywords;
+import com.example.chartboost.mediation.sdk.demo.java.BaseAdsActivity;
 import com.example.chartboost.mediation.sdk.demo.java.R;
 import com.example.chartboost.mediation.sdk.demo.java.databinding.ActivityQueuedAdsBinding;
-import com.example.chartboost.mediation.sdk.demo.java.LogAdapter;
 
-import java.util.ArrayList;
-
-public class QueuedAdsActivity extends AppCompatActivity {
+public class QueuedAdsActivity extends BaseAdsActivity {
 
     private ActivityQueuedAdsBinding binding;
-    private QueuedAdsViewModel viewModel;
-    private String interstitialPlacementName;
-    private String rewardedPlacementName;
-    private RecyclerView logRecyclerView;
-    private LogAdapter logAdapter;
-    private ChartboostMediationBannerAdView banner;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +26,16 @@ public class QueuedAdsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(R.string.queued_ads);
         }
 
-        interstitialPlacementName = getString(R.string.interstitial_placement);
-        rewardedPlacementName = getString(R.string.rewarded_placement);
-
         viewModel.setup(interstitialPlacementName, rewardedPlacementName);
-        viewModel.createAdQueue(this);
+        ((QueuedAdsViewModel) viewModel).createAdQueue(this);
 
-        setupLogsRecyclerView();
+        setupLogsRecyclerView(binding.logsRv);
         setupObservers();
-        setupClickListeners();
-        loadBanner();
+        setupClickListeners((QueuedAdsViewModel) viewModel);
+        loadBanner(binding.bannerLayout);
     }
 
-    private void setupClickListeners() {
+    private void setupClickListeners(QueuedAdsViewModel viewModel) {
         // Interstitial Ad Buttons
         binding.startInterstitialQueueBtn.setOnClickListener(v -> {
             viewModel.startStopQueue(interstitialPlacementName);
@@ -78,15 +60,9 @@ public class QueuedAdsActivity extends AppCompatActivity {
         });
     }
 
-    private void setupLogsRecyclerView() {
-        logRecyclerView = binding.logsRv;
-        logRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        logAdapter = new LogAdapter(new ArrayList<>());
-        logRecyclerView.setAdapter(logAdapter);
-    }
-
-    private void setupObservers() {
-        viewModel.uiState.observe(this, uiState -> {
+    @Override
+    protected void setupObservers() {
+        ((QueuedAdsViewModel) viewModel).uiState.observe(this, uiState -> {
             if (uiState == null) return;
 
             if (uiState.interstitialQueueControlState == QueueControlState.START) {
@@ -105,41 +81,6 @@ public class QueuedAdsActivity extends AppCompatActivity {
             binding.showRewardedBtn.setEnabled(uiState.isShowRewardedButtonEnabled);
         });
 
-        viewModel.logs.observe(this, logs -> {
-            int size = logs.size();
-            if (size == 0) {
-                logAdapter.clearLogs();
-                logRecyclerView.scrollToPosition(0);
-            } else {
-                logAdapter.setLogs(logs);
-                logAdapter.notifyItemInserted(size - 1);
-                logRecyclerView.post(() -> logRecyclerView.scrollToPosition(size - 1));
-            }
-        });
+        viewModel.uiLogs.observe(this, this::updateLogs);
     }
-
-    private void loadBanner() {
-        viewModel.addToUiLogs("Loading banner started");
-        String bannerPlacementName = getString(R.string.banner_placement);
-        banner = new ChartboostMediationBannerAdView(
-                this,
-                bannerPlacementName,
-                ChartboostMediationBannerAdView.ChartboostMediationBannerSize.STANDARD,
-                viewModel.bannerAdListener
-        );
-
-        binding.bannerLayout.removeAllViews();
-        binding.bannerLayout.addView(banner);
-        banner.loadFromJava(
-                new ChartboostMediationBannerAdLoadRequest(bannerPlacementName, new Keywords(), ChartboostMediationBannerAdView.ChartboostMediationBannerSize.STANDARD),
-                viewModel.bannerAdLoadListener
-        );
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        banner.invalidate();
-    }
-
 }
