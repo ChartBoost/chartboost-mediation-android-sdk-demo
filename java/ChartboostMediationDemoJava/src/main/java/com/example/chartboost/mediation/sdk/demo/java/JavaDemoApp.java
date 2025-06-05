@@ -42,10 +42,7 @@ public class JavaDemoApp extends Application {
                         Toast.makeText(getBaseContext(), "Initialization failed", Toast.LENGTH_LONG).show();
                     }
                 }
-
             }
         });
-
     }
-
 }

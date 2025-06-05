@@ -2,60 +2,32 @@ package com.example.chartboost.mediation.sdk.demo.java.queuedads;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.chartboost.chartboostmediationsdk.ad.AdLoadResult;
-import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationAdShowResult;
-import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdLoadListener;
-import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdLoadResult;
-import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdViewListener;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAd;
-import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdListener;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQueue;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQueueListener;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQueueManager;
-import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdShowListener;
-import com.chartboost.chartboostmediationsdk.domain.ChartboostMediationAdException;
+import com.example.chartboost.mediation.sdk.demo.java.BaseAdsViewModel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
-public class QueuedAdsViewModel extends ViewModel {
+public class QueuedAdsViewModel extends BaseAdsViewModel {
 
-    private Boolean isSetup = false;
-    private String interstitialPlacement = "";
-    private String rewardedPlacement = "";
     private static final int DEFAULT_QUEUE_CAPACITY = 5;
 
     private final MutableLiveData<QueuedAdsUIState> _uiState = new MutableLiveData<>(QueuedAdsUIState.initialState());
     public final LiveData<QueuedAdsUIState> uiState = _uiState;
 
-    private final MutableLiveData<List<String>> _uiLogs = new MutableLiveData<>(new ArrayList<>());
-    public final LiveData<List<String>> logs = _uiLogs;
-
     private final Map<String, ChartboostMediationFullscreenAdQueue> queues = new HashMap<>();
-
-
-    public void setup(String interstitialPlacement, String rewardedPlacement) {
-        if (!isSetup) {
-            this.interstitialPlacement = interstitialPlacement;
-            this.rewardedPlacement = rewardedPlacement;
-        }
-    }
 
     final public void createAdQueue(Context context) {
         createAdQueueForPlacement(interstitialPlacement, context);
@@ -71,13 +43,6 @@ public class QueuedAdsViewModel extends ViewModel {
             queues.get(placement).stop();
             addUiLogs(String.format("Queue for %s stopped", placement));
         }
-    }
-
-    public void clearUiLogs() {
-        _uiLogs.postValue(Collections.emptyList());
-    }
-    public void addToUiLogs(String log){
-        addUiLogs(log);
     }
 
     final public void showFullscreenAd(
@@ -171,96 +136,6 @@ public class QueuedAdsViewModel extends ViewModel {
         };
     }
 
-    private ChartboostMediationFullscreenAdShowListener createFullscreenAdShowListener(
-            String placementName,
-            Runnable onAdShownFailure,
-            Runnable onAdShownSuccess
-    ) {
-        return new ChartboostMediationFullscreenAdShowListener() {
-            @Override
-            public void onAdShown(@NonNull ChartboostMediationAdShowResult chartboostMediationAdShowResult) {
-                if (chartboostMediationAdShowResult.getError() != null) {
-                    addUiLogs(String.format("%s fullscreen ad failed to show with error: %s", placementName, chartboostMediationAdShowResult.getError().getCause()));
-                    onAdShownFailure.run();
-                } else {
-                    onAdShownSuccess.run();
-                }
-            }
-        };
-    }
-
-    private ChartboostMediationFullscreenAdListener createFullscreenAdListener(
-            String placementName,
-            Runnable onAdClosed
-    ) {
-        return new ChartboostMediationFullscreenAdListener() {
-
-            @Override
-            public void onAdClicked(@NonNull ChartboostMediationFullscreenAd chartboostMediationFullscreenAd) {
-                addUiLogs(String.format("%s ad clicked", placementName));
-            }
-
-            @Override
-            public void onAdClosed(@NonNull ChartboostMediationFullscreenAd chartboostMediationFullscreenAd, @Nullable ChartboostMediationAdException e) {
-                addUiLogs(String.format("%s ad closed", placementName));
-                onAdClosed.run();
-            }
-
-            @Override
-            public void onAdRewarded(@NonNull ChartboostMediationFullscreenAd chartboostMediationFullscreenAd) {
-                addUiLogs(String.format("%s ad rewarded", placementName));
-
-            }
-
-            @Override
-            public void onAdImpressionRecorded(@NonNull ChartboostMediationFullscreenAd chartboostMediationFullscreenAd) {
-                addUiLogs(String.format("%s impression recorded", placementName));
-
-            }
-
-            @Override
-            public void onAdExpired(@NonNull ChartboostMediationFullscreenAd chartboostMediationFullscreenAd) {
-                addUiLogs(String.format("%s ad expired", placementName));
-
-            }
-        };
-    }
-
-    private void addUiLogs(String... logs) {
-        List<String> updatedLogs = new ArrayList<>(_uiLogs.getValue());
-        updatedLogs.addAll(Arrays.stream(logs).collect(Collectors.toList()));
-        _uiLogs.postValue(updatedLogs);
-    }
-
-    public final ChartboostMediationBannerAdViewListener bannerAdListener =
-            new ChartboostMediationBannerAdViewListener() {
-                @Override
-                public void onAdClicked(@NonNull String s) {
-                    addUiLogs("Banner clicked");
-                }
-
-                @Override
-                public void onAdImpressionRecorded(@NonNull String s) {
-                    addUiLogs("Banner impression recorded");
-                }
-
-                @Override
-                public void onAdViewAdded(@NonNull String s, @Nullable View view) {
-                    addUiLogs("Ad view added");
-                }
-            };
-
-    public final ChartboostMediationBannerAdLoadListener bannerAdLoadListener = new ChartboostMediationBannerAdLoadListener() {
-        @Override
-        public void onAdLoaded(@NonNull ChartboostMediationBannerAdLoadResult chartboostMediationBannerAdLoadResult) {
-            if (chartboostMediationBannerAdLoadResult.getError() == null) {
-                addUiLogs("Banner loaded");
-            } else {
-                addUiLogs(String.format("Error loading banner ad , code %s : ", chartboostMediationBannerAdLoadResult.getError()));
-            }
-        }
-    };
-
     @Override
     protected void onCleared() {
         for (ChartboostMediationFullscreenAdQueue queue : queues.values()) {
@@ -270,5 +145,4 @@ public class QueuedAdsViewModel extends ViewModel {
             }
         }
     }
-
 }

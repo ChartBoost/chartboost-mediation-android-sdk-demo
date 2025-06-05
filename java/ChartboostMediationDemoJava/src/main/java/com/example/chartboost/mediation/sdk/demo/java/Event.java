@@ -1,4 +1,4 @@
-package com.example.chartboost.mediation.sdk.demo.java; // Or a suitable package
+package com.example.chartboost.mediation.sdk.demo.java;
 
 import androidx.annotation.Nullable;
 
