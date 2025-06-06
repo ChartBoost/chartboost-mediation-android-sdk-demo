@@ -35,7 +35,7 @@ public class QueuedAdsActivity extends BaseAdsActivity {
         loadBanner(binding.bannerLayout);
     }
 
-    private void setupClickListeners(QueuedAdsViewModel viewModel) {
+    private void setupClickListeners(final QueuedAdsViewModel viewModel) {
         // Interstitial Ad Buttons
         binding.startInterstitialQueueBtn.setOnClickListener(v -> {
             viewModel.startStopQueue(interstitialPlacementName);

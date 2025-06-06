@@ -11,7 +11,7 @@ public class Event<T> {
     private final T content;
     private boolean hasBeenHandled = false;
 
-    public Event(T content) {
+    public Event(final T content) {
         if (content == null) {
             throw new IllegalArgumentException("Event content cannot be null");
         }

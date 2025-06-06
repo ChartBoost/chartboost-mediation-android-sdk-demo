@@ -29,12 +29,12 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
 
     private final Map<String, ChartboostMediationFullscreenAdQueue> queues = new HashMap<>();
 
-    final public void createAdQueue(Context context) {
+    final public void createAdQueue(final Context context) {
         createAdQueueForPlacement(interstitialPlacement, context);
         createAdQueueForPlacement(rewardedPlacement, context);
     }
 
-    final public void startStopQueue(String placement) {
+    final public void startStopQueue(final String placement) {
         QueueControlState newState = updateQueueControlButtonState(placement);
         if (newState == QueueControlState.STOP) {
             queues.get(placement).start();
@@ -46,8 +46,8 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
     }
 
     final public void showFullscreenAd(
-            String placementName,
-            Activity activity
+            final String placementName,
+            final Activity activity
     ) {
         ChartboostMediationFullscreenAd ad;
         ChartboostMediationFullscreenAdQueue queue = queues.get(placementName);
@@ -77,7 +77,7 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
         }
     }
 
-    private void createAdQueueForPlacement(String placement, Context context) {
+    private void createAdQueueForPlacement(final String placement, final Context context) {
         ChartboostMediationFullscreenAdQueue queue = ChartboostMediationFullscreenAdQueueManager.queue(context, placement);
         queue.setQueueCapacity(DEFAULT_QUEUE_CAPACITY);// this will update queue capacity only to the maximum capacity received on initialization
         queue.setAdQueueListener(createFullscreenAdQueueListener(placement, (enabled) -> updateShowButtonState.accept(placement, enabled)));
@@ -94,7 +94,7 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
         }
     };
 
-    private QueueControlState updateQueueControlButtonState(String placementName) {
+    private QueueControlState updateQueueControlButtonState(final String placementName) {
         QueuedAdsUIState currentState = _uiState.getValue();
         QueueControlState nextState;
         if (placementName.equals(interstitialPlacement)) {
@@ -110,7 +110,7 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
         return null;
     }
 
-    private QueueControlState getNextState(QueueControlState currentState) {
+    private QueueControlState getNextState(final QueueControlState currentState) {
         if (currentState == QueueControlState.START) {
             return QueueControlState.STOP;
         } else {
@@ -119,8 +119,8 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
     }
 
     private ChartboostMediationFullscreenAdQueueListener createFullscreenAdQueueListener(
-            String placementName,
-            Consumer<Boolean> enableShowButtonConsumer) {
+            final String placementName,
+            final Consumer<Boolean> enableShowButtonConsumer) {
         return new ChartboostMediationFullscreenAdQueueListener() {
             @Override
             public void onFullScreenAdQueueUpdated(@NonNull ChartboostMediationFullscreenAdQueue queue, @NonNull AdLoadResult adLoadResult, int numberOfAdsReady) {

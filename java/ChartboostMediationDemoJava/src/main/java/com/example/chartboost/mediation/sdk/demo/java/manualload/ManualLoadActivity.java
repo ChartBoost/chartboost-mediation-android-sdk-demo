@@ -46,7 +46,7 @@ public class ManualLoadActivity extends BaseAdsActivity {
         });
     }
 
-    private void setupOnClickListeners(ManualLoadViewModel viewModel) {
+    private void setupOnClickListeners(final ManualLoadViewModel viewModel) {
         binding.loadInterstitialBtn.setOnClickListener(v -> viewModel.loadInterstitial(this.getApplicationContext()));
         binding.loadRewardedBtn.setOnClickListener(v -> viewModel.loadRewarded(this.getApplicationContext()));
         binding.showInterstitialBtn.setOnClickListener(v -> viewModel.showInterstitial());

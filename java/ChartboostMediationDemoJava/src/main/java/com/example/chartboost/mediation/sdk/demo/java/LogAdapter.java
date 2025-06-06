@@ -15,7 +15,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
 
     private List<String> logs;
 
-    public LogAdapter(List<String> logs) {
+    public LogAdapter(final List<String> logs) {
         this.logs = new ArrayList<>(logs);
     }
 
@@ -45,7 +45,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
         }
     }
 
-    public void setLogs(List<String> logs) {
+    public void setLogs(final List<String> logs) {
         this.logs = new ArrayList<>(logs);
     }
 

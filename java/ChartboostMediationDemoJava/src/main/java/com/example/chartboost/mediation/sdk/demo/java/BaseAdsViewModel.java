@@ -68,7 +68,7 @@ public abstract class BaseAdsViewModel extends ViewModel {
         };
     }
 
-    public void setup(String interstitialPlacement, String rewardedPlacement) {
+    public void setup(final String interstitialPlacement, final String rewardedPlacement) {
         if (!isSetup) {
             this.interstitialPlacement = interstitialPlacement;
             this.rewardedPlacement = rewardedPlacement;
@@ -76,13 +76,13 @@ public abstract class BaseAdsViewModel extends ViewModel {
         }
     }
 
-    protected void addUiLogs(String... logs) {
+    protected void addUiLogs(final String... logs) {
         List<String> updatedLogs = new ArrayList<>(_uiLogs.getValue());
         updatedLogs.addAll(Arrays.stream(logs).collect(Collectors.toList()));
         _uiLogs.postValue(updatedLogs);
     }
 
-    public void addToUiLogs(String... logs) {
+    public void addToUiLogs(final String... logs) {
         addUiLogs(logs);
     }
 
@@ -92,8 +92,8 @@ public abstract class BaseAdsViewModel extends ViewModel {
     }
 
     protected ChartboostMediationFullscreenAdListener createFullscreenAdListener(
-            String placementName,
-            Runnable onAdClosed
+            final String placementName,
+            final Runnable onAdClosed
     ) {
         return new ChartboostMediationFullscreenAdListener() {
             @Override
@@ -127,9 +127,9 @@ public abstract class BaseAdsViewModel extends ViewModel {
     }
 
     protected ChartboostMediationFullscreenAdShowListener createFullscreenAdShowListener(
-            String placementName,
-            Runnable onAdShownFailure,
-            Runnable onAdShownSuccess
+            final String placementName,
+            final Runnable onAdShownFailure,
+            final Runnable onAdShownSuccess
     ) {
         return new ChartboostMediationFullscreenAdShowListener() {
             @Override

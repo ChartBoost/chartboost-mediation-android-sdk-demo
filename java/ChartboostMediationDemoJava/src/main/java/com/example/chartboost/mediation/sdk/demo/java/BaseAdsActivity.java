@@ -32,7 +32,7 @@ public abstract class BaseAdsActivity extends AppCompatActivity {
         rewardedPlacementName = getString(R.string.rewarded_placement);
     }
 
-    protected void setupLogsRecyclerView(RecyclerView rv) {
+    protected void setupLogsRecyclerView(final RecyclerView rv) {
         logRecyclerView = rv;
         logRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         logAdapter = new LogAdapter(new ArrayList<>());
@@ -41,7 +41,7 @@ public abstract class BaseAdsActivity extends AppCompatActivity {
 
     abstract protected void setupObservers();
 
-    protected void updateLogs(List<String> logs) {
+    protected void updateLogs(final List<String> logs) {
         int size = logs.size();
         if (size == 0) {
             logAdapter.clearLogs();
@@ -54,7 +54,7 @@ public abstract class BaseAdsActivity extends AppCompatActivity {
         }
     }
 
-    protected void loadBanner(FrameLayout bannerFrameLayout) {
+    protected void loadBanner(final FrameLayout bannerFrameLayout) {
         viewModel.addToUiLogs("Loading banner started");
         String bannerPlacementName = getString(R.string.banner_placement);
         banner = new ChartboostMediationBannerAdView(
