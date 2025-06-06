@@ -12,14 +12,16 @@ import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdL
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdLoadRequest;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdLoadResult;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdShowListener;
+import com.chartboost.chartboostmediationsdk.domain.ChartboostMediationAdException;
 import com.chartboost.chartboostmediationsdk.domain.Keywords;
 import com.example.chartboost.mediation.sdk.demo.java.BaseAdsViewModel;
+import com.example.chartboost.mediation.sdk.demo.java.CustomFullscreenAdListener;
 import com.example.chartboost.mediation.sdk.demo.java.Event;
 
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-public class ManualLoadViewModel extends BaseAdsViewModel {
+public class ManualLoadViewModel extends BaseAdsViewModel implements CustomFullscreenAdListener {
 
     private ChartboostMediationFullscreenAd interstitialAd;
     private ChartboostMediationFullscreenAd rewardedAd;
@@ -43,19 +45,7 @@ public class ManualLoadViewModel extends BaseAdsViewModel {
         addUiLogs(String.format("Loading %s ad", interstitialPlacement));
         loadAd(
                 interstitialPlacement,
-                /* onAdClosed */ () -> updateState(getState().withInterstitialShowEnabled(false)),
-                /* onAdLoaded */ (ad) -> {
-                    if (ad == null) {
-                        updateState(getState()
-                                .withInterstitialLoadEnabled(true)
-                                .withInterstitialShowEnabled(false));
-                    } else {
-                        interstitialAd = ad;
-                        updateState(getState()
-                                .withInterstitialLoadEnabled(true)
-                                .withInterstitialShowEnabled(true));
-                    }
-                },
+                this,
                 context
         );
     }
@@ -65,19 +55,7 @@ public class ManualLoadViewModel extends BaseAdsViewModel {
         addUiLogs(String.format("Loading %s ad", rewardedPlacement));
         loadAd(
                 rewardedPlacement,
-                /* onAdClosed */ () -> updateState(getState().withRewardedShowEnabled(false)),
-                /* onAdLoaded */ (ad) -> {
-                    if (ad == null) {
-                        updateState(getState()
-                                .withRewardedLoadEnabled(true)
-                                .withRewardedShowEnabled(false));
-                    } else {
-                        rewardedAd = ad;
-                        updateState(getState()
-                                .withRewardedLoadEnabled(true)
-                                .withRewardedShowEnabled(true));
-                    }
-                },
+                this,
                 context
         );
     }
@@ -102,18 +80,23 @@ public class ManualLoadViewModel extends BaseAdsViewModel {
         }
     }
 
-    private void loadAd(final String placementName, final Runnable onAdClosed, final Consumer<ChartboostMediationFullscreenAd> onAdLoaded, final Context context) {
+    private void loadAd(
+            final String placementName,
+            final CustomFullscreenAdListener customAdListener,
+            final Context context
+    ) {
         ChartboostMediationFullscreenAdLoadRequest request = new ChartboostMediationFullscreenAdLoadRequest(placementName, new Keywords(), new HashMap<>());
         ChartboostMediationFullscreenAd.loadFullscreenAdFromJava(
                 context,
                 request,
                 createFullscreenAdListener(
                         placementName,
-                        /* onAdClosed */ () -> onAdClosed.run()
+                        customAdListener,
+                        null
                 ),
                 createFullscreenAdLoadListener(
                         placementName,
-                        /* onAdLoaded */ (ad) -> onAdLoaded.accept(ad)
+                        customAdListener
                 )
         );
     }
@@ -122,21 +105,21 @@ public class ManualLoadViewModel extends BaseAdsViewModel {
         if (placementName.equals(interstitialPlacement)) {
             return createFullscreenAdShowListener(
                     interstitialPlacement,
-                    /* onAdShownFailure */() -> updateState(getState().withInterstitialShowEnabled(false)),
-                    /* onAdShownSuccess */() -> addUiLogs(String.format("%s fullscreen ad shown", interstitialPlacement))
+                    this,
+                    null
             );
         }
         if (placementName.equals(rewardedPlacement)) {
             return createFullscreenAdShowListener(
                     rewardedPlacement,
-                    /* onAdShownFailure */() -> updateState(getState().withRewardedShowEnabled(false)),
-                    /* onAdShownSuccess */() -> addUiLogs(String.format("%s fullscreen ad shown", rewardedPlacement))
+                    this,
+                    null
             );
         }
         return null;
     }
 
-    private ChartboostMediationFullscreenAdLoadListener createFullscreenAdLoadListener(
+    private ChartboostMediationFullscreenAdLoadListener createFullscreenAdLoadListener2(
             final String placementName,
             final Consumer<ChartboostMediationFullscreenAd> onAdLoaded
     ) {
@@ -144,12 +127,24 @@ public class ManualLoadViewModel extends BaseAdsViewModel {
             @Override
             public void onAdLoaded(@NonNull ChartboostMediationFullscreenAdLoadResult chartboostMediationFullscreenAdLoadResult) {
                 if (chartboostMediationFullscreenAdLoadResult.getError() == null) {
-                    addUiLogs(String.format("%s fullscreen ad loaded", placementName));
+                    addUiLogs(String.format("%s fullscreen ad loaded, loadId %s", placementName, chartboostMediationFullscreenAdLoadResult.getLoadId()));
                     onAdLoaded.accept(chartboostMediationFullscreenAdLoadResult.getAd());
                 } else {
                     addUiLogs(String.format("Error loading %s ad , code %s : ", placementName, chartboostMediationFullscreenAdLoadResult.getError()));
                     onAdLoaded.accept(null);
                 }
+            }
+        };
+    }
+
+    private ChartboostMediationFullscreenAdLoadListener createFullscreenAdLoadListener(
+            final String placementName,
+            final CustomFullscreenAdListener adListener
+    ) {
+        return new ChartboostMediationFullscreenAdLoadListener() {
+            @Override
+            public void onAdLoaded(@NonNull ChartboostMediationFullscreenAdLoadResult chartboostMediationFullscreenAdLoadResult) {
+                adListener.onAdLoaded(placementName, chartboostMediationFullscreenAdLoadResult);
             }
         };
     }
@@ -162,5 +157,57 @@ public class ManualLoadViewModel extends BaseAdsViewModel {
         if (rewardedAd != null) {
             rewardedAd.invalidate();
         }
+    }
+
+    @Override
+    public void onAdLoaded(final String placementName, final ChartboostMediationFullscreenAdLoadResult adLoadResult) {
+        if (adLoadResult.getError() == null) {
+            addUiLogs(String.format("%s fullscreen ad loaded, loadId %s", placementName, adLoadResult.getLoadId()));
+            assignToProperAd(placementName, adLoadResult.getAd());
+            updateButtons(placementName, true, true);
+        } else {
+            addUiLogs(String.format("Error loading %s ad , code %s : ", placementName, adLoadResult.getError()));
+            updateButtons(placementName, true, false);
+        }
+    }
+
+    @Override
+    public void onAdClosed(final String placementName, final @NonNull ChartboostMediationFullscreenAd chartboostMediationFullscreenAd, final @Nullable ChartboostMediationAdException e, @Nullable Boolean hasNextAdQueued) {
+        updateButtons(placementName, true, false);
+    }
+
+    @Override
+    public void onAdShowFailure(final String placementName, final @Nullable Boolean hasAdQueued) {
+        updateButtons(placementName, true, false);
+    }
+
+    @Override
+    public void onAdShowSuccess(final String placementName, final @Nullable Integer numberOfAdsReady) {
+        addUiLogs(String.format("%s fullscreen ad shown", rewardedPlacement));
+    }
+
+    private void assignToProperAd(final String placementName, final ChartboostMediationFullscreenAd ad) {
+        if (placementName.equals(interstitialPlacement)) {
+            interstitialAd = ad;
+        }
+        if (placementName.equals(rewardedPlacement)) {
+            rewardedAd = ad;
+        }
+    }
+
+    private void updateButtons(final String placementName, final boolean loadEnabled, final boolean showEnabled) {
+        if (placementName.equals(interstitialPlacement)) {
+            updateState(getState()
+                    .withInterstitialLoadEnabled(loadEnabled)
+                    .withInterstitialShowEnabled(showEnabled)
+            );
+        }
+        if (placementName.equals(rewardedPlacement)) {
+            updateState(getState()
+                    .withRewardedLoadEnabled(loadEnabled)
+                    .withRewardedShowEnabled(showEnabled)
+            );
+        }
+
     }
 }

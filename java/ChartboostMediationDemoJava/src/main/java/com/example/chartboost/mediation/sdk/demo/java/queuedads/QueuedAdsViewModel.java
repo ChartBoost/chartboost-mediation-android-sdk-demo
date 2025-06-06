@@ -4,23 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.chartboost.chartboostmediationsdk.ad.AdLoadResult;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAd;
+import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdLoadResult;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQueue;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQueueListener;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQueueManager;
+import com.chartboost.chartboostmediationsdk.domain.ChartboostMediationAdException;
 import com.example.chartboost.mediation.sdk.demo.java.BaseAdsViewModel;
+import com.example.chartboost.mediation.sdk.demo.java.CustomFullscreenAdListener;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
-public class QueuedAdsViewModel extends BaseAdsViewModel {
+public class QueuedAdsViewModel extends BaseAdsViewModel implements CustomFullscreenAdListener, CustomAdQueueListener {
 
     private static final int DEFAULT_QUEUE_CAPACITY = 5;
 
@@ -58,41 +59,44 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
                 // Be mindful that ads will need to be reattached to your ChartboostMediationFullscreenAdListener if you are listening to ad cycle events.
                 ad.setListener(createFullscreenAdListener(
                         placementName,
-                        /* onAdClosed */() -> updateShowButtonState.accept(placementName, queue.hasNextAd())
+                        this,
+                        queue
                 ));
                 addUiLogs("Fullscreen ad is about to show");
-                ad.showFullscreenAdFromJava(activity, createFullscreenAdShowListener(
-                        placementName,
-                        /* onAdShownFailure */() -> updateShowButtonState.accept(placementName, queue.hasNextAd()),
-                        /* onAdShownSuccess */() -> addUiLogs(
-                                String.format("%s fullscreen ad shown", placementName),
-                                String.format("Fullscreen ad queue has been updated for placement %s. One ad has been removed after onShow. Number of ads ready to show: %s", placementName, queue.getNumberOfAdsReady()))
-                ));
+                ad.showFullscreenAdFromJava(
+                        activity,
+                        createFullscreenAdShowListener(
+                                placementName,
+                                this,
+                                queue)
+                );
             } else {
                 addUiLogs("Ad retrieved from the queue is null");
             }
         } else {
             addUiLogs("No ads in the queue. Load an ad first.");
-            updateShowButtonState.accept(placementName, false);
+            updateShowButtonState(placementName, false);
         }
     }
 
     private void createAdQueueForPlacement(final String placement, final Context context) {
         ChartboostMediationFullscreenAdQueue queue = ChartboostMediationFullscreenAdQueueManager.queue(context, placement);
         queue.setQueueCapacity(DEFAULT_QUEUE_CAPACITY);// this will update queue capacity only to the maximum capacity received on initialization
-        queue.setAdQueueListener(createFullscreenAdQueueListener(placement, (enabled) -> updateShowButtonState.accept(placement, enabled)));
+        queue.setAdQueueListener(createFullscreenAdQueueListener(placement, this));
         queues.put(placement, queue);
     }
 
-    private final BiConsumer<String, Boolean> updateShowButtonState = (placementName, isEnabled) -> {
-        if (Objects.equals(placementName, interstitialPlacement)) {
-            _uiState.postValue(_uiState.getValue().withIsShowInterstitialButtonEnabled(isEnabled));
+    private void updateShowButtonState(final String placementName, final boolean isEnabled) {
+        if (placementName == null) {
             return;
         }
-        if (Objects.equals(placementName, rewardedPlacement)) {
+
+        if (placementName.equals(interstitialPlacement)) {
+            _uiState.postValue(_uiState.getValue().withIsShowInterstitialButtonEnabled(isEnabled));
+        } else if (placementName.equals(rewardedPlacement)) {
             _uiState.postValue(_uiState.getValue().withIsShowRewardedButtonEnabled(isEnabled));
         }
-    };
+    }
 
     private QueueControlState updateQueueControlButtonState(final String placementName) {
         QueuedAdsUIState currentState = _uiState.getValue();
@@ -120,18 +124,18 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
 
     private ChartboostMediationFullscreenAdQueueListener createFullscreenAdQueueListener(
             final String placementName,
-            final Consumer<Boolean> enableShowButtonConsumer) {
+            final CustomAdQueueListener adQueueListener) {
         return new ChartboostMediationFullscreenAdQueueListener() {
             @Override
             public void onFullScreenAdQueueUpdated(@NonNull ChartboostMediationFullscreenAdQueue queue, @NonNull AdLoadResult adLoadResult, int numberOfAdsReady) {
                 addUiLogs("Fullscreen ad queue has been updated for placement " + placementName + ". Number of ads ready to show: " + numberOfAdsReady);
-                enableShowButtonConsumer.accept(numberOfAdsReady > 0);
+                adQueueListener.onFullScreenAdQueueUpdated(placementName, numberOfAdsReady);
             }
 
             @Override
             public void onFullscreenAdQueueExpiredAdRemoved(@NonNull ChartboostMediationFullscreenAdQueue adQueue, int numberOfAdsReady) {
                 addUiLogs("Fullscreen ad queue expired ad has been removed for placement " + placementName + ". Number of ads ready to show: " + numberOfAdsReady);
-                enableShowButtonConsumer.accept(numberOfAdsReady > 0);
+                adQueueListener.onFullScreenAdQueueUpdated(placementName, numberOfAdsReady);
             }
         };
     }
@@ -144,5 +148,32 @@ public class QueuedAdsViewModel extends BaseAdsViewModel {
                 queue.getNextAd().invalidate();
             }
         }
+    }
+
+    @Override
+    public void onAdLoaded(final String placementName, final ChartboostMediationFullscreenAdLoadResult adLoadResult) {
+        // ChartboostMediationFullscreenAdQueueListener logs about loaded ads, and updates the buttons. No additional logic to show.
+    }
+
+    @Override
+    public void onAdClosed(final String placementName, final @NonNull ChartboostMediationFullscreenAd chartboostMediationFullscreenAd, final @Nullable ChartboostMediationAdException e, final @Nullable Boolean hasAdQueued) {
+        updateShowButtonState(placementName, hasAdQueued);
+    }
+
+    @Override
+    public void onAdShowFailure(final String placementName, final @Nullable Boolean hasAdQueued) {
+        updateShowButtonState(placementName, hasAdQueued == null ? false : hasAdQueued);
+    }
+
+    @Override
+    public void onAdShowSuccess(String placementName, @Nullable Integer numberOfAdsReady) {
+        addUiLogs(
+                String.format("%s fullscreen ad shown", placementName),
+                String.format("Fullscreen ad queue has been updated for placement %s. One ad has been removed after onShow. Number of ads ready to show: %s", placementName, numberOfAdsReady == null ? 0 : numberOfAdsReady));
+    }
+
+    @Override
+    public void onFullScreenAdQueueUpdated(String placementName, int numberOfAdsReady) {
+        updateShowButtonState(placementName, numberOfAdsReady > 0);
     }
 }

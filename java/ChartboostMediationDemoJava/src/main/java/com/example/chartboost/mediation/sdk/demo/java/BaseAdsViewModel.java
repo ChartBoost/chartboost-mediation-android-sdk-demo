@@ -14,6 +14,7 @@ import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdLoadR
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdViewListener;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAd;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdListener;
+import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQueue;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdShowListener;
 import com.chartboost.chartboostmediationsdk.domain.ChartboostMediationAdException;
 
@@ -93,7 +94,8 @@ public abstract class BaseAdsViewModel extends ViewModel {
 
     protected ChartboostMediationFullscreenAdListener createFullscreenAdListener(
             final String placementName,
-            final Runnable onAdClosed
+            final CustomFullscreenAdListener customAdListener,
+            @Nullable final ChartboostMediationFullscreenAdQueue queue
     ) {
         return new ChartboostMediationFullscreenAdListener() {
             @Override
@@ -103,10 +105,8 @@ public abstract class BaseAdsViewModel extends ViewModel {
 
             @Override
             public void onAdClosed(@NonNull ChartboostMediationFullscreenAd chartboostMediationFullscreenAd, @Nullable ChartboostMediationAdException e) {
+                customAdListener.onAdClosed(placementName, chartboostMediationFullscreenAd, e, queue == null ? null : queue.hasNextAd());
                 addUiLogs(String.format("%s ad closed", placementName));
-                if (onAdClosed != null) {
-                    onAdClosed.run();
-                }
             }
 
             @Override
@@ -128,8 +128,8 @@ public abstract class BaseAdsViewModel extends ViewModel {
 
     protected ChartboostMediationFullscreenAdShowListener createFullscreenAdShowListener(
             final String placementName,
-            final Runnable onAdShownFailure,
-            final Runnable onAdShownSuccess
+            final CustomFullscreenAdListener customAdListener,
+            @Nullable final ChartboostMediationFullscreenAdQueue queue
     ) {
         return new ChartboostMediationFullscreenAdShowListener() {
             @Override
@@ -139,13 +139,9 @@ public abstract class BaseAdsViewModel extends ViewModel {
                             placementName,
                             chartboostMediationAdShowResult.getError().getCode(),
                             chartboostMediationAdShowResult.getError().getMessage()));
-                    if (onAdShownFailure != null) {
-                        onAdShownFailure.run();
-                    }
+                    customAdListener.onAdShowFailure(placementName, queue == null ? null : queue.hasNextAd());
                 } else {
-                    if (onAdShownSuccess != null) {
-                        onAdShownSuccess.run();
-                    }
+                    customAdListener.onAdShowSuccess(placementName, queue == null ? null : queue.getNumberOfAdsReady());
                 }
             }
         };
