@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/appbar_height"
+        android:theme="@style/ThemeOverlay.AppCompat"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:title="@string/app_name" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/banner_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium"
+        app:chartboostMediationBannerSize="STANDARD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        tools:layout_height="@dimen/banner_standard_height" />
+
+    <TextView
+        android:id="@+id/interstitial_header_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="82dp"
+        android:text="@string/interstitial_ad_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <TextView
+        android:id="@+id/interstitial_placement_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:text="@string/interstitial_placement"
+        app:layout_constraintStart_toEndOf="@+id/interstitial_header_tv"
+        app:layout_constraintTop_toTopOf="@id/interstitial_header_tv" />
+
+    <Button
+        android:id="@+id/start_interstitial_queue_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:backgroundTint="@color/chartboost_green"
+        android:text="@string/load_ad_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/interstitial_header_tv" />
+
+    <Button
+        android:id="@+id/show_interstitial_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:backgroundTint="@color/chartboost_green"
+        android:enabled="false"
+        android:text="@string/show_ad_text"
+        android:textColor="@color/show_btn_text_color"
+        app:layout_constraintStart_toEndOf="@+id/start_interstitial_queue_btn"
+        app:layout_constraintTop_toTopOf="@+id/start_interstitial_queue_btn" />
+
+    <TextView
+        android:id="@+id/rewarded_header_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:text="@string/rewarded_video_ad_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_interstitial_queue_btn" />
+
+    <TextView
+        android:id="@+id/rewarded_placement_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:text="@string/rewarded_placement"
+        app:layout_constraintStart_toEndOf="@+id/rewarded_header_tv"
+        app:layout_constraintTop_toBottomOf="@+id/show_interstitial_btn" />
+
+    <Button
+        android:id="@+id/start_rewarded_queue_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:backgroundTint="@color/chartboost_green"
+        android:text="@string/load_ad_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rewarded_header_tv" />
+
+    <Button
+        android:id="@+id/show_rewarded_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:backgroundTint="@color/chartboost_green"
+        android:enabled="false"
+        android:text="@string/show_ad_text"
+        android:textColor="@color/show_btn_text_color"
+        app:layout_constraintStart_toEndOf="@+id/start_rewarded_queue_btn"
+        app:layout_constraintTop_toTopOf="@+id/start_rewarded_queue_btn" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/logs_rv"
+        android:layout_width="0dp"
+        android:layout_height="320dp"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:background="@color/light_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/show_rewarded_btn" />
+
+    <Button
+        android:id="@+id/clear_logs_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:backgroundTint="@color/chartboost_green"
+        android:text="@string/clear_logs_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logs_rv" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
