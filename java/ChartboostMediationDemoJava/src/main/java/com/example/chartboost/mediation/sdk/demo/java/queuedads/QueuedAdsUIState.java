@@ -1,4 +1,4 @@
-package com.example.chartboost.mediation.sdk.demo.java.queuedads; // Adjust package if needed
+package com.example.chartboost.mediation.sdk.demo.java.queuedads;
 
 public class QueuedAdsUIState {
 

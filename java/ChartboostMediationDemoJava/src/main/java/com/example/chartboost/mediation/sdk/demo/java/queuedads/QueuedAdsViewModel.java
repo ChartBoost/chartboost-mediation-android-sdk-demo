@@ -16,17 +16,26 @@ import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQ
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQueueManager;
 import com.chartboost.chartboostmediationsdk.domain.ChartboostMediationAdException;
 import com.example.chartboost.mediation.sdk.demo.java.BaseAdsViewModel;
-import com.example.chartboost.mediation.sdk.demo.java.CustomFullscreenAdListener;
+import com.example.chartboost.mediation.sdk.demo.java.FullscreenAdLifecycleListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class QueuedAdsViewModel extends BaseAdsViewModel implements CustomFullscreenAdListener, CustomAdQueueListener {
+public class QueuedAdsViewModel extends BaseAdsViewModel implements FullscreenAdLifecycleListener, ViewModelAdQueueListener {
 
+    /**
+     * The current capacity of the queue.
+     * <p>
+     * Note: When setting this value, it cannot exceed the maximum capacity
+     * established during initialization. It will be capped if a larger value is provided.
+     */
     private static final int DEFAULT_QUEUE_CAPACITY = 5;
 
-    private final MutableLiveData<QueuedAdsUIState> _uiState = new MutableLiveData<>(QueuedAdsUIState.initialState());
-    public final LiveData<QueuedAdsUIState> uiState = _uiState;
+    private final MutableLiveData<QueuedAdsUIState> uiState = new MutableLiveData<>(QueuedAdsUIState.initialState());
+
+    public final LiveData<QueuedAdsUIState> getUiState() {
+        return uiState;
+    }
 
     private final Map<String, ChartboostMediationFullscreenAdQueue> queues = new HashMap<>();
 
@@ -92,23 +101,23 @@ public class QueuedAdsViewModel extends BaseAdsViewModel implements CustomFullsc
         }
 
         if (placementName.equals(interstitialPlacement)) {
-            _uiState.postValue(_uiState.getValue().withIsShowInterstitialButtonEnabled(isEnabled));
+            uiState.postValue(uiState.getValue().withIsShowInterstitialButtonEnabled(isEnabled));
         } else if (placementName.equals(rewardedPlacement)) {
-            _uiState.postValue(_uiState.getValue().withIsShowRewardedButtonEnabled(isEnabled));
+            uiState.postValue(uiState.getValue().withIsShowRewardedButtonEnabled(isEnabled));
         }
     }
 
     private QueueControlState updateQueueControlButtonState(final String placementName) {
-        QueuedAdsUIState currentState = _uiState.getValue();
+        QueuedAdsUIState currentState = uiState.getValue();
         QueueControlState nextState;
         if (placementName.equals(interstitialPlacement)) {
             nextState = getNextState(currentState.interstitialQueueControlState);
-            _uiState.postValue(currentState.withInterstitialQueueControlState(nextState));
+            uiState.postValue(currentState.withInterstitialQueueControlState(nextState));
             return nextState;
         }
         if (placementName.equals(rewardedPlacement)) {
             nextState = getNextState(currentState.rewardedQueueControlState);
-            _uiState.postValue(currentState.withRewardedQueueControlState(nextState));
+            uiState.postValue(currentState.withRewardedQueueControlState(nextState));
             return nextState;
         }
         return null;
@@ -124,7 +133,7 @@ public class QueuedAdsViewModel extends BaseAdsViewModel implements CustomFullsc
 
     private ChartboostMediationFullscreenAdQueueListener createFullscreenAdQueueListener(
             final String placementName,
-            final CustomAdQueueListener adQueueListener) {
+            final ViewModelAdQueueListener adQueueListener) {
         return new ChartboostMediationFullscreenAdQueueListener() {
             @Override
             public void onFullScreenAdQueueUpdated(@NonNull ChartboostMediationFullscreenAdQueue queue, @NonNull AdLoadResult adLoadResult, int numberOfAdsReady) {

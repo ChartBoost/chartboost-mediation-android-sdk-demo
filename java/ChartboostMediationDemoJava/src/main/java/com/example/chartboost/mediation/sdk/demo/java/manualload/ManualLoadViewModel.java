@@ -15,29 +15,34 @@ import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdS
 import com.chartboost.chartboostmediationsdk.domain.ChartboostMediationAdException;
 import com.chartboost.chartboostmediationsdk.domain.Keywords;
 import com.example.chartboost.mediation.sdk.demo.java.BaseAdsViewModel;
-import com.example.chartboost.mediation.sdk.demo.java.CustomFullscreenAdListener;
+import com.example.chartboost.mediation.sdk.demo.java.FullscreenAdLifecycleListener;
 import com.example.chartboost.mediation.sdk.demo.java.Event;
 
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-public class ManualLoadViewModel extends BaseAdsViewModel implements CustomFullscreenAdListener {
+public class ManualLoadViewModel extends BaseAdsViewModel implements FullscreenAdLifecycleListener {
 
     private ChartboostMediationFullscreenAd interstitialAd;
     private ChartboostMediationFullscreenAd rewardedAd;
-    private final MutableLiveData<ManualLoadUIStateModel> _uiState = new MutableLiveData(ManualLoadUIStateModel.initialState());
+    private final MutableLiveData<ManualLoadUIStateModel> uiState = new MutableLiveData(ManualLoadUIStateModel.initialState());
 
-    private final MutableLiveData<Event<ChartboostMediationFullscreenAd>> _showAdEvent = new MutableLiveData<>();
-    public final LiveData<Event<ChartboostMediationFullscreenAd>> showAdEvent = _showAdEvent;
+    public final LiveData<ManualLoadUIStateModel> getUiState() {
+        return uiState;
+    }
 
-    public LiveData<ManualLoadUIStateModel> uiState = _uiState;
+    private final MutableLiveData<Event<ChartboostMediationFullscreenAd>> showAdEvent = new MutableLiveData<>();
+
+    public final LiveData<Event<ChartboostMediationFullscreenAd>> getShowAdEvent() {
+        return showAdEvent;
+    }
 
     private void updateState(ManualLoadUIStateModel value) {
-        _uiState.postValue(value);
+        uiState.postValue(value);
     }
 
     private @Nullable ManualLoadUIStateModel getState() {
-        return _uiState.getValue();
+        return uiState.getValue();
     }
 
     public void loadInterstitial(final Context context) {
@@ -63,7 +68,7 @@ public class ManualLoadViewModel extends BaseAdsViewModel implements CustomFulls
     public void showInterstitial() {
         addUiLogs(String.format("Show %s ad clicked", interstitialPlacement));
         if (interstitialAd != null) {
-            _showAdEvent.postValue(new Event<>(interstitialAd));
+            showAdEvent.postValue(new Event<>(interstitialAd));
         } else {
             addUiLogs("Interstitial ad is null. Load an ad first.");
             updateState(getState().withInterstitialShowEnabled(false));
@@ -73,7 +78,7 @@ public class ManualLoadViewModel extends BaseAdsViewModel implements CustomFulls
     public void showRewarded() {
         addUiLogs(String.format("Show %s ad clicked", rewardedPlacement));
         if (rewardedAd != null) {
-            _showAdEvent.postValue(new Event<>(rewardedAd));
+            showAdEvent.postValue(new Event<>(rewardedAd));
         } else {
             addUiLogs("Rewarded ad is null. Load an ad first.");
             updateState(getState().withRewardedShowEnabled(false));
@@ -82,7 +87,7 @@ public class ManualLoadViewModel extends BaseAdsViewModel implements CustomFulls
 
     private void loadAd(
             final String placementName,
-            final CustomFullscreenAdListener customAdListener,
+            final FullscreenAdLifecycleListener customAdListener,
             final Context context
     ) {
         ChartboostMediationFullscreenAdLoadRequest request = new ChartboostMediationFullscreenAdLoadRequest(placementName, new Keywords(), new HashMap<>());
@@ -139,7 +144,7 @@ public class ManualLoadViewModel extends BaseAdsViewModel implements CustomFulls
 
     private ChartboostMediationFullscreenAdLoadListener createFullscreenAdLoadListener(
             final String placementName,
-            final CustomFullscreenAdListener adListener
+            final FullscreenAdLifecycleListener adListener
     ) {
         return new ChartboostMediationFullscreenAdLoadListener() {
             @Override

@@ -1,5 +1,5 @@
 package com.example.chartboost.mediation.sdk.demo.java.queuedads;
 
-public interface CustomAdQueueListener {
+public interface ViewModelAdQueueListener {
     void onFullScreenAdQueueUpdated(final String placementName, final int numberOfAdsReady);
 }

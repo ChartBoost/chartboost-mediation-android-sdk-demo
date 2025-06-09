@@ -1,5 +1,6 @@
 package com.example.chartboost.mediation.sdk.demo.java;
 
+import android.content.Context;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -10,30 +11,36 @@ import androidx.lifecycle.ViewModel;
 
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationAdShowResult;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdLoadListener;
+import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdLoadRequest;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdLoadResult;
+import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdView;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdViewListener;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAd;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdListener;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdQueue;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationFullscreenAdShowListener;
 import com.chartboost.chartboostmediationsdk.domain.ChartboostMediationAdException;
+import com.chartboost.chartboostmediationsdk.domain.Keywords;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class BaseAdsViewModel extends ViewModel {
 
-    protected Boolean isSetup = false;
     protected String interstitialPlacement = "";
     protected String rewardedPlacement = "";
+    protected String bannerPlacement = "";
 
-    private final MutableLiveData<List<String>> _uiLogs = new MutableLiveData<>(new ArrayList<>());
-    public final LiveData<List<String>> uiLogs = _uiLogs;
+    private final List<String> backingUiLogs = new ArrayList<>();
+    private final MutableLiveData<List<String>> uiLogs = new MutableLiveData<>(new ArrayList<>());
 
-    public final ChartboostMediationBannerAdViewListener bannerAdListener;
-    public final ChartboostMediationBannerAdLoadListener bannerAdLoadListener;
+    public final LiveData<List<String>> getUiLogs() {
+        return uiLogs;
+    }
+
+    private final ChartboostMediationBannerAdViewListener bannerAdListener;
+    private final ChartboostMediationBannerAdLoadListener bannerAdLoadListener;
 
     public BaseAdsViewModel() {
         // Initialize banner listeners
@@ -69,18 +76,27 @@ public abstract class BaseAdsViewModel extends ViewModel {
         };
     }
 
-    public void setup(final String interstitialPlacement, final String rewardedPlacement) {
-        if (!isSetup) {
-            this.interstitialPlacement = interstitialPlacement;
-            this.rewardedPlacement = rewardedPlacement;
-            isSetup = true;
-        }
+    public void setup(final String interstitialPlacement, final String rewardedPlacement, final String bannerPlacement) {
+        this.interstitialPlacement = interstitialPlacement;
+        this.rewardedPlacement = rewardedPlacement;
+        this.bannerPlacement = bannerPlacement;
     }
 
+    public ChartboostMediationBannerAdView createBanner(@NonNull final Context context) {
+        return new ChartboostMediationBannerAdView(context, bannerPlacement, ChartboostMediationBannerAdView.ChartboostMediationBannerSize.STANDARD, bannerAdListener);
+    }
+
+    public void loadBanner(@NonNull final ChartboostMediationBannerAdView banner) {
+        banner.loadFromJava(
+                new ChartboostMediationBannerAdLoadRequest(bannerPlacement, new Keywords(), ChartboostMediationBannerAdView.ChartboostMediationBannerSize.STANDARD),
+                bannerAdLoadListener
+        );
+    }
+
+
     protected void addUiLogs(final String... logs) {
-        List<String> updatedLogs = new ArrayList<>(_uiLogs.getValue());
-        updatedLogs.addAll(Arrays.stream(logs).collect(Collectors.toList()));
-        _uiLogs.postValue(updatedLogs);
+        Collections.addAll(backingUiLogs, logs);
+        uiLogs.postValue(new ArrayList<>(backingUiLogs));
     }
 
     public void addToUiLogs(final String... logs) {
@@ -88,13 +104,14 @@ public abstract class BaseAdsViewModel extends ViewModel {
     }
 
     public void clearUiLogs() {
-        _uiLogs.setValue(new ArrayList<>());
+        backingUiLogs.clear();
+        uiLogs.setValue(new ArrayList<>());
         addUiLogs("UI Logs Cleared.");
     }
 
     protected ChartboostMediationFullscreenAdListener createFullscreenAdListener(
             final String placementName,
-            final CustomFullscreenAdListener customAdListener,
+            final FullscreenAdLifecycleListener customAdListener,
             @Nullable final ChartboostMediationFullscreenAdQueue queue
     ) {
         return new ChartboostMediationFullscreenAdListener() {
@@ -128,7 +145,7 @@ public abstract class BaseAdsViewModel extends ViewModel {
 
     protected ChartboostMediationFullscreenAdShowListener createFullscreenAdShowListener(
             final String placementName,
-            final CustomFullscreenAdListener customAdListener,
+            final FullscreenAdLifecycleListener customAdListener,
             @Nullable final ChartboostMediationFullscreenAdQueue queue
     ) {
         return new ChartboostMediationFullscreenAdShowListener() {

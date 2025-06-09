@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdLoadRequest;
 import com.chartboost.chartboostmediationsdk.ad.ChartboostMediationBannerAdView;
-import com.chartboost.chartboostmediationsdk.domain.Keywords;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,20 +54,11 @@ public abstract class BaseAdsActivity extends AppCompatActivity {
 
     protected void loadBanner(final FrameLayout bannerFrameLayout) {
         viewModel.addToUiLogs("Loading banner started");
-        String bannerPlacementName = getString(R.string.banner_placement);
-        banner = new ChartboostMediationBannerAdView(
-                this,
-                bannerPlacementName,
-                ChartboostMediationBannerAdView.ChartboostMediationBannerSize.STANDARD,
-                viewModel.bannerAdListener
-        );
+        banner = viewModel.createBanner(this);
 
         bannerFrameLayout.removeAllViews();
         bannerFrameLayout.addView(banner);
-        banner.loadFromJava(
-                new ChartboostMediationBannerAdLoadRequest(bannerPlacementName, new Keywords(), ChartboostMediationBannerAdView.ChartboostMediationBannerSize.STANDARD),
-                viewModel.bannerAdLoadListener
-        );
+        viewModel.loadBanner(banner);
     }
 
     @Override

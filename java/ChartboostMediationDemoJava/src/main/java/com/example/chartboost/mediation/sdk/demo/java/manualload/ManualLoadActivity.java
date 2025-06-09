@@ -23,7 +23,7 @@ public class ManualLoadActivity extends BaseAdsActivity {
         setupLogsRecyclerView(binding.logsRv);
 
         viewModel = new ViewModelProvider(this).get(ManualLoadViewModel.class);
-        viewModel.setup(getString(R.string.interstitial_placement), getString(R.string.rewarded_placement));
+        viewModel.setup(interstitialPlacementName, rewardedPlacementName, getString(R.string.banner_placement));
 
         setupObservers();
         setupOnClickListeners((ManualLoadViewModel) viewModel);
@@ -31,14 +31,14 @@ public class ManualLoadActivity extends BaseAdsActivity {
     }
 
     protected void setupObservers() {
-        ((ManualLoadViewModel) viewModel).uiState.observe(this, manualLoadUIStateModel -> {
+        ((ManualLoadViewModel) viewModel).getUiState().observe(this, manualLoadUIStateModel -> {
             binding.loadInterstitialBtn.setEnabled(manualLoadUIStateModel.isInterstitialLoadEnabled);
             binding.showInterstitialBtn.setEnabled(manualLoadUIStateModel.isInterstitialShowEnabled);
             binding.loadRewardedBtn.setEnabled(manualLoadUIStateModel.isRewardedLoadEnabled);
             binding.showRewardedBtn.setEnabled(manualLoadUIStateModel.isRewardedShowEnabled);
         });
-        viewModel.uiLogs.observe(this, this::updateLogs);
-        ((ManualLoadViewModel) viewModel).showAdEvent.observe(this, event -> {
+        viewModel.getUiLogs().observe(this, this::updateLogs);
+        ((ManualLoadViewModel) viewModel).getShowAdEvent().observe(this, event -> {
             ChartboostMediationFullscreenAd ad = event.getContentIfNotHandled();
             if (ad != null) {
                 ad.showFullscreenAdFromJava(this, ((ManualLoadViewModel) viewModel).getFullscreenAdShowListener(ad.getRequest().getPlacement()));

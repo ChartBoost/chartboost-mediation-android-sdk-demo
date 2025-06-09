@@ -26,7 +26,7 @@ public class QueuedAdsActivity extends BaseAdsActivity {
             getSupportActionBar().setTitle(R.string.queued_ads);
         }
 
-        viewModel.setup(interstitialPlacementName, rewardedPlacementName);
+        viewModel.setup(interstitialPlacementName, rewardedPlacementName, getString(R.string.banner_placement));
         ((QueuedAdsViewModel) viewModel).createAdQueue(this);
 
         setupLogsRecyclerView(binding.logsRv);
@@ -62,7 +62,7 @@ public class QueuedAdsActivity extends BaseAdsActivity {
 
     @Override
     protected void setupObservers() {
-        ((QueuedAdsViewModel) viewModel).uiState.observe(this, uiState -> {
+        ((QueuedAdsViewModel) viewModel).getUiState().observe(this, uiState -> {
             if (uiState == null) return;
 
             if (uiState.interstitialQueueControlState == QueueControlState.START) {
@@ -81,6 +81,6 @@ public class QueuedAdsActivity extends BaseAdsActivity {
             binding.showRewardedBtn.setEnabled(uiState.isShowRewardedButtonEnabled);
         });
 
-        viewModel.uiLogs.observe(this, this::updateLogs);
+        viewModel.getUiLogs().observe(this, this::updateLogs);
     }
 }
